@@ -26,10 +26,10 @@ But also nothing stops you from using this data flow to control an oven (or any 
 
 ```
 impl Drone as Oven (
-  drone_state_collector=OvenThermometer;
-  controller_input_collector=TemperatureGaugeState;
-  controller=PidController;
-  motor_interface=OvenPowerController;
+  drone_state_collector: OvenThermometer;
+  controller_input_collector: TemperatureGaugeState;
+  controller: PidController;
+  motor_interface: OvenPowerController;
 );
 ```
 
@@ -59,25 +59,7 @@ impl ControlledProcess as Drone {
 It seems that if you want to implement a concrete system you have to devise an abstract flow of data through it. But this approach to designing your system will help you build a modular system where each component has a clearly defined responsibility.
 
 ## Components in data flows
-A data flow can be instantiated by assigning component or data flow instances to stages. It can also be implemented first by assigning component or data flow types to stages, and then instanced by assigning correct component or data flow instances to stages. The compiler will make sure the types are correctly assigned.
-
-### Straight instantiation
-```
-let drone = ControlledProcess(
-  state_collector=DroneStateCollector(
-    sensors=sensors,
-  ),
-  controller_input_collector=ReferencePathServer(
-    serialized_path=path,
-  ),
-  controller=MpcController(
-    N=10,
-    Nu=10,
-    no_vars=drone_state_vars,
-    weights=weights,
-  ),
-  process_interface=MotorInterface(),
-)
+A data flow can be instantiated by implementing it first i.e. assigning component or data flow types to stages, and then instanced by assigning correct component or data flow instances to stages. The compiler will make sure the types are correctly assigned.
 
 ```
 

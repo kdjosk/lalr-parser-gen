@@ -1,6 +1,10 @@
 # Aim of the language
 
-Allow for highly modular design, similar to putting the system together from lego bricks.
+Allow for highly modular design, similar to putting a system together from lego bricks.
+
+# Technical details
+
+Dflow is an interpreter written in pure Rust. It takes a stream of characters as an input and produces a stream of characters as an output. Grammar specification is written in ANTLR4 notation to enable easy testing of the grammar.
 
 # Keywords with code examples
 ## `dflow`
@@ -33,13 +37,13 @@ Explanation:
 ## `compnt`
 ```
 compnt name {
-  Init(args)
+  init(args)
   : pre (conds)
   : post (conds)
   {
 
   }
-  Call(args) -> outs
+  call(args) -> outs
   : pre (conds)
   : post (conds){
   }
@@ -55,24 +59,20 @@ Example:
 
 ```
 compnt Gps {
-  Init(ip: String)
+  init(ip: String)
   : pre (
-    IsValidIp(ip)
-  )
+    IsValidIp(ip))
   : post (
-    m.IsConnected()
-  ) {
-    
+    m.IsConnected()) {
+    m.ip = ip;
   }
 
-  Call() -> GpsOutput{
-    return GpsOutput(
-      position(0, 0, 0);
-      orientation_rpy(0, 0, 0);
-    );
+  call() -> GpsOutput {
+    return GpsOutput();
   }
 
-  IsConnected() -> bool {
+  ip : String;
+  fn IsConnected() -> bool {
     return true;
   }
 } 
@@ -131,20 +131,20 @@ impl ControlledProcess as Drone {
 };
 ```
 
-# Standard library
-
-Standard library provides the following basic types
+# Basic types
 
 ```
-String
-Vector<type, size>
-Vector<type>
+vec<type, size>
+vec<type>
 i32
 f32
 u32
+i64
+f64
+u64
 u8
 bool
-char
+str
 ```
 
 # Control flow
@@ -168,6 +168,7 @@ if boolean_expr_1 {
 ## `for`
 
 ```
+# element is an immutable reference in the next two for loop statements
 for element in vector {
 
 } 
@@ -189,15 +190,19 @@ while boolean_expr {
 ```
 # Mutability
 
-Everything is immutable by default. Use `mut` keyword to allow for mutating component members. You can't use `mut` for function arguments. Arguments of `Call` component function are moved as they're just moving through a data flow and are no longer needed in the stage before the component.
+Everything is immutable by default. Use `mut` keyword to allow for mutating component members. You can't use `mut` for function arguments. Arguments of `call` component function are moved as they're just moving through a data flow and are no longer needed in the stage before the component.
 
 # Assignment
 
-Data structures are moved during assignment. basic types like i32 and char are copied. 
+Data structures are moved during assignment. basic types like i32 and char are copied. Declaration of new variables uses the `let` keyword. Types don't have to be written explicitly.
+
+```
+let mut numbers = vec<f32,3>();
+```
 
 # References
 
-Immutable references are used when passing data structures to a function.
+Immutable references are implicitly used when passing data structures to a function.
 
 # Function libraries and design by contract
 
@@ -215,21 +220,20 @@ Example:
 ```
 library ip {
 
-fn IsCorrectIp(ip: String) -> bool {
+fn IsCorrectIp(ip: str) -> bool {
   if IsKnownInvalidAddresses(ip) {
     return false;
   }
   let ip_numbers = NumberVectorFromIpString(ip);
   for segment in ip_numbers {
-    if (segment > 255 or segment < 0) {
+    if segment > 255 or segment < 0 {
       return false;
     }
   }
-
   return true;
 }
 
-priv fn IsKnownInvalidAddresses(ip: String) {
+priv fn IsKnownInvalidAddresses(ip: str) {
   if ip == "0.0.0.0" {
     return false;
   } else if ip == "255.255.255.255" {
@@ -237,17 +241,16 @@ priv fn IsKnownInvalidAddresses(ip: String) {
   }
 }
 
-priv fn NumberVectorFromIpString(ip: String) -> Vector<u8, 4>
+priv fn NumberVectorFromIpString(ip: str) -> vec<u8, 4>
 : post(numbers.len() == 4) {
-  let substrings = ip.Split('.');
+  let substrings = ip.Split(".");
 
-  let numbers = Vector<u8, 4>::New();
+  let numbers = vec<u32, 4>();
   for s,idx in substrings {
     numbers[idx] = s.To_u32();
   }
   return numbers;
 }
-
 }
 ```
 
@@ -256,8 +259,9 @@ priv fn NumberVectorFromIpString(ip: String) -> Vector<u8, 4>
 As a compromise between object oriented and procedural programming, you can create a library and then if all of the non private functions take the type of a given data structure as a first argument, you can bind the library to the data structure and later use it like `ip.Split('.')` in the example above. That's how the String type is implemented.
 
 ```
-struct StructName {
-  bind lib_name;
+struct StructName 
+: bind lib_names {
+  
   indentifier_1: type_1;
   .
   .
@@ -290,11 +294,30 @@ library lib_name {
 
 ```
 
-# How to run a program
+Example:
+
+```
+struct Rectangle : bind rect_lib{
+  width: f32;
+  height: f32;
+}
+
+library rect_lib {
+  fn Area(rect: Rectangle) -> f32
+  : pre(rect.width > 0, rect.height > 0) {
+    return rect.width * rect.height;
+  }
+}
+
+let rect = Rectangle(2, 3);
+let area = rect.Area();
+```
+
+# How to run a dflow
 
 You just write
 ```
-main(dflow_instance)
+exec(dflow_instance);
 ```
 And that's it.
 

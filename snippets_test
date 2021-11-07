@@ -1,0 +1,169 @@
+let r0 = tester.NumberOfTests();
+let r1 = 2;
+let r2 = 2.0;
+let r3 = 2.;
+let r4 = .2;
+let r5 = "string literal\"inner string literal\"";
+let r6 = 2'000'000;
+let r7 = isValidIp(ip);
+let r8 = vec<f32>();
+let r9 = a > 255 or a < 0;
+
+let mut m1 = 10;
+m1 = 14;
+
+
+if not result {
+  return "Invalid IP";
+}
+
+if not isValidIp(ip) {
+  return "Invalid IP";
+} else {
+  return "Valid IP";
+}
+
+if condition1 {
+  return "condition1";
+} else if not condition2 {
+  return "condition2";
+} else {
+  return "condition3";
+}
+
+for ip in ip_table {
+  if IsValidIp(ip) {
+    Ping(ip);
+  }
+}
+
+for num, idx in numbers {
+  numbers[idx] = num + 1;
+}
+
+for idx in range(1,10) {
+  numbers[idx] = 2 * idx;
+}
+
+while m.IsConnected() {
+  Ping(m.ip);
+}
+
+dflow Hello {
+  name_collector() -> Name;
+  greeting_printer(Name);
+}
+
+dflow Test {
+  stage1(a, b, c) -> x, y;
+  stage2(x) -> z;
+  stage3(y) -> w;
+  stage4(z, w) -> result;
+}
+
+impl Hello as HelloName {
+  name_collector : StdInNameCollector;
+  greeting_printer : StdOutGreetingPrinter;
+}
+
+let hello_name = HelloName(
+  name_collector = StdInNameCollector(),
+  greeting_printer = StdOutGreetingPrinter()
+);
+
+exec(hello_name);
+
+struct GpsOutput {
+  position: vec<f32, 3>;
+  orientation_rpy: vec<f32, 3>;
+}
+
+compnt Gps {
+  init(ip: String)
+  : pre (
+    IsValidIp(ip))
+  : post (
+    m.IsConnected()) {
+    m.ip = ip;
+  }
+
+  call() -> GpsOutput {
+    return GpsOutput(
+      position = vec<f32>(0, 0, 0),
+      orientation_rpy = vec<f32>(0, 0, 0));
+  }
+
+  ip : String;
+  fn IsConnected() -> bool {
+    return true;
+  }
+}
+
+library ip {
+
+fn IsCorrectIp(ip: str) -> bool {
+  if IsKnownInvalidAddresses(ip) {
+    return false;
+  }
+  let ip_numbers = NumberVectorFromIpString(ip);
+  for segment in ip_numbers {
+    if segment > 255 or segment < 0 {
+      return false;
+    }
+  }
+  return true;
+}
+
+priv fn IsKnownInvalidAddresses(ip: str) {
+  if ip == "0.0.0.0" {
+    return false;
+  } else if ip == "255.255.255.255" {
+    return false;
+  }
+}
+
+priv fn NumberVectorFromIpString(ip: str) -> vec<u8, 4>
+: post(numbers.len() == 4) {
+  let substrings = ip.Split(".");
+
+  let numbers = vec<u32, 4>();
+  for s,idx in substrings {
+    numbers[idx] = s.To_u32();
+  }
+  return numbers;
+}
+}
+
+module greeting_writers {
+
+  compnt PrettyGreetingWriter {
+    init(){}
+    call(name: str){
+      return "_~Hello " + name + "~_";
+    }
+  }
+
+  compnt PlainGreetingWriter {
+    init(){}
+    call(name: str){
+      return "Hello " + name;
+    }
+  }
+}
+
+struct Rectangle : bind rect_lib{
+  width: f32;
+  height: f32;
+}
+
+library rect_lib {
+  fn Area(rect: Rectangle) -> f32
+  : pre(rect.width > 0, rect.height > 0) {
+    return rect.width * rect.height;
+  }
+}
+
+let rect = Rectangle(2, 3);
+let area = rect.Area();
+
+
