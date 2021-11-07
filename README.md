@@ -61,8 +61,6 @@ It seems that if you want to implement a concrete system you have to devise an a
 ## Components in data flows
 A data flow can be instantiated by implementing it first i.e. assigning component or data flow types to stages, and then instanced by assigning correct component or data flow instances to stages. The compiler will make sure the types are correctly assigned.
 
-```
-
 ### Instantiation following implementation
 
 ```
