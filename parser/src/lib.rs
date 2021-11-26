@@ -46,9 +46,8 @@ impl Parser {
             }
 
             sets_of_items.extend(new_sets_of_items);
-            println!("sets of items {:?}", sets_of_items);
             new_sets_of_items = Vec::new();
-            if !new_set_of_items_added{
+            if !new_set_of_items_added {
                 break;
             }
         }
@@ -59,12 +58,18 @@ impl Parser {
     fn goto(grammar: &Grammar, set_of_items: &HashSet<Production>, symbol: &Symbol) -> HashSet<Production> {
         let mut new_set = HashSet::new();
         for item in set_of_items {
-            new_set.insert(Parser::move_dot_through(item, symbol));
+            match Parser::move_dot_through(item, symbol) {
+                Some(i) => {
+                    new_set.insert(i);
+                },
+                None => (),
+            };
         }
+
         Parser::closure(grammar, &new_set)
     }
 
-    fn move_dot_through(item: &Production, symbol: &Symbol) -> Production {
+    fn move_dot_through(item: &Production, symbol: &Symbol) -> Option<Production> {
         let dot_idx = item.find_indexes_of_symbol_on_rhs(&*DOT);
         assert_eq!(dot_idx.len(), 1);
         let dot_idx = dot_idx[0];
@@ -72,13 +77,13 @@ impl Parser {
         let mut new_prod = item.clone();
 
         for idx in sym_idxs {
-            if idx > 1 && idx - 1 == dot_idx {
+            if idx >= 1 && idx - 1 == dot_idx {
                 new_prod.rhs.insert(idx + 1, DOT.clone());
                 new_prod.rhs.remove(dot_idx);
-                break;
+                return Some(new_prod)
             }
         }
-        new_prod
+        None
     } 
 
     // Page 245 in the Dragon Book
@@ -90,13 +95,19 @@ impl Parser {
         loop {
             new_items_added = false;
             for item in &set_of_items {
-                let mut sym_after_dot = &*EPSILON;
-                let mut prev_rhs_sym = &*EPSILON;
-                for rhs_sym in &item.rhs {
-                    if *prev_rhs_sym == *DOT {
-                        sym_after_dot = rhs_sym;
-                    }
-                    prev_rhs_sym = rhs_sym;
+                let dot_idx = item.find_indexes_of_symbol_on_rhs(&*DOT);
+                assert_eq!(dot_idx.len(), 1);
+                let dot_idx = dot_idx[0];
+                assert!(dot_idx < item.rhs.len());
+
+                if dot_idx == item.rhs.len() - 1 {
+                    continue;
+                }
+
+                let sym_after_dot = &item.rhs[dot_idx + 1];
+
+                if grammar.is_terminal(sym_after_dot) {
+                    continue;
                 }
                 for mut prod in grammar.get_productions_of(sym_after_dot) {
                     prod.rhs.insert(0, DOT.clone());
@@ -120,7 +131,7 @@ impl Parser {
 
 #[cfg(test)]
 mod tests {
-    use std::str::ParseBoolError;
+    use std::{str::ParseBoolError, vec};
 
     use super::*;
 
@@ -165,10 +176,10 @@ mod tests {
             T -> S EOT
             S -> A Sp
             Sp -> Plus A Sp
-            Sp -> epsilon
+            Sp -> 
             A -> B Ap
             Ap -> Star B Ap
-            Ap -> epsilon
+            Ap -> 
             B -> LP S RP
             B -> c
             "#.to_string();
@@ -204,16 +215,57 @@ mod tests {
     }
 
     #[test]
+    fn goto_test() {
+        let descript = 
+        r#"
+        T -> S EOT
+        S -> A Sp
+        Sp -> Plus A Sp
+        Sp -> 
+        A -> B Ap
+        Ap -> Star B Ap
+        Ap -> 
+        B -> LP S RP
+        B -> c
+        "#.to_string();
+
+        let t =  Symbol::new("T");
+        let s =  Symbol::new("S");
+        let a = Symbol::new("A");
+        let sp = Symbol::new("Sp");
+        let ap = Symbol::new("Ap");
+        let b = Symbol::new("B");
+        let lp = Symbol::new("LP");
+        let rp = Symbol::new("RP");
+        let c = Symbol::new("c");
+        let star = Symbol::new("Star");
+        let plus = Symbol::new("Plus");
+        let epsilon = Symbol::new("epsilon");
+
+        let grammar = Grammar::new(descript);
+
+        let mut starting_item = grammar.productions[0].clone();
+        starting_item.rhs.insert(0, DOT.clone());
+        let item_set = HashSet::from([starting_item]);
+        let closure = Parser::closure(&grammar, &item_set);
+
+        let res = Parser::goto(&grammar, &closure, &a);
+
+        let expected = Production{lhs: s.clone(), rhs: vec![a.clone(), DOT.clone(), sp.clone()]};
+        assert!(res.contains(&expected));
+    }
+
+    #[test]
     fn lr0_item_sets_test() {
         let descript = 
             r#"
             T -> S EOT
             S -> A Sp
             Sp -> Plus A Sp
-            Sp -> epsilon
+            Sp -> 
             A -> B Ap
             Ap -> Star B Ap
-            Ap -> epsilon
+            Ap -> 
             B -> LP S RP
             B -> c
             "#.to_string();
