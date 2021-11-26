@@ -14,10 +14,10 @@ pub struct Production {
 }
 
 impl Production {
-    pub fn find_indexes_of_symbol_on_rhs(&self, s: &Symbol) -> Vec<usize> {
+    pub fn find_indexes_of_symbol_on_rhs(&self, sym: &Symbol) -> Vec<usize> {
         let mut res = Vec::new();
-        for i in [self.rhs.len()] {
-            if s == &self.rhs[i] {
+        for (i, s) in self.rhs.iter().enumerate() {
+            if s == sym {
                 res.push(i);
             }
         }

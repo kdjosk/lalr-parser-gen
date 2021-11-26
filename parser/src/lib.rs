@@ -23,45 +23,66 @@ impl Parser {
     }
 
     // Page 246 in the Dragon Book
-    fn sets_of_lr0_items(grammar: &Grammar) {
-        const MAX_STATE_NUM: usize = 2000;
+    fn sets_of_lr0_items(grammar: &Grammar) -> Vec<HashSet<Production>>{
         let mut sets_of_items = Vec::new();
         let mut initial_item = grammar.productions[0].clone();
         initial_item.rhs.insert(0, DOT.clone());
-        sets_of_items.push(Parser::closure(&grammar, &vec![initial_item]));
-        
-        let goto = Parser::make_goto_table(grammar, MAX_STATE_NUM);
-        
+        let item_set = HashSet::from([initial_item]);
+
+        sets_of_items.push(Parser::closure(&grammar, &item_set));
+        let mut new_sets_of_items = Vec::new();
+        let mut new_set_of_items_added;
+
         loop {
-            for i in  [sets_of_items.len()] {
+            new_set_of_items_added = false;
+            for set in &sets_of_items {
                 for sym in &grammar.symbols {
-                    match goto.get(sym) {
-                        Some(states) => {
-                            if states[]
-                        },
-                        None => (),
+                    let goto_set = Parser::goto(grammar, set, sym);
+                    if !goto_set.is_empty() && !sets_of_items.contains(&goto_set) && !new_sets_of_items.contains(&goto_set) {
+                        new_sets_of_items.push(goto_set);
+                        new_set_of_items_added = true;
                     }
                 }
             }
-            break;
+
+            sets_of_items.extend(new_sets_of_items);
+            println!("sets of items {:?}", sets_of_items);
+            new_sets_of_items = Vec::new();
+            if !new_set_of_items_added{
+                break;
+            }
         }
+        sets_of_items
     }
 
-    fn goto(set_of_items: &HashSet<Production>, symbol: &Symbol) -> HashSet<Production> {
-
+    // Page 246 in the Dragon Book
+    fn goto(grammar: &Grammar, set_of_items: &HashSet<Production>, symbol: &Symbol) -> HashSet<Production> {
+        let mut new_set = HashSet::new();
+        for item in set_of_items {
+            new_set.insert(Parser::move_dot_through(item, symbol));
+        }
+        Parser::closure(grammar, &new_set)
     }
 
-    fn make_goto_table(grammar: &Grammar, state_num: usize) -> HashMap<Symbol, Vec<i32>>{
-        
-        let mut goto = HashMap::new();
-        for sym in &grammar.symbols {
-            goto.insert(sym.clone(), vec![0; state_num]);
+    fn move_dot_through(item: &Production, symbol: &Symbol) -> Production {
+        let dot_idx = item.find_indexes_of_symbol_on_rhs(&*DOT);
+        assert_eq!(dot_idx.len(), 1);
+        let dot_idx = dot_idx[0];
+        let sym_idxs = item.find_indexes_of_symbol_on_rhs(symbol);
+        let mut new_prod = item.clone();
+
+        for idx in sym_idxs {
+            if idx > 1 && idx - 1 == dot_idx {
+                new_prod.rhs.insert(idx + 1, DOT.clone());
+                new_prod.rhs.remove(dot_idx);
+                break;
+            }
         }
-        goto
+        new_prod
     } 
 
-    // Page 261 in the Dragon Book
-    fn closure(grammar: &Grammar, items: &Vec<Production>) -> HashSet<Production> {
+    // Page 245 in the Dragon Book
+    fn closure(grammar: &Grammar, items: &HashSet<Production>) -> HashSet<Production> {
         let mut set_of_items: HashSet<Production> = items.clone().into_iter().collect();
         let mut new_set_of_items = set_of_items.clone();
         let mut new_items_added;
@@ -114,11 +135,11 @@ mod tests {
             decl -> constDecl
             decl -> stmt
             "#.to_string();
-        let g = Grammar::new(descript);
-        let p = Parser::new(g);
-        let mut starting_item = p.grammar.productions[0].clone();
+        let grammar = Grammar::new(descript);
+        let mut starting_item = grammar.productions[0].clone();
         starting_item.rhs.insert(0, DOT.clone());
-        let closure = p.closure(&vec![starting_item]);
+        let item_set = HashSet::from([starting_item]);
+        let closure = Parser::closure(&grammar, &item_set);
 
         let t =  Symbol::new("T");
         let program = Symbol::new("program");
@@ -165,11 +186,12 @@ mod tests {
         let plus = Symbol::new("Plus");
         let epsilon = Symbol::new("epsilon");
 
-        let g = Grammar::new(descript);
-        let p = Parser::new(g);
-        let mut starting_item = p.grammar.productions[0].clone();
+        let grammar = Grammar::new(descript);
+        let mut starting_item = grammar.productions[0].clone();
         starting_item.rhs.insert(0, DOT.clone());
-        let closure = p.closure(&vec![starting_item]);
+        let item_set = HashSet::from([starting_item]);
+
+        let closure = Parser::closure(&grammar, &item_set);
         let expected = HashSet::from([
             Production{lhs: t.clone(), rhs: vec![DOT.clone(), s.clone(), EOT.clone()]},
             Production{lhs: s.clone(), rhs: vec![DOT.clone(), a.clone(), sp.clone()]},
@@ -177,6 +199,52 @@ mod tests {
             Production{lhs: b.clone(), rhs: vec![DOT.clone(), c.clone()]},
             Production{lhs: b.clone(), rhs: vec![DOT.clone(), lp.clone(), s.clone(), rp.clone()]},
         ]);
+
+        assert_eq!(closure, expected);
+    }
+
+    #[test]
+    fn lr0_item_sets_test() {
+        let descript = 
+            r#"
+            T -> S EOT
+            S -> A Sp
+            Sp -> Plus A Sp
+            Sp -> epsilon
+            A -> B Ap
+            Ap -> Star B Ap
+            Ap -> epsilon
+            B -> LP S RP
+            B -> c
+            "#.to_string();
+
+        let t =  Symbol::new("T");
+        let s =  Symbol::new("S");
+        let a = Symbol::new("A");
+        let sp = Symbol::new("Sp");
+        let ap = Symbol::new("Ap");
+        let b = Symbol::new("B");
+        let lp = Symbol::new("LP");
+        let rp = Symbol::new("RP");
+        let c = Symbol::new("c");
+        let star = Symbol::new("Star");
+        let plus = Symbol::new("Plus");
+        let epsilon = Symbol::new("epsilon");
+
+        let grammar = Grammar::new(descript);
+   
+        let mut starting_item = grammar.productions[0].clone();
+        starting_item.rhs.insert(0, DOT.clone());
+        let item_set = HashSet::from([starting_item]);
+
+        let res = Parser::sets_of_lr0_items(&grammar);
+
+        for (idx, s) in res.iter().enumerate() {
+            println!("set nr. {}", idx);
+            for p in s {
+                println!("{:?}", p);
+            }
+        }
     }
 
 }
