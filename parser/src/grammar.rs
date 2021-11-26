@@ -1,12 +1,13 @@
 use std::collections::{HashSet, HashMap};
+use lazy_static::lazy_static;
 pub struct Grammar {
     pub start: Symbol,
     pub productions: Vec<Production>,
-    symbols: HashSet<Symbol>,
+    pub symbols: HashSet<Symbol>,
     terminals: HashSet<Symbol>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Production {
     pub lhs: Symbol,
     pub rhs: Vec<Symbol>,
@@ -27,6 +28,11 @@ impl Production {
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub struct Symbol {
     id: String,
+}
+
+lazy_static! {
+    pub static ref EPSILON: Symbol = Symbol::new("epsilon");
+    pub static ref EOT: Symbol = Symbol::new("EOT");
 }
 
 impl Symbol {
@@ -85,6 +91,7 @@ impl Grammar {
         }
     }
 
+    // page 221 in the Dragon Book
     pub fn get_first_sets(&self) -> HashMap<Symbol, HashSet<Symbol>> {
         let mut f = HashMap::new();
         for s in &self.symbols {
@@ -101,26 +108,36 @@ impl Grammar {
         } else {
             let prod = self.get_productions_of(s);
             for p in &prod {
-                for sym in &p.rhs {
-                    if sym == s {
-                        if self.is_nullable(s) {
-                            continue;
-                        } else {
-                            break;
-                        }
+                for rhs_sym in &p.rhs {
+                    if rhs_sym != s {
+                        first_set.extend(self.first(rhs_sym));
                     }
-                    first_set.extend(self.first(sym));
-                    if !self.is_nullable(sym) {
+                    if !self.can_reduce_to_epsilon(rhs_sym) {
                         break;
-                    }  
+                    }
                 }
             }
         }
-        if self.is_nullable(s) {
-            first_set.insert(Symbol{id: "epsilon".to_string()});
-        } 
-
         return first_set;
+    }
+
+    // TODO(Krzysztof) cache results 
+    fn can_reduce_to_epsilon(&self, s: &Symbol) -> bool {
+        let prod = self.get_productions_of(s);
+        if self.is_terminal(s) {
+            return false;
+        }
+        for p in prod {
+            if p.rhs.len() == 1 && p.rhs[0] == *EPSILON {
+                return true;
+            }
+            for rhs_sym in &p.rhs { 
+                if !self.can_reduce_to_epsilon(rhs_sym) {
+                    return false;
+                }
+            }
+        }
+        true
     }
 
     pub fn get_productions_of(&self, s: &Symbol) -> Vec<Production> {
@@ -133,14 +150,6 @@ impl Grammar {
         res
     }
 
-    pub fn is_nullable(&self, s: &Symbol) -> bool {
-        for p in &self.productions {
-            if &p.lhs == s && p.rhs.is_empty() {
-                return true;
-            }
-        }
-        false
-    }
 
     pub fn is_terminal(&self, s: &Symbol) -> bool {
         self.terminals.contains(s)
@@ -158,7 +167,7 @@ mod tests {
         let descript = 
             r#"
             T -> program
-            program ->
+            program -> epsilon
             program -> program declaration
             declaration -> varDecl
             declaration -> constDecl
@@ -172,13 +181,14 @@ mod tests {
         let var_decl = Symbol::new("varDecl");
         let const_decl = Symbol::new("constDecl");
         let statement = Symbol::new("statement");
+        let epsilon = Symbol::new("epsilon");
 
         assert_eq!(g.start, t);
         assert_eq!(g.productions[0].lhs, t);
         assert_eq!(g.productions[0].rhs, vec![program.clone()]);
 
         assert_eq!(g.productions[1].lhs, program);
-        assert_eq!(g.productions[1].rhs, vec![]);
+        assert_eq!(g.productions[1].rhs, vec![epsilon.clone()]);
 
         assert_eq!(g.productions[2].lhs, program);
         assert_eq!(g.productions[2].rhs, vec![program.clone(), declaration.clone()]);
@@ -200,38 +210,38 @@ mod tests {
             r#"
             S -> A Sp
             Sp -> Plus A Sp
-            Sp ->
+            Sp -> epsilon
             A -> B Ap
             Ap -> Star B Ap
-            Ap ->
+            Ap -> epsilon
             B -> LP S RP
-            B -> a
+            B -> c
             "#.to_string();
         let g = Grammar::new(descript);
         let f = g.get_first_sets();
 
-        let S =  Symbol::new("S");
-        let A = Symbol::new("A");
-        let Sp = Symbol::new("Sp");
-        let Ap = Symbol::new("Ap");
-        let B = Symbol::new("B");
-        let LP = Symbol::new("LP");
-        let RP = Symbol::new("RP");
-        let a = Symbol::new("a");
-        let Star = Symbol::new("Star");
-        let Plus = Symbol::new("Plus");
+        let s =  Symbol::new("S");
+        let a = Symbol::new("A");
+        let sp = Symbol::new("Sp");
+        let ap = Symbol::new("Ap");
+        let b = Symbol::new("B");
+        let lp = Symbol::new("LP");
+        let rp = Symbol::new("RP");
+        let c = Symbol::new("c");
+        let star = Symbol::new("Star");
+        let plus = Symbol::new("Plus");
         let epsilon = Symbol::new("epsilon");
         
-        assert_eq!(f.get(&S).unwrap(), &HashSet::from([LP.clone(), a.clone()]));
-        assert_eq!(f.get(&A).unwrap(), &HashSet::from([LP.clone(), a.clone()]));
-        assert_eq!(f.get(&B).unwrap(), &HashSet::from([LP.clone(), a.clone()]));
-        assert_eq!(f.get(&Ap).unwrap(), &HashSet::from([Star.clone(), epsilon.clone()]));
-        assert_eq!(f.get(&Sp).unwrap(), &HashSet::from([Plus.clone(), epsilon.clone()]));
-        assert_eq!(f.get(&Star).unwrap(), &HashSet::from([Star.clone()]));
-        assert_eq!(f.get(&LP).unwrap(), &HashSet::from([LP.clone()]));
-        assert_eq!(f.get(&RP).unwrap(), &HashSet::from([RP.clone()]));
-        assert_eq!(f.get(&a).unwrap(), &HashSet::from([a.clone()]));
-        assert_eq!(f.get(&Plus).unwrap(), &HashSet::from([Plus.clone()]));
+        assert_eq!(f.get(&s).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
+        assert_eq!(f.get(&a).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
+        assert_eq!(f.get(&b).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
+        assert_eq!(f.get(&ap).unwrap(), &HashSet::from([star.clone(), epsilon.clone()]));
+        assert_eq!(f.get(&sp).unwrap(), &HashSet::from([plus.clone(), epsilon.clone()]));
+        assert_eq!(f.get(&star).unwrap(), &HashSet::from([star.clone()]));
+        assert_eq!(f.get(&lp).unwrap(), &HashSet::from([lp.clone()]));
+        assert_eq!(f.get(&rp).unwrap(), &HashSet::from([rp.clone()]));
+        assert_eq!(f.get(&c).unwrap(), &HashSet::from([c.clone()]));
+        assert_eq!(f.get(&plus).unwrap(), &HashSet::from([plus.clone()]));
         
     }
 }
