@@ -25,9 +25,27 @@ impl Production {
     }
 }
 
+impl Display for Production {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} -> ", self.lhs)?;
+        for s in &self.rhs {
+            write!(f, "{} ", s)?;
+        }
+        Ok(())
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub struct Symbol {
     id: String,
+}
+
+use core::fmt::{Display};
+use core::fmt;
+impl Display for Symbol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.id)
+    }
 }
 
 lazy_static! {

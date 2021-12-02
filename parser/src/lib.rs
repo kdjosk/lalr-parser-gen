@@ -1,7 +1,7 @@
 mod grammar;
-use grammar::{Grammar, Symbol, Production, EPSILON, EOT};
+use grammar::{Grammar, Symbol, Production, EOT};
 use lazy_static::lazy_static;
-use std::{collections::{HashSet, HashMap}, hash::Hash, iter::Product, ops::Index};
+use std::{collections::{HashSet, HashMap}};
 struct Parser {
     grammar: Grammar,
     sets_of_items: Vec<HashSet<Production>>,
@@ -140,7 +140,7 @@ mod tests {
         let descript = 
             r#"
             T -> program
-            program -> epsilon
+            program -> 
             program -> program decl
             decl -> varDecl
             decl -> constDecl
@@ -158,11 +158,10 @@ mod tests {
         let var_decl = Symbol::new("varDecl");
         let const_decl = Symbol::new("constDecl");
         let statement = Symbol::new("statement");
-        let epsilon = Symbol::new("epsilon");
 
         let expected = HashSet::from([
             Production{lhs: t.clone(), rhs: vec![DOT.clone(), program.clone()]},
-            Production{lhs: program.clone(), rhs: vec![DOT.clone(), EPSILON.clone()]},
+            Production{lhs: program.clone(), rhs: vec![DOT.clone()]},
             Production{lhs: program.clone(), rhs: vec![DOT.clone(), program.clone(), decl.clone()]},
         ]);
 
@@ -261,7 +260,7 @@ mod tests {
         for (idx, s) in res.iter().enumerate() {
             println!("set nr. {}", idx);
             for p in s {
-                println!("{:?}", p);
+                println!("{}", p);
             }
         }
     }
