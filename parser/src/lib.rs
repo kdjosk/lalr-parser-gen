@@ -171,18 +171,7 @@ mod tests {
 
     #[test]
     fn closure_test_2() {
-        let descript = 
-            r#"
-            T -> S EOT
-            S -> A Sp
-            Sp -> Plus A Sp
-            Sp -> 
-            A -> B Ap
-            Ap -> Star B Ap
-            Ap -> 
-            B -> LP S RP
-            B -> c
-            "#.to_string();
+        let descript = get_test_grammar_1_description();
 
         let t =  Symbol::new("T");
         let s =  Symbol::new("S");
@@ -216,18 +205,7 @@ mod tests {
 
     #[test]
     fn goto_test() {
-        let descript = 
-        r#"
-        T -> S EOT
-        S -> A Sp
-        Sp -> Plus A Sp
-        Sp -> 
-        A -> B Ap
-        Ap -> Star B Ap
-        Ap -> 
-        B -> LP S RP
-        B -> c
-        "#.to_string();
+        let descript = get_test_grammar_1_description();
 
         let t =  Symbol::new("T");
         let s =  Symbol::new("S");
@@ -257,18 +235,7 @@ mod tests {
 
     #[test]
     fn lr0_item_sets_test() {
-        let descript = 
-            r#"
-            T -> S EOT
-            S -> A Sp
-            Sp -> Plus A Sp
-            Sp -> 
-            A -> B Ap
-            Ap -> Star B Ap
-            Ap -> 
-            B -> LP S RP
-            B -> c
-            "#.to_string();
+        let descript = get_test_grammar_1_description();
 
         let t =  Symbol::new("T");
         let s =  Symbol::new("S");
@@ -299,6 +266,19 @@ mod tests {
         }
     }
 
+    fn get_test_grammar_1_description() -> String {
+        r#"
+        T -> S EOT
+        S -> A Sp
+        Sp -> Plus A Sp
+        Sp -> 
+        A -> B Ap
+        Ap -> Star B Ap
+        Ap -> 
+        B -> LP S RP
+        B -> c
+        "#.to_string()
+    }
 }
 
 
