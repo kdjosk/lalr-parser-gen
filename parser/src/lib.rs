@@ -1,5 +1,5 @@
 mod grammar;
-use grammar::{Grammar, Symbol, Production, EOT};
+use grammar::{Grammar, Symbol, Production, ProductionWithLookahead, EOT};
 use lazy_static::lazy_static;
 use std::{collections::{HashSet, HashMap}};
 struct Parser {
@@ -127,6 +127,64 @@ impl Parser {
         set_of_items
     }
 
+    fn closure_with_lookahead(
+        grammar: &Grammar,
+        items: &HashSet<ProductionWithLookahead>
+    ) -> HashSet<ProductionWithLookahead> {
+        
+        let mut set_of_items: HashSet<ProductionWithLookahead> = items.clone().into_iter().collect();
+        let mut new_set_of_items = set_of_items.clone();
+        let mut new_items_added;
+
+        loop {
+            new_items_added = false;
+            for item in &set_of_items {
+                let dot_idx = item.production.find_indexes_of_symbol_on_rhs(&*DOT);
+                assert_eq!(dot_idx.len(), 1);
+                let dot_idx = dot_idx[0];
+                assert!(dot_idx < item.production.rhs.len());
+                if dot_idx == item.production.rhs.len() - 1 {
+                    continue;
+                }
+                let sym_after_dot = &item.production.rhs[dot_idx + 1];
+                if grammar.is_terminal(sym_after_dot) {
+                    continue;
+                }
+
+                // beta in book
+                let mut postfix;
+                if dot_idx + 2 >= item.production.rhs.len() {
+                    postfix = vec![];
+                } else {
+                    let rhs = item.production.rhs.clone();
+                    postfix = rhs[dot_idx + 2..].to_vec();
+                }
+                postfix.push(item.lookahead.clone());
+
+                for prod in grammar.get_productions_of(sym_after_dot) {
+                    for terminal in grammar.first(&postfix) {
+                        let mut p = prod.clone();
+                        p.rhs.insert(0, DOT.clone());
+                        let pa = ProductionWithLookahead {
+                            production: p, 
+                            lookahead: terminal
+                        };
+                        if !set_of_items.contains(&pa) && new_set_of_items.insert(pa){
+                           new_items_added = true;      
+                        }
+                    }
+                }
+            }
+            if !new_items_added {
+                break;
+            }
+
+            set_of_items.extend(new_set_of_items);
+            new_set_of_items = HashSet::new();
+        }
+
+        set_of_items
+    }
 }
 
 #[cfg(test)]
@@ -203,6 +261,32 @@ mod tests {
     }
 
     #[test]
+    fn closure_with_lookahead_test() {
+        let descript = get_test_grammar_3_description();
+
+        let s =  Symbol::new("S");
+        let sp = Symbol::new("Sp");
+        let b = Symbol::new("C");
+        let c = Symbol::new("c");
+        let star = Symbol::new("d");
+
+
+        let grammar = Grammar::new(descript);
+        let mut starting_item = grammar.productions[0].clone();
+        starting_item.rhs.insert(0, DOT.clone());
+        let starting_item = ProductionWithLookahead { production: starting_item, lookahead: EOT.clone()};
+        let item_set = HashSet::from([starting_item]);
+
+        let closure = Parser::closure_with_lookahead(&grammar, &item_set);
+        for c in closure {
+            println!("{}", c);
+        }
+
+        // assert_eq!(closure, expected);
+    }
+
+
+    #[test]
     fn goto_test() {
         let descript = get_test_grammar_1_description();
 
@@ -234,20 +318,7 @@ mod tests {
 
     #[test]
     fn lr0_item_sets_test() {
-        let descript = get_test_grammar_1_description();
-
-        let t =  Symbol::new("T");
-        let s =  Symbol::new("S");
-        let a = Symbol::new("A");
-        let sp = Symbol::new("Sp");
-        let ap = Symbol::new("Ap");
-        let b = Symbol::new("B");
-        let lp = Symbol::new("LP");
-        let rp = Symbol::new("RP");
-        let c = Symbol::new("c");
-        let star = Symbol::new("Star");
-        let plus = Symbol::new("Plus");
-        let epsilon = Symbol::new("epsilon");
+        let descript = get_test_grammar_2_description();
 
         let grammar = Grammar::new(descript);
    
@@ -256,13 +327,6 @@ mod tests {
         let item_set = HashSet::from([starting_item]);
 
         let res = Parser::sets_of_lr0_items(&grammar);
-
-        for (idx, s) in res.iter().enumerate() {
-            println!("set nr. {}", idx);
-            for p in s {
-                println!("{}", p);
-            }
-        }
     }
 
     fn get_test_grammar_1_description() -> String {
@@ -276,6 +340,26 @@ mod tests {
         Ap -> 
         B -> LP S RP
         B -> c
+        "#.to_string()
+    }
+
+    fn get_test_grammar_2_description() -> String {
+        r#"
+        Sp -> S
+        S -> L Eq R
+        S -> R
+        L -> Star R
+        L -> id
+        R -> L
+        "#.to_string()
+    }
+
+    fn get_test_grammar_3_description() -> String {
+        r#"
+        Sp -> S EOT
+        S -> C C
+        C -> c C
+        C -> d
         "#.to_string()
     }
 }

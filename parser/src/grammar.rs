@@ -35,6 +35,21 @@ impl Display for Production {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct ProductionWithLookahead {
+    pub production: Production,
+    pub lookahead: Symbol,
+}
+
+impl Display for ProductionWithLookahead {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}, {}", self.production, self.lookahead)?;
+        Ok(())
+    }
+}
+
+
+
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub struct Symbol {
     id: String,
@@ -110,30 +125,21 @@ impl Grammar {
     }
 
     // page 221 in the Dragon Book
-    pub fn get_first_sets(&self) -> HashMap<Symbol, HashSet<Symbol>> {
-        let mut f = HashMap::new();
-        for s in &self.symbols {
-            f.insert(s.clone(), self.first(&s));
-        }
-        f
-    }
 
-    fn first(&self, s: &Symbol) -> HashSet<Symbol> {
+    pub fn first(&self, sequence: &Vec<Symbol>) -> HashSet<Symbol> {
         let mut first_set = HashSet::new();
-        if self.is_terminal(s) {
-            first_set.insert(s.clone());
-            return first_set;
-        } else {
-            let prod = self.get_productions_of(s);
-            for p in &prod {
-                for rhs_sym in &p.rhs {
-                    if rhs_sym != s {
-                        first_set.extend(self.first(rhs_sym));
-                    }
-                    if !self.can_reduce_to_epsilon(rhs_sym) {
-                        break;
-                    }
+        for s in sequence {
+            if self.is_terminal(s) {
+                first_set.insert(s.clone());
+                return first_set;
+            } else {
+                let prod = self.get_productions_of(s);
+                for p in &prod {
+                    first_set.extend(self.first(&p.rhs));
                 }
+            }
+            if !self.can_reduce_to_epsilon(s) {
+                break;
             }
         }
         return first_set;
@@ -146,7 +152,7 @@ impl Grammar {
             return false;
         }
         for p in prod {
-            if p.rhs.len() == 1 && p.rhs[0] == *EPSILON {
+            if p.rhs.len() == 1 && p.rhs.is_empty() {
                 return true;
             }
             for rhs_sym in &p.rhs { 
@@ -236,7 +242,6 @@ mod tests {
             B -> c
             "#.to_string();
         let g = Grammar::new(descript);
-        let f = g.get_first_sets();
 
         let s =  Symbol::new("S");
         let a = Symbol::new("A");
@@ -249,17 +254,39 @@ mod tests {
         let star = Symbol::new("Star");
         let plus = Symbol::new("Plus");
         let epsilon = Symbol::new("epsilon");
-        
-        assert_eq!(f.get(&s).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
-        assert_eq!(f.get(&a).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
-        assert_eq!(f.get(&b).unwrap(), &HashSet::from([lp.clone(), c.clone()]));
-        assert_eq!(f.get(&ap).unwrap(), &HashSet::from([star.clone(), epsilon.clone()]));
-        assert_eq!(f.get(&sp).unwrap(), &HashSet::from([plus.clone(), epsilon.clone()]));
-        assert_eq!(f.get(&star).unwrap(), &HashSet::from([star.clone()]));
-        assert_eq!(f.get(&lp).unwrap(), &HashSet::from([lp.clone()]));
-        assert_eq!(f.get(&rp).unwrap(), &HashSet::from([rp.clone()]));
-        assert_eq!(f.get(&c).unwrap(), &HashSet::from([c.clone()]));
-        assert_eq!(f.get(&plus).unwrap(), &HashSet::from([plus.clone()]));
+
+        let f = g.first(&vec![s.clone()]);
+        assert_eq!(f, HashSet::from([lp.clone(), c.clone()]));
+
+        let f = g.first(&vec![a.clone()]);
+        assert_eq!(f, HashSet::from([lp.clone(), c.clone()]));
+
+        let f = g.first(&vec![b.clone()]);
+        assert_eq!(f, HashSet::from([lp.clone(), c.clone()]));
+
+        let f = g.first(&vec![ap.clone()]);
+        assert_eq!(f, HashSet::from([star.clone(), epsilon.clone()]));
+
+        let f = g.first(&vec![sp.clone()]);
+        assert_eq!(f, HashSet::from([plus.clone(), epsilon.clone()]));
+
+        let f = g.first(&vec![a.clone()]);
+        assert_eq!(f, HashSet::from([lp.clone(), c.clone()]));
+
+        let f = g.first(&vec![star.clone()]);
+        assert_eq!(f, HashSet::from([star.clone()]));
+
+        let f = g.first(&vec![lp.clone()]);
+        assert_eq!(f, HashSet::from([lp.clone()]));
+
+        let f = g.first(&vec![rp.clone()]);
+        assert_eq!(f, HashSet::from([rp.clone()]));
+
+        let f = g.first(&vec![c.clone()]);
+        assert_eq!(f, HashSet::from([c.clone()]));
+
+        let f = g.first(&vec![plus.clone()]);
+        assert_eq!(f, HashSet::from([plus.clone()]));
         
     }
 }
