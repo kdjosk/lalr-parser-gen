@@ -1,0 +1,21 @@
+build:
+  image: rust
+  stage: build
+  script:
+    - cargo build
+  
+test:
+  image: rust
+  stage: test
+  needs: [build]
+  script:
+    - cargo test
+    - cargo test -p lexer -- --show-output
+
+run_lexer_on_snippets:
+  image: rust
+  stage: deploy
+  needs: [test]
+  script:
+    - cargo run
+

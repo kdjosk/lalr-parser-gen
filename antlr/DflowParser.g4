@@ -358,7 +358,6 @@ GreaterEqual : '>=';
 Equal : '==';
 NotEqual : '!=';
 RArrow : '->';
-M : 'm';
 
 BooleanLiteral : 'true' | 'false';
 
