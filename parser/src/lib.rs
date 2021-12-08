@@ -54,6 +54,21 @@ impl Parser {
         
         sets_of_items
     }
+    
+    fn lookaheads(grammar: &Grammar) {
+        todo!();
+        let mut start_item = grammar.get_start_item();
+        start_item.rhs.insert(0, DOT.clone());
+        assert_eq!(start_item.rhs.pop().unwrap(), EOT.clone());
+        let start_item = 
+            ProductionWithLookahead::new(start_item, UNKNOWN.clone());
+        let start_closure = 
+            Parser::closure_with_lookahead(grammar, &HashSet::from([start_item]));
+
+        for p in start_closure {
+            println!("{}", p);
+        }
+    }
 
     // page 272 in the Dragon Book
     fn discover_propagated_and_spontaneous_lookaheads(
@@ -229,6 +244,7 @@ impl Parser {
         set_of_items
     }
 
+    // page 261
     fn closure_with_lookahead(
         grammar: &Grammar,
         items: &HashSet<ProductionWithLookahead>,
@@ -262,6 +278,10 @@ impl Parser {
                     postfix = rhs[dot_idx + 2..].to_vec();
                 }
                 postfix.push(item.lookahead.clone());
+                
+                println!("postfix: {:?}", postfix);
+                println!("first: {:?}", grammar.first(&postfix));
+                println!("------");
 
                 for prod in grammar.get_productions_of(sym_after_dot) {
                     for terminal in grammar.first(&postfix) {
@@ -309,6 +329,13 @@ mod tests {
     use std::hash::Hash;
 
     use super::*;
+
+    #[test]
+    fn lookaheads_test() {
+        let descript = get_test_grammar_2_description();
+        let grammar = Grammar::new(descript);
+        Parser::lookaheads(&grammar);
+    }
 
     #[test]
     fn closure_test() {
@@ -553,16 +580,7 @@ mod tests {
         assert_vec_of_sets_of_items_eq(&kernels, &expected)
     }
 
-    #[test]
-    fn discover_propagated_and_spontaneous_lookaheads_test() {
-        let grammar = get_test_grammar_2_description();
-        let lr0_kernel = HashSet::from([
-            ProductionWithLookahead::from("S' -> . S", "UNKNOWN"),
-        ]);
-        
-        let prop_spont = 
-            Parser::discover_propagated_and_spontaneous_lookaheads(grammar, lr0_kernel, sym);
-    }
+
 
     fn assert_vec_of_sets_of_items_eq(
         v1: &Vec<HashSet<Production>>,

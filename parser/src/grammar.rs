@@ -123,6 +123,7 @@ lazy_static! {
     pub static ref EPSILON: Symbol = Symbol::new("epsilon");
     pub static ref EOT: Symbol = Symbol::new("EOT");
     pub static ref DOT: Symbol = Symbol::new(".");
+    pub static ref UNKNOWN: Symbol = Symbol::new("UNKNOWN");
 }
 
 impl Symbol {
@@ -245,8 +246,12 @@ impl Grammar {
         false
     }
 
+    pub fn get_start_item(&self) -> Production {
+        self.productions[0].clone()
+    }
+
     pub fn is_terminal(&self, s: &Symbol) -> bool {
-        self.terminals.contains(s) || s == &EOT.clone()
+        self.terminals.contains(s) || s == &EOT.clone() || s == &UNKNOWN.clone()
     }
 }
 
