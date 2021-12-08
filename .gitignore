@@ -1,2 +1,4 @@
 antlr/**
 !antlr/**.g4
+target/**
+lexer/target/**

@@ -78,8 +78,8 @@ struct GpsOutput {
   orientation_rpy: vec<f32, 3>;
 }
 
-compnt Gps {
-  init(ip: String)
+component Gps {
+  _init(ip: str)
   : pre (
     IsValidIp(ip))
   : post (
@@ -87,13 +87,13 @@ compnt Gps {
     m.ip = ip;
   }
 
-  call() -> GpsOutput {
+  _call() -> GpsOutput {
     return GpsOutput(
       position = vec<f32>(0, 0, 0),
       orientation_rpy = vec<f32>(0, 0, 0));
   }
 
-  ip : String;
+  ip : str;
   fn IsConnected() -> bool {
     return true;
   }
