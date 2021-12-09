@@ -1,6 +1,6 @@
 use lexer::{self, FileSource, Token};
-use parser::Parser;
 use parser::grammar::Grammar;
+use parser::lalr_parsing_tables::{self, LALRParsingTables};
 use std::env;
 
 fn main() {
@@ -15,15 +15,17 @@ fn main() {
     //     t = lexer.next_token();
     // }
 
-    let dflow_grammar = Grammar::new(        
+    let dflow_grammar = Grammar::new(
         r#"
-        S' -> S EOT
+        S' -> S
         S -> L Eq R
         S -> R
         L -> Star R
         L -> id
         R -> L
-        "#.to_string());
-    let dflow_parser = Parser::new(dflow_grammar);
-    println!("hello");
+        "#
+        .to_string(),
+    );
+    let lalr_tables = LALRParsingTables::new(&dflow_grammar);
+    lalr_tables.compute_tables();
 }

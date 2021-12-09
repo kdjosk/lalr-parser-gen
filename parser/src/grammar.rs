@@ -1,7 +1,6 @@
 use lazy_static::lazy_static;
-use std::collections::{HashMap, HashSet};
-use std::io::BufRead;
 use regex::Regex;
+use std::collections::HashSet;
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Production {
     pub lhs: Symbol,
@@ -15,12 +14,12 @@ impl Production {
         let mut lhs = Symbol::new(String::new().as_str());
         let mut rhs = Vec::new();
         lazy_static! {
-            static ref symbol_regex: Regex = Regex::new(r"[a-zA-Z\.']").unwrap();
+            static ref SYMBOL_REGEX: Regex = Regex::new(r"[a-zA-Z\.']").unwrap();
         }
         let description = description.trim();
         let chars: Vec<_> = description.chars().collect();
         for (idx, &c) in chars.iter().enumerate() {
-            if symbol_regex.is_match(c.to_string().as_str()) {
+            if SYMBOL_REGEX.is_match(c.to_string().as_str()) {
                 token_string.push(c);
             }
             if c == '-' {
@@ -38,13 +37,13 @@ impl Production {
                     lhs.id = token_string;
                     token_string = String::new();
                 } else if !token_string.is_empty() {
-                    rhs.push(Symbol::new( token_string.as_str()));
+                    rhs.push(Symbol::new(token_string.as_str()));
                     token_string = String::new();
                 }
             }
         }
         if !(lhs.id.is_empty() && rhs.is_empty()) {
-            return Production { lhs, rhs }
+            return Production { lhs, rhs };
         } else {
             panic!("No LHS and RHS in production {}", description);
         }
@@ -110,9 +109,9 @@ pub struct Symbol {
     id: String,
 }
 
-use core::{fmt};
+use core::fmt;
 use core::fmt::Display;
-use std::{vec, panic};
+use std::{panic, vec};
 impl Display for Symbol {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.id)
@@ -232,11 +231,8 @@ impl Grammar {
     // page 245 in the Dragon Book
     pub fn is_kernel_item(&self, production: &Production) -> bool {
         let dot_idx = production.get_dot_index();
-        if dot_idx == 0 
-            && production.lhs == self.start
-        {
-            assert_eq!(production.rhs.len(), 3);
-            assert_eq!(production.rhs[2], EOT.clone());
+        if dot_idx == 0 && production.lhs == self.start {
+            assert_eq!(production.rhs.len(), 2);
             return true;
         }
 
