@@ -26,5 +26,5 @@ fn main() {
         "#
         .to_string(),
     );
-    LALRParsingTablesGenerator::compute_tables(&dflow_grammar);
+    LALRParsingTablesGenerator::compute(&dflow_grammar);
 }
