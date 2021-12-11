@@ -1,5 +1,6 @@
 pub mod grammar;
 pub mod lalr_parsing_tables;
+pub mod lr_parser;
 mod lr0_items;
 mod lookaheads_table;
 mod test_utils;

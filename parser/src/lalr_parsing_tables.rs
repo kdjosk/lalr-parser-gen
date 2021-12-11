@@ -188,7 +188,9 @@ impl LALRParsingTablesGenerator {
                     lalr_tables.set_action(set_idx, &EOT, Action::Accept)
                 } 
                 else if item.production.rhs.last().unwrap() == &DOT.clone() {
-                    lalr_tables.set_action(set_idx, &item.lookahead, Action::Reduce(item.production.clone()))
+                    let mut prod = item.production.clone();
+                    prod.rhs.pop();
+                    lalr_tables.set_action(set_idx, &item.lookahead, Action::Reduce(prod))
                 }
                 else {
                     let dot_idx = item.production.find_indexes_of_symbol_on_rhs(&DOT);
@@ -201,24 +203,51 @@ impl LALRParsingTablesGenerator {
                             grammar.goto_with_lookahead(set, sym_after_dot);
                         let mut success = false;
                         for (shift_set_idx, set) in sets.sets.iter().enumerate() {
-                            if goto_set == *set {
+                            if LALRParsingTablesGenerator::are_kernels_equal(&goto_set, set) {
                                 lalr_tables.set_action(set_idx, sym_after_dot, Action::Shift(shift_set_idx));
                                 success = true;
                                 break;
                             }
                         }
-                        // println!("");
-                        // println!("set:");
-                        // for p in set {
-                        //     println!("{}", p);
-                        // }
-                        // println!("goto set: {}", sym_after_dot);
-                        // for p in goto_set {
-                        //     println!("{}", p);
-                        // }
+                        assert!(success);
                     }
                 }
             }
+        }
+    }
+
+    fn are_kernels_equal(
+        set_1: &HashSet<ProductionWithLookahead>,
+        set_2: &HashSet<ProductionWithLookahead>
+    ) -> bool {
+        let mut kernels_1 = HashSet::new();
+        let mut kernels_2 = HashSet::new();
+
+        let mut lr0_kernels_1 = HashSet::new();
+        let mut lr0_kernels_2 = HashSet::new();
+
+        for item in set_1 {
+            if item.production.rhs[0] != DOT.clone() {
+                kernels_1.insert(item.clone());
+                lr0_kernels_1.insert(item.production.clone());
+            }
+        }
+
+        for item in set_2 {
+            if item.production.rhs[0] != DOT.clone() {
+                kernels_2.insert(item.clone());
+                lr0_kernels_2.insert(item.production.clone());
+            }
+        }
+        
+        if lr0_kernels_1 == lr0_kernels_2 {
+            if kernels_1.len() > kernels_2.len() {
+                return kernels_2.is_subset(&kernels_1);
+            } else {
+                return kernels_1.is_subset(&kernels_2);
+            }
+        } else {
+            return false;
         }
     }
 
