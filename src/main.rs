@@ -26,5 +26,15 @@ fn main() {
         "#
         .to_string(),
     );
-    LALRParsingTablesGenerator::compute(&dflow_grammar);
+
+    let another_grammar = Grammar::new(
+        r#"
+        S' -> S
+        S -> C C
+        C -> c C
+        C -> d
+        "#
+        .to_string(),
+    );
+    LALRParsingTablesGenerator::compute(&another_grammar);
 }

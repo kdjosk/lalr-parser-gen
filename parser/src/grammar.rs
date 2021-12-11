@@ -105,10 +105,7 @@ impl Display for ProductionWithLookahead {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq, PartialOrd, Ord)]
-pub struct Symbol {
-    id: String,
-}
+
 
 use core::fmt;
 use core::fmt::Display;
@@ -126,6 +123,10 @@ lazy_static! {
     pub static ref UNKNOWN: Symbol = Symbol::new("UNKNOWN");
 }
 
+#[derive(Debug, Clone, PartialEq, Hash, Eq, PartialOrd, Ord)]
+pub struct Symbol {
+    pub id: String,
+}
 impl Symbol {
     pub fn new(id: &str) -> Symbol {
         Symbol { id: id.to_string() }
