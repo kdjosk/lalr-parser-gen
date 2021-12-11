@@ -1,6 +1,6 @@
 use lexer::{self, FileSource, Token};
 use parser::grammar::Grammar;
-use parser::lalr_parsing_tables::{self, LALRParsingTables};
+use parser::lalr_parsing_tables::{self, LALRParsingTablesGenerator};
 use std::env;
 
 fn main() {
@@ -26,6 +26,5 @@ fn main() {
         "#
         .to_string(),
     );
-    let lalr_tables = LALRParsingTables::new(&dflow_grammar);
-    lalr_tables.compute_tables();
+    LALRParsingTablesGenerator::compute_tables(&dflow_grammar);
 }

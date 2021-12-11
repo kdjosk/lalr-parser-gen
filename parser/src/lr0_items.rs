@@ -184,7 +184,7 @@ mod tests {
         let closure = LR0Items::new(&grammar).closure(&item_set);
 
         let expected = HashSet::from([
-            Production::from("T -> . S EOT"),
+            Production::from("T -> . S"),
             Production::from("S -> . A S'"),
             Production::from("A -> . B A'"),
             Production::from("B -> . c"),
@@ -231,14 +231,14 @@ mod tests {
         // page 255
         let expected: Vec<HashSet<Production>> = Vec::from([
             HashSet::from([
-                Production::from("S' -> . S EOT"),
+                Production::from("S' -> . S"),
                 Production::from("S -> . L Eq R"),
                 Production::from("S -> . R"),
                 Production::from("L -> . Star R"),
                 Production::from("L -> . id"),
                 Production::from("R -> . L"),
             ]),
-            HashSet::from([Production::from("S' -> S . EOT")]),
+            HashSet::from([Production::from("S' -> S .")]),
             HashSet::from([
                 Production::from("S -> L . Eq R"),
                 Production::from("R -> L ."),
@@ -278,8 +278,8 @@ mod tests {
         let kernels = LR0Items::new(&grammar).compute_kernels();
 
         let expected: Vec<HashSet<Production>> = Vec::from([
-            HashSet::from([Production::from("S' -> . S EOT")]),
-            HashSet::from([Production::from("S' -> S . EOT")]),
+            HashSet::from([Production::from("S' -> . S")]),
+            HashSet::from([Production::from("S' -> S .")]),
             HashSet::from([
                 Production::from("S -> L . Eq R"),
                 Production::from("R -> L ."),

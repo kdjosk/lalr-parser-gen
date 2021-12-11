@@ -3,7 +3,7 @@ use std::collections::HashSet;
 
 pub fn get_test_grammar_1_description() -> String {
     r#"
-    T -> S EOT
+    T -> S
     S -> A S'
     S' -> Plus A S'
     S' -> 
@@ -18,7 +18,7 @@ pub fn get_test_grammar_1_description() -> String {
 
 pub fn get_test_grammar_2_description() -> String {
     r#"
-    S' -> S EOT
+    S' -> S
     S -> L Eq R
     S -> R
     L -> Star R
@@ -31,7 +31,7 @@ pub fn get_test_grammar_2_description() -> String {
 // page 263
 pub fn get_test_grammar_3_description() -> String {
     r#"
-    S' -> S EOT
+    S' -> S
     S -> C C
     C -> c C
     C -> d
