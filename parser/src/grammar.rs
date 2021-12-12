@@ -105,8 +105,6 @@ impl Display for ProductionWithLookahead {
     }
 }
 
-
-
 use core::fmt;
 use core::fmt::Display;
 use std::{panic, vec};

@@ -43,7 +43,6 @@ pub fn get_kwords() -> HashMap<&'static str, Token> {
         ("str", Token::String),
         ("false", Token::False),
         ("true", Token::True),
-        ("m", Token::M),
     ])
 }
 
@@ -146,8 +145,9 @@ pub enum Token {
     False,
     M,
     StringLiteral(String),
-    IntegerLiteral(String),
-    FloatingLiteral(String),
+    IntegerLiteral(u64),
+    FloatingLiteral(f64),
     Identifier(String),
+    Unknown,
     EndOfText,
 }

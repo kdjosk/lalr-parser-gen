@@ -1,22 +1,32 @@
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
+use std::collections::VecDeque;
 pub trait Source {
     fn get_char(&mut self) -> char;
+    fn peek(&mut self) -> char;
 }
 
 pub struct FileSource {
     file_handle: File,
+    cache: Option<char>,
 }
 
 impl FileSource {
     pub fn new(path_to_file: String) -> io::Result<FileSource> {
         let file = File::open(path_to_file)?;
-        Ok(FileSource { file_handle: file })
+        Ok(FileSource { file_handle: file, cache: None})
     }
 }
 
 impl Source for FileSource {
     fn get_char(&mut self) -> char {
+        match self.cache {
+            Some(c) => {
+                self.cache = None;
+                return c;
+            }
+            None => (),
+        }
         let mut buf = [0; 1];
         match self.file_handle.read_exact(&mut buf) {
             Err(e) => {
@@ -35,10 +45,23 @@ impl Source for FileSource {
             }
         }
     }
+
+    fn peek(&mut self) -> char { 
+        match self.cache {
+            Some(c) => {
+                return c;
+            }
+            None => (),
+        }
+        let c = self.get_char();
+        self.cache = Some(c);
+        c
+    }
 }
 
 pub struct StringSource {
     string: String,
+    cache: Option<char>,
 }
 
 impl StringSource {
@@ -46,16 +69,36 @@ impl StringSource {
         StringSource {
             // storing as reversed for easy popping
             string: string.chars().rev().collect(),
+            cache: None,
         }
     }
 }
 
 impl Source for StringSource {
     fn get_char(&mut self) -> char {
+        match self.cache {
+            Some(c) => {
+                self.cache = None;
+                return c;
+            }
+            None => (),
+        }
         match self.string.pop() {
             Some(c) => c,
             None => '$',
         }
+    }
+
+    fn peek(&mut self) -> char {
+        match self.cache {
+            Some(c) => {
+                return c;
+            }
+            None => (),
+        }
+        let c = self.get_char();
+        self.cache = Some(c);
+        c
     }
 }
 

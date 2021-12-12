@@ -1,12 +1,11 @@
-use crate::grammar::{Grammar, Production, ProductionWithLookahead, Symbol, EOT, DOT};
+use crate::grammar::{Grammar, Production, ProductionWithLookahead, Symbol, DOT, EOT};
+use lazy_static::lazy_static;
 use std::collections::{HashMap, HashSet};
 use std::mem;
-use lazy_static::lazy_static;
 
 lazy_static! {
     static ref UNKNOWN: Symbol = Symbol::new("UNKNOWN");
 }
-
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 pub struct SetItem {
@@ -15,7 +14,10 @@ pub struct SetItem {
 }
 impl SetItem {
     pub fn new(production: Production, set_idx: usize) -> SetItem {
-        SetItem { production, set_idx }
+        SetItem {
+            production,
+            set_idx,
+        }
     }
 }
 
@@ -24,7 +26,7 @@ pub struct LookaheadsTable<'a> {
     lr0_kernels: Vec<HashSet<Production>>,
     pub table: Vec<HashMap<Production, HashSet<Symbol>>>,
     table_swap_copy: Vec<HashMap<Production, HashSet<Symbol>>>,
-    propagation: HashMap<SetItem, HashSet<SetItem>>, 
+    propagation: HashMap<SetItem, HashSet<SetItem>>,
 }
 impl<'a> LookaheadsTable<'a> {
     pub fn new(grammar: &'a Grammar, lr0_kernels: Vec<HashSet<Production>>) -> LookaheadsTable<'a> {
@@ -46,22 +48,20 @@ impl<'a> LookaheadsTable<'a> {
             table_swap_copy: table.clone(),
             table,
             propagation,
-        }     
+        }
     }
 
     pub fn compute(&mut self) {
         self.init_propagation_rules_and_spontaneous_lookaheads();
         self.make_repeated_passes_of_propagation()
     }
-    
+
     pub fn add_lookahead(&mut self, item: &SetItem, lookahead: &Symbol) {
         let current_lookaheads = self.table[item.set_idx].get_mut(&item.production).unwrap();
         current_lookaheads.insert(lookahead.clone());
     }
 
-    fn init_propagation_rules_and_spontaneous_lookaheads(
-        &mut self,
-    ) {
+    fn init_propagation_rules_and_spontaneous_lookaheads(&mut self) {
         // contract
         let mut starting_item = self.grammar.get_start_item();
         starting_item.rhs.insert(0, DOT.clone());
@@ -75,9 +75,7 @@ impl<'a> LookaheadsTable<'a> {
         }
     }
 
-    pub fn make_repeated_passes_of_propagation(
-        &mut self,
-    ) {
+    pub fn make_repeated_passes_of_propagation(&mut self) {
         loop {
             for (set_idx, kernel) in self.lr0_kernels.clone().iter().enumerate() {
                 for kernel_item in kernel {
@@ -88,20 +86,28 @@ impl<'a> LookaheadsTable<'a> {
                 break;
             }
             mem::swap(&mut self.table, &mut self.table_swap_copy);
-        } 
+        }
     }
 
     // TODO - Gets stuck on pass 1 state
     pub fn propagate_lookaheads(&mut self, from: &SetItem) {
-        let from_lookaheads = self.table[from.set_idx].get(&from.production).unwrap().clone();
-        self.table_swap_copy[from.set_idx].get_mut(&from.production).unwrap().extend(from_lookaheads.clone());
+        let from_lookaheads = self.table[from.set_idx]
+            .get(&from.production)
+            .unwrap()
+            .clone();
+        self.table_swap_copy[from.set_idx]
+            .get_mut(&from.production)
+            .unwrap()
+            .extend(from_lookaheads.clone());
         let propagations = self.propagation.get(from).unwrap();
 
-        for item in propagations {     
-            let item_lookaheads = self.table_swap_copy[item.set_idx].get_mut(&item.production).unwrap();
+        for item in propagations {
+            let item_lookaheads = self.table_swap_copy[item.set_idx]
+                .get_mut(&item.production)
+                .unwrap();
             if *item_lookaheads != from_lookaheads {
                 item_lookaheads.extend(from_lookaheads.clone())
-            }     
+            }
         }
     }
 
@@ -115,14 +121,12 @@ impl<'a> LookaheadsTable<'a> {
         &mut self,
         lr0_kernel: &HashSet<Production>,
         sym: &Symbol,
-    )  {
+    ) {
         for kernel_item in lr0_kernel {
-            let closure_set =
-                self.grammar.closure_with_lookahead(&HashSet::from([ProductionWithLookahead::new(
-                    kernel_item.clone(),
-                    UNKNOWN.clone(),
-                )]));
-            let mut goto_items = HashSet::new();          
+            let closure_set = self.grammar.closure_with_lookahead(&HashSet::from([
+                ProductionWithLookahead::new(kernel_item.clone(), UNKNOWN.clone()),
+            ]));
+            let mut goto_items = HashSet::new();
             for item in &closure_set {
                 let dot_idx = item.production.find_indexes_of_symbol_on_rhs(&DOT);
                 assert_eq!(dot_idx.len(), 1);
@@ -148,7 +152,7 @@ impl<'a> LookaheadsTable<'a> {
 
             let mut kernel_set_idx = None;
             let mut source_kernel_set_idx = None;
-            for (set_idx, table_el)  in self.table.iter().enumerate() {
+            for (set_idx, table_el) in self.table.iter().enumerate() {
                 let mut kernel_set = HashSet::new();
                 for key in table_el.keys() {
                     kernel_set.insert(key.clone());
@@ -158,24 +162,24 @@ impl<'a> LookaheadsTable<'a> {
                 }
                 if kernel_set == *lr0_kernel {
                     source_kernel_set_idx = Some(set_idx);
-                } 
+                }
             }
 
-            for goto_item in &goto_items {         
+            for goto_item in &goto_items {
                 if goto_item.lookahead != UNKNOWN.clone() {
                     self.add_lookahead(
-                        &SetItem::new(goto_item.production.clone(), kernel_set_idx.unwrap()), 
-                        &goto_item.lookahead);
+                        &SetItem::new(goto_item.production.clone(), kernel_set_idx.unwrap()),
+                        &goto_item.lookahead,
+                    );
                 } else {
                     self.add_propagation(
                         &SetItem::new(kernel_item.clone(), source_kernel_set_idx.unwrap()),
-                            &SetItem::new(goto_item.production.clone(), kernel_set_idx.unwrap()));
+                        &SetItem::new(goto_item.production.clone(), kernel_set_idx.unwrap()),
+                    );
                 }
             }
-                
         }
     }
-    
 
     pub fn print(&self) {
         for (idx, map) in self.table.iter().enumerate() {
@@ -196,14 +200,12 @@ impl<'a> LookaheadsTable<'a> {
                 println!("{} in {}", p.production, p.set_idx);
             }
         }
-
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils;
     use crate::lr0_items::LR0Items;
-
+    use crate::test_utils;
 }
