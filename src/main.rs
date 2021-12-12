@@ -1,7 +1,26 @@
 use lexer::{self, FileSource, Token};
-use parser::grammar::Grammar;
+use parser::grammar::{Grammar, Symbol};
+use parser::lr_parser::{LRParser, SymbolSource};
 use parser::lalr_parsing_tables::{self, LALRParsingTablesGenerator};
 use std::env;
+
+
+struct MockSource {
+    symbols: Vec<Symbol>,
+}
+impl MockSource {
+    pub fn new(mut symbols: Vec<Symbol>) -> MockSource {
+        symbols.reverse();
+        MockSource {
+            symbols 
+        }
+    }
+}
+impl SymbolSource for MockSource {
+    fn next_symbol(&mut self) -> Symbol {
+        self.symbols.pop().unwrap() 
+    }
+}
 
 fn main() {
     // let path = env::current_dir().unwrap();
@@ -36,5 +55,17 @@ fn main() {
         "#
         .to_string(),
     );
-    LALRParsingTablesGenerator::compute(&another_grammar);
+    
+    let parsing_tables = LALRParsingTablesGenerator::compute(&dflow_grammar);
+    let symbol_source = MockSource::new( 
+        vec![
+            Symbol::new("id"),
+            Symbol::new("EOT"),
+        ]);
+    let mut parser = LRParser::new(parsing_tables, symbol_source);
+    let output = parser.parse();
+
+    for p in output {
+        println!("{}", p);
+    }
 }

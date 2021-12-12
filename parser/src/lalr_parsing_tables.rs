@@ -59,6 +59,19 @@ impl LALRParsingTables {
         }
     }
 
+    pub fn get_action(&self, set_idx: usize, terminal: &Symbol) -> Action {
+        self.action[set_idx][*self.symbol_to_idx.get(terminal).unwrap()].clone()
+    }
+
+    pub fn get_goto(&self, from_state: usize, nonterminal: &Symbol) -> usize {
+        let res = self.goto[from_state][*self.symbol_to_idx.get(nonterminal).unwrap()];
+        if res == usize::MAX {
+            panic!("TRYING TO ACCESS ERROR VALUE IN GOTO");
+        } else {
+            res
+        }
+    }
+
     pub fn set_goto(&mut self, from_state: usize, nonterminal: &Symbol, to_state: usize) {
         if self.goto[from_state][*self.symbol_to_idx.get(nonterminal).unwrap()] == usize::MAX {
             self.goto[from_state][*self.symbol_to_idx.get(nonterminal).unwrap()] = to_state;
@@ -113,20 +126,19 @@ pub struct LALRParsingTablesGenerator {
 }
 impl LALRParsingTablesGenerator {
 
-    pub fn compute(grammar: &Grammar) {
+    pub fn compute(grammar: &Grammar) -> LALRParsingTables {
         let kernels = LR0Items::new(grammar).compute_kernels();
         let mut lookaheads_table = LookaheadsTable::new(grammar, kernels);
         lookaheads_table.compute();
-        lookaheads_table.print();
         let canonical_lalr_sets = 
             LALRParsingTablesGenerator::convert_lookaheads_table_to_canonical_lalr_sets(
                 &lookaheads_table,
                 grammar,
             );
-        LALRParsingTablesGenerator::compute_parsing_tables(grammar, canonical_lalr_sets);
+        LALRParsingTablesGenerator::compute_parsing_tables(grammar, canonical_lalr_sets)
     }
 
-    fn compute_parsing_tables(grammar: &Grammar, sets: CanonicalLALRSets) {
+    fn compute_parsing_tables(grammar: &Grammar, sets: CanonicalLALRSets) -> LALRParsingTables {
         let mut terminals = HashSet::new();
         let mut nonterminals = HashSet::new();
         let symbols = grammar.symbols.clone();
@@ -151,8 +163,8 @@ impl LALRParsingTablesGenerator {
             &sets,
             &mut lalr_tables, 
             &nonterminals);
-
         lalr_tables.print();
+        lalr_tables
     }
 
     fn populate_goto(
