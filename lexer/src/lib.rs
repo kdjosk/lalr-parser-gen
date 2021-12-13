@@ -4,14 +4,11 @@ use regex::Regex;
 pub use source::{FileSource, Source, StringSource};
 use std::collections::HashMap;
 use std::{mem, panic};
-pub use tokens::Token;
+pub use tokens::{Token, KEYWORDS, ONE_CHAR_OPERATORS, TWO_CHAR_OPERATORS};
 
 pub struct Lexer<T> {
     source: T,
     cache: Option<char>,
-    kwords: HashMap<&'static str, Token>,
-    ll1_operators: HashMap<&'static str, Token>,
-    ll2_operators: HashMap<&'static str, Token>,
 }
 
 impl<T: Source> Lexer<T> {
@@ -19,9 +16,6 @@ impl<T: Source> Lexer<T> {
         Lexer {
             source,
             cache: None,
-            kwords: tokens::get_kwords(),
-            ll1_operators: tokens::get_ll1_operators(),
-            ll2_operators: tokens::get_ll2_operators(),
         }
     }
     // 1 3 2 4
@@ -34,10 +28,88 @@ impl<T: Source> Lexer<T> {
         if self.is_digit(c) {
             return self.build_number_literal();
         }
-
-        Token::Unknown
+        if let Some(t) = self.try_build_string_literal() {
+            return t;
+        }
+        if let Some(t) = self.try_build_operator() {
+            return t;
+        }
+        if let Some(t) = self.try_build_whitespace() {
+            return t;
+        }
+        unreachable!("Could not recognize token!")
     }
 
+    fn try_build_string_literal(&mut self) -> Option<Token> {
+        static MAX_STRING_LITERAL_LEN: usize = 8192;
+        let opening = self.peek();
+        match opening {
+            '\'' | '"' => {
+                self.get_char();
+                let mut literal = String::new();
+                while literal.len() < MAX_STRING_LITERAL_LEN {
+                    let c = self.get_char();
+                    match c {
+                        '\'' | '"' => {
+                            if c == opening {
+                                return Some(Token::StringLiteral(literal));
+                            }
+                            panic!("Opening is `{}`, but ending is `{}`", opening, c);
+                        }
+                        '\\' => {
+                            let c = self.get_char();
+                            match c {
+                                '\'' | '"' | '\\' => literal.push(c),
+                                't' => literal.push('\t'),
+                                'n' => literal.push('\n'),
+                                _ => panic!("Unknown escape sequence \\{}", c),
+                            }
+                        }
+                        '$' => {
+                            panic!("No matching ending for opening `{}`", opening);
+                        }
+                        c => {
+                            literal.push(c);
+                        }
+                    }
+                }
+                panic!("Max string literal len exceeded");
+            }
+            _ => None,
+        }
+    }
+
+    fn try_build_whitespace(&mut self) -> Option<Token> {
+        let c = self.get_char();
+        match c {
+            '\n' => Some(Token::Newline),
+            '\t' => Some(Token::Tab),
+            ' ' => Some(Token::Space),
+            _ => {
+                self.cache(c);
+                None
+            } 
+        }
+        
+    }
+
+    fn try_build_operator(&mut self) -> Option<Token> {
+        let c = self.get_char();
+        let mut op = String::new();
+        op.push(c);
+        op.push(self.peek());
+        if TWO_CHAR_OPERATORS.contains_key(op.as_str()) {
+            return Some(TWO_CHAR_OPERATORS.get(op.as_str()).unwrap().clone());
+        }
+        op.pop();
+
+        if ONE_CHAR_OPERATORS.contains_key(op.as_str()) {
+            Some(ONE_CHAR_OPERATORS.get(op.as_str()).unwrap().clone())
+        } else {
+            self.cache(c);
+            None
+        }
+    }
 
     fn build_number_literal(&mut self) -> Token {
         match self.peek() {
@@ -48,7 +120,6 @@ impl<T: Source> Lexer<T> {
                     '0'..='9' => panic!("Invalid number prefix 0[0-9]"),
                     _ => Token::IntegerLiteral(0),
                 }
-               
             }
             '1'..='9' => {
                 let integer = self.build_integer_literal();
@@ -62,8 +133,8 @@ impl<T: Source> Lexer<T> {
                         let res = integer as f64 * exp;
                         Token::FloatingLiteral(res)
                     }
-                    _ => Token::IntegerLiteral(integer)
-                } 
+                    _ => Token::IntegerLiteral(integer),
+                }
             }
             _ => unreachable!(),
         }
@@ -76,7 +147,7 @@ impl<T: Source> Lexer<T> {
                 let exponent = self.build_exponent_part();
                 return (integer_prefix as f64 + fractional_part) * exponent;
             }
-            _ => ()
+            _ => (),
         }
         integer_prefix as f64 + fractional_part
     }
@@ -92,7 +163,7 @@ impl<T: Source> Lexer<T> {
             '+' => {
                 self.get_char();
             }
-            _ => ()
+            _ => (),
         }
         let exp = self.build_integer_literal();
         let base: f64 = 10.0;
@@ -105,7 +176,7 @@ impl<T: Source> Lexer<T> {
         let mut point_idx = None;
         let mut idx = 0;
         while self.is_digit(c) || c == '.' {
-            if c == '.'{
+            if c == '.' {
                 point_idx = Some(idx);
                 idx += 1;
                 c = self.get_char();
@@ -122,19 +193,19 @@ impl<T: Source> Lexer<T> {
         let base: u64 = 10;
         match point_idx {
             Some(i) => div = base.pow(idx - i),
-            None => ()
+            None => (),
         }
 
         num as f64 / div as f64
     }
 
-    fn build_integer_literal(&mut self) -> u64 {      
+    fn build_integer_literal(&mut self) -> u64 {
         let mut c = self.get_char();
         let mut num: u64 = c.to_digit(10).unwrap() as u64;
         c = self.get_char();
         while self.is_digit(c) {
             num *= 10;
-            num += c.to_digit(10).unwrap() as u64;    
+            num += c.to_digit(10).unwrap() as u64;
             c = self.get_char();
         }
         self.cache(c);
@@ -147,8 +218,8 @@ impl<T: Source> Lexer<T> {
         string.push(self.get_char());
         let mut c = self.source.get_char();
         while self.is_letter_or_underscore(c) || self.is_digit(c) {
-            if string.len() < MAX_TOKEN_IDENTIFIER_LEN {
-                panic!("MAX IDENTIFIER LENGTH SURPASSED: {}", string);
+            if string.len() >= MAX_TOKEN_IDENTIFIER_LEN {
+                panic!("MAX IDENTIFIER LENGTH SURPASSED: {}{}", string, c);
             }
             string.push(c);
             c = self.get_char();
@@ -164,7 +235,7 @@ impl<T: Source> Lexer<T> {
     }
 
     fn if_is_keyword_get(&self, string: &String) -> Option<&Token> {
-        self.kwords.get(string.as_str())
+        KEYWORDS.get(string.as_str())
     }
 
     fn get_char(&mut self) -> char {
@@ -173,28 +244,20 @@ impl<T: Source> Lexer<T> {
                 self.cache = None;
                 c
             }
-            None => {
-                self.source.get_char()
-            }
+            None => self.source.get_char(),
         }
     }
 
     fn peek(&mut self) -> char {
         match self.cache {
-            Some(c) => {
-                c
-            }
-            None => {
-                self.source.peek()
-            }
+            Some(c) => c,
+            None => self.source.peek(),
         }
     }
-
 
     fn cache(&mut self, c: char) {
         self.cache = Some(c);
     }
-
 
     fn is_letter_or_underscore(&self, c: char) -> bool {
         match c {

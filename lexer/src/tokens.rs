@@ -1,7 +1,39 @@
+use lazy_static::lazy_static;
 use std::collections::HashMap;
 
-pub fn get_kwords() -> HashMap<&'static str, Token> {
-    HashMap::from([
+lazy_static! {
+    pub static ref WHITESPACE: HashMap<&'static str, Token> = HashMap::from([
+        (" ", Token::Space),
+        ("\t", Token::Tab),
+        ("\n", Token::Newline),
+    ]);
+    pub static ref ONE_CHAR_OPERATORS: HashMap<&'static str, Token> = HashMap::from([
+        ("{", Token::LBrace),
+        ("}", Token::RBrace),
+        ("(", Token::LParen),
+        (")", Token::RParen),
+        ("[", Token::LBracket),
+        ("]", Token::RBracket),
+        ("+", Token::Plus),
+        ("*", Token::Star),
+        ("/", Token::Div),
+        (":", Token::Colon),
+        (";", Token::Semi),
+        (",", Token::Coma),
+        (".", Token::Dot),
+        ("-", Token::Minus),
+        ("=", Token::Assign),
+        ("<", Token::Less),
+        (">", Token::Greater),
+    ]);
+    pub static ref TWO_CHAR_OPERATORS: HashMap<&'static str, Token> = HashMap::from([
+        ("->", Token::RArrow),
+        ("==", Token::Equal),
+        ("<=", Token::LessEqual),
+        (">=", Token::GreaterEqual),
+        ("!=", Token::NotEqual),
+    ]);
+    pub static ref KEYWORDS: HashMap<&'static str, Token> = HashMap::from([
         ("dflow", Token::Dflow),
         ("module", Token::Module),
         ("library", Token::Library),
@@ -16,8 +48,8 @@ pub fn get_kwords() -> HashMap<&'static str, Token> {
         ("if", Token::If),
         ("else", Token::Else),
         ("struct", Token::Struct),
-        ("_init", Token::Init),
-        ("_call", Token::Call),
+        ("init", Token::Init),
+        ("call", Token::Call),
         ("impl", Token::Impl),
         ("as", Token::As),
         ("priv", Token::Priv),
@@ -43,39 +75,7 @@ pub fn get_kwords() -> HashMap<&'static str, Token> {
         ("str", Token::String),
         ("false", Token::False),
         ("true", Token::True),
-    ])
-}
-
-pub fn get_ll1_operators() -> HashMap<&'static str, Token> {
-    HashMap::from([
-        ("{", Token::LBrace),
-        ("}", Token::RBrace),
-        ("(", Token::LParen),
-        (")", Token::RParen),
-        ("[", Token::LBracket),
-        ("]", Token::RBracket),
-        ("+", Token::Plus),
-        ("*", Token::Star),
-        ("/", Token::Div),
-        (":", Token::Colon),
-        (";", Token::Semi),
-        (",", Token::Coma),
-        (".", Token::Dot),
-        ("!=", Token::NotEqual),
-    ])
-}
-
-pub fn get_ll2_operators() -> HashMap<&'static str, Token> {
-    HashMap::from([
-        ("-", Token::Minus),
-        ("->", Token::RArrow),
-        ("=", Token::Assign),
-        ("==", Token::Equal),
-        ("<", Token::Less),
-        ("<=", Token::LessEqual),
-        (">", Token::Greater),
-        (">=", Token::GreaterEqual),
-    ])
+    ]);
 }
 
 #[derive(Clone, PartialEq, Debug)]
@@ -148,6 +148,8 @@ pub enum Token {
     IntegerLiteral(u64),
     FloatingLiteral(f64),
     Identifier(String),
-    Unknown,
+    Space,
+    Tab,
+    Newline,
     EndOfText,
 }

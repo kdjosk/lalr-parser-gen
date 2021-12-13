@@ -190,6 +190,7 @@ name = "lexer"
 version = "0.1.0"
 dependencies = [
  "float-cmp",
+ "lazy_static",
  "regex",
 ]
 

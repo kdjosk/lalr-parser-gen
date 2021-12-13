@@ -1,6 +1,6 @@
+use std::collections::VecDeque;
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
-use std::collections::VecDeque;
 pub trait Source {
     fn get_char(&mut self) -> char;
     fn peek(&mut self) -> char;
@@ -14,7 +14,10 @@ pub struct FileSource {
 impl FileSource {
     pub fn new(path_to_file: String) -> io::Result<FileSource> {
         let file = File::open(path_to_file)?;
-        Ok(FileSource { file_handle: file, cache: None})
+        Ok(FileSource {
+            file_handle: file,
+            cache: None,
+        })
     }
 }
 
@@ -46,7 +49,7 @@ impl Source for FileSource {
         }
     }
 
-    fn peek(&mut self) -> char { 
+    fn peek(&mut self) -> char {
         match self.cache {
             Some(c) => {
                 return c;
