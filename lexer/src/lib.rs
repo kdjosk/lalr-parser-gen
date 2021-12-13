@@ -42,37 +42,55 @@ impl<T: Source> Lexer<T> {
     fn build_number_literal(&mut self) -> Token {
         match self.peek() {
             '0' => {
-                return Token::FloatingLiteral(self.build_floating_literal());
+                Token::FloatingLiteral(self.build_floating_literal(0))
             }
             '1'..='9' => {
-                return Token::IntegerLiteral(self.build_integer_literal());
+                let integer = self.build_integer_literal();
+                match self.peek() {
+                    '.' => {
+                        let floating = self.build_floating_literal(integer);
+                        Token::FloatingLiteral(floating)
+                    }
+                    'e' | 'E' => {
+                        let exp = self.build_exponent_part();
+                        let res = integer as f64 * exp;
+                        Token::FloatingLiteral(res)
+                    }
+                    _ => Token::IntegerLiteral(integer)
+                } 
             }
             _ => unreachable!(),
         }
     }
 
-    fn build_floating_literal(&mut self) -> f64 {
+    fn build_floating_literal(&mut self, integer_prefix: u64) -> f64 {
         let fractional_part = self.build_fractional_part();
         match self.peek() {
             'e' | 'E' => {
-                self.get_char();
-                let mut sign = 1.0;
-                match self.peek() {
-                    '-' => {
-                        sign = -1.0;
-                        self.get_char();
-                    }
-                    '+' => {
-                        self.get_char();
-                    }
-                    _ => ()
-                }
-                let exp = self.build_integer_literal();
-                return fractional_part.powf(sign * exp as f64);
+                let exponent = self.build_exponent_part();
+                return (integer_prefix as f64 + fractional_part) * exponent;
             }
             _ => ()
         }
-        fractional_part
+        integer_prefix as f64 + fractional_part
+    }
+
+    fn build_exponent_part(&mut self) -> f64 {
+        self.get_char();
+        let mut sign = 1.0;
+        match self.peek() {
+            '-' => {
+                sign = -1.0;
+                self.get_char();
+            }
+            '+' => {
+                self.get_char();
+            }
+            _ => ()
+        }
+        let exp = self.build_integer_literal();
+        let base: f64 = 10.0;
+        return base.powf(sign * exp as f64);
     }
 
     fn build_fractional_part(&mut self) -> f64 {
@@ -83,6 +101,8 @@ impl<T: Source> Lexer<T> {
         while self.is_digit(c) || c == '.' {
             if c == '.'{
                 point_idx = Some(idx);
+                idx += 1;
+                c = self.get_char();
                 continue;
             }
             num += c.to_digit(10).unwrap() as u64;
