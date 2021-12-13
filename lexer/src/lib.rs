@@ -42,7 +42,13 @@ impl<T: Source> Lexer<T> {
     fn build_number_literal(&mut self) -> Token {
         match self.peek() {
             '0' => {
-                Token::FloatingLiteral(self.build_floating_literal(0))
+                self.get_char();
+                match self.peek() {
+                    '.' => Token::FloatingLiteral(self.build_floating_literal(0)),
+                    '0'..='9' => panic!("Invalid number prefix 0[0-9]"),
+                    _ => Token::IntegerLiteral(0),
+                }
+               
             }
             '1'..='9' => {
                 let integer = self.build_integer_literal();
