@@ -1,0 +1,75 @@
+expr -> conjunction Or conjunctions
+expr -> conjunction
+
+conjunctions -> conjunctions Or conjunction
+conjunctions -> conjuction
+
+conjunction -> inversion And inversions
+conjunction-> inversion
+
+inversions -> inversions And inversion
+inversions -> inversion
+
+inversion -> Not inversion
+inversion -> comparison
+
+comparison -> sum relOperator sum
+comparison -> sum
+
+sum -> sum addOperator term
+sum -> term
+
+term -> term multOperator factor
+term -> factor
+
+factor -> addOperator factor
+factor -> primary
+
+primary -> primary Dot primary
+primary -> primary LParen argSeq RParen
+primary -> primary LBracket expr RBracket
+primary -> atom;
+
+atom -> Identifier
+atom -> literal;
+
+unaryOperator -> Minus
+unaryOperator -> Not
+
+addOperator -> Plus 
+addOperator -> Minus 
+
+multOperator -> Star
+multOperator -> Div
+
+relOperator -> Less
+relOperator -> Greater
+relOperator -> LessEqual
+relOperator -> GreaterEqual
+relOperator -> Equal
+relOperator -> NotEqual
+
+literal -> IntegerLiteral
+literal -> FloatingLiteral
+literal -> StringLiteral
+literal -> booleanLiteral
+
+booleanLiteral -> True
+booleanLiteral -> False
+
+typeSpecifier -> Identifier
+typeSpecifier -> simpleTypeSpecifier
+
+simpleTypeSpecifier -> U32 
+simpleTypeSpecifier -> I32 
+simpleTypeSpecifier -> F32 
+simpleTypeSpecifier -> U64 
+simpleTypeSpecifier -> I64 
+simpleTypeSpecifier -> F64 
+simpleTypeSpecifier -> U8 
+simpleTypeSpecifier -> Bool 
+simpleTypeSpecifier -> String 
+
+
+    
+

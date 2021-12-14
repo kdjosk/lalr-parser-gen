@@ -8,4 +8,5 @@ edition = "2021"
 [dependencies]
 lexer = {path = "lexer", version = "0.1.0"}
 parser = {path = "parser", version = "0.1.0"}
-
+lazy_static = "1.4.0"
+enum-map = "1.1.1"

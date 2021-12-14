@@ -1,5 +1,6 @@
 use lazy_static::lazy_static;
 use std::collections::HashMap;
+use enum_map::Enum;
 
 lazy_static! {
     pub static ref ONE_CHAR_OPERATORS: HashMap<&'static str, Token> = HashMap::from([
@@ -145,5 +146,6 @@ pub enum Token {
     Tab,
     Newline,
     Comment(String),
+    Empty,
     EndOfText,
 }

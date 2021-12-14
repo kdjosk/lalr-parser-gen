@@ -1,6 +1,5 @@
 mod source;
 mod tokens;
-use regex::Regex;
 pub use source::{FileSource, Source, StringSource};
 use std::collections::HashMap;
 use std::{mem, panic};
