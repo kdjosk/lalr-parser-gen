@@ -34,10 +34,31 @@ impl<T: Source> Lexer<T> {
         if let Some(t) = self.try_build_operator() {
             return t;
         }
+        if let Some(t) = self.try_build_comment() {
+            return t;
+        }
         if let Some(t) = self.try_build_whitespace() {
             return t;
         }
         unreachable!("Could not recognize token!")
+    }
+
+    fn try_build_comment(&mut self) -> Option<Token> {
+        static MAX_COMMENT_LEN: usize = 1024;
+        match self.peek() {
+           '#' => {
+                self.get_char();
+                let mut comment = String::new();
+                while comment.len() < MAX_COMMENT_LEN {
+                    match self.get_char() {
+                        '\n' => return Some(Token::Comment(comment)),
+                        c => comment.push(c),
+                    }
+                }
+                panic!("Max comment length exceeded! {}", comment);
+           }
+           _ => None,
+        }
     }
 
     fn try_build_string_literal(&mut self) -> Option<Token> {

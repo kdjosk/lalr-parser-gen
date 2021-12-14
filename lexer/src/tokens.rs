@@ -2,11 +2,6 @@ use lazy_static::lazy_static;
 use std::collections::HashMap;
 
 lazy_static! {
-    pub static ref WHITESPACE: HashMap<&'static str, Token> = HashMap::from([
-        (" ", Token::Space),
-        ("\t", Token::Tab),
-        ("\n", Token::Newline),
-    ]);
     pub static ref ONE_CHAR_OPERATORS: HashMap<&'static str, Token> = HashMap::from([
         ("{", Token::LBrace),
         ("}", Token::RBrace),
@@ -52,7 +47,6 @@ lazy_static! {
         ("call", Token::Call),
         ("impl", Token::Impl),
         ("as", Token::As),
-        ("priv", Token::Priv),
         ("pre", Token::Pre),
         ("post", Token::Post),
         ("break", Token::Break),
@@ -98,7 +92,6 @@ pub enum Token {
     Call,
     Impl,
     As,
-    Priv,
     Pre,
     Post,
     Break,
@@ -151,5 +144,6 @@ pub enum Token {
     Space,
     Tab,
     Newline,
+    Comment(String),
     EndOfText,
 }

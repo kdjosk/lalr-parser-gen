@@ -61,6 +61,14 @@ fn invalid_string_literal_test() {
     panic_lexer_test(r#"'aaabbbc'cc"#);
 }
 
+#[test]
+fn comment_test() {
+    lexer_test(
+        "# aaabbbccc\n",
+        &Token::Comment(String::from(" aaabbbccc")),
+    );
+}
+
 fn lbrace_test() {
     lexer_test("{", &Token::LBrace);
 }
@@ -275,11 +283,6 @@ fn impl_test() {
 #[test]
 fn as_test() {
     lexer_test("as", &Token::As);
-}
-
-#[test]
-fn priv_test() {
-    lexer_test("priv", &Token::Priv);
 }
 
 #[test]
