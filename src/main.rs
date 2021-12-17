@@ -23,12 +23,12 @@ impl SymbolSource for MockSource {
 }
 
 fn main() {
-    let program_source = FileSource::new("program.txt").unwrap();
-    let mut lexer = Lexer::new(program_source);
+    let program_source = FileSource::new("src/program.txt".to_string()).unwrap();
+    let lexer = Lexer::new(program_source);
 
-    let grammar_input = File::open("grammar_input.txt").unwrap();
+    let mut grammar_input = File::open("src/simple_grammar_input.txt").unwrap();
     let mut buf = String::new();
-    grammar_input.read_to_string(&mut buf);
+    grammar_input.read_to_string(&mut buf).unwrap();
 
     let dflow_grammar = Grammar::new(buf);
 

@@ -18,9 +18,10 @@ impl<T: Source> LexerWrapper<T> {
 }
 impl<T: Source> SymbolSource for LexerWrapper<T> {
     fn next_symbol(&mut self) -> Symbol { 
-        let t = Token::Empty;
+        let mut t = Token::Empty;
         loop {
-            let t = self.lexer.next_token();
+            t = self.lexer.next_token();
+            println!("Got token {:?}", t);
             match t {
                 Token::Comment(_) => continue,
                 Token::Tab | Token::Newline | Token::Space => continue,
@@ -28,6 +29,8 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             }   
         }
         match t {
+            Token::Coma => Symbol::new("Coma"),
+            Token::Semi => Symbol::new("Semi"),
             Token::Dot => Symbol::new("Dot"),
             Token::LParen => Symbol::new("LParen"),
             Token::RParen => Symbol::new("RParen"),

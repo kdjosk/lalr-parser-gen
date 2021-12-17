@@ -1,3 +1,7 @@
+program -> stmtSeq
+
+stmtSeq -> stmtSeq expr Semi
+stmtSeq -> expr Semi
 expr -> conjunction Or conjunctions
 expr -> conjunction
 
@@ -5,7 +9,7 @@ conjunctions -> conjunctions Or conjunction
 conjunctions -> conjuction
 
 conjunction -> inversion And inversions
-conjunction-> inversion
+conjunction -> inversion
 
 inversions -> inversions And inversion
 inversions -> inversion
@@ -28,10 +32,14 @@ factor -> primary
 primary -> primary Dot primary
 primary -> primary LParen argSeq RParen
 primary -> primary LBracket expr RBracket
-primary -> atom;
+primary -> atom
+
+argSeq -> argSeq Coma expr
+argSeq -> expr
+argSeq ->
 
 atom -> Identifier
-atom -> literal;
+atom -> literal
 
 unaryOperator -> Minus
 unaryOperator -> Not

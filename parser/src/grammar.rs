@@ -1,6 +1,6 @@
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::collections::HashSet;
+use std::{collections::HashSet, hash::Hash};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Production {
@@ -174,28 +174,53 @@ impl Grammar {
     }
 
     // page 221 in the Dragon Book
-    pub fn first(&self, sequence: &Vec<Symbol>) -> HashSet<Symbol> {
+    pub fn first(&self, sequence: &Vec<Symbol>, ) -> HashSet<Symbol> {
         let mut first_set = HashSet::new();
-        let mut all_can_reduce_to_epsilon = true;
         for s in sequence {
-            if self.is_terminal(s) {
-                first_set.insert(s.clone());
+            let mut symbols_already_called = HashSet::new();
+            let mut first_set_of_s = self.first_for_symbol(s, &mut symbols_already_called);
+            if !first_set_of_s.contains(&EPSILON) {
+                first_set.extend(first_set_of_s);
                 return first_set;
             } else {
-                let prod = self.get_productions_of(s);
-                for p in &prod {
-                    first_set.extend(self.first(&p.rhs));
+                first_set_of_s.remove(&EPSILON);
+                first_set.extend(first_set_of_s)
+            }
+            
+        }
+        first_set.insert(EPSILON.clone());
+        first_set
+    }
+
+    fn first_for_symbol(&self, sym: &Symbol, symbols_already_called: &mut HashSet<Symbol>) -> HashSet<Symbol> {
+        symbols_already_called.insert(sym.clone());
+        let mut first_set = HashSet::new();
+        if self.is_terminal(sym) {
+            first_set.insert(sym.clone());
+            return first_set;
+        } else {
+            let productions = self.get_productions_of(sym);
+            for p in &productions {
+                let mut can_reduce_to_epsilon = true;
+                for s in &p.rhs {
+                    if s != sym && !symbols_already_called.contains(s) {
+                        let mut first_set_of_s = self.first_for_symbol(s, symbols_already_called);
+                        if !first_set_of_s.contains(&EPSILON) {
+                            first_set.extend(first_set_of_s);
+                            can_reduce_to_epsilon = false;
+                            break;
+                        } else {
+                            first_set_of_s.remove(&EPSILON);
+                            first_set.extend(first_set_of_s);
+                        }
+                    }
+                }
+                if can_reduce_to_epsilon {
+                    first_set.insert(EPSILON.clone());
                 }
             }
-            if !self.can_reduce_to_epsilon(s) {
-                all_can_reduce_to_epsilon = false;
-                break;
-            }
         }
-        if all_can_reduce_to_epsilon {
-            first_set.insert(EPSILON.clone());
-        }
-        return first_set;
+        first_set
     }
 
     // TODO cache results
@@ -404,7 +429,7 @@ mod tests {
             A -> B Ap
             Ap -> Star B Ap
             Ap ->
-            B -> LP S RP
+            B -> B LP S RP
             B -> c
             "#
         .to_string();
