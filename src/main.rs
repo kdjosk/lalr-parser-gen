@@ -7,7 +7,7 @@ use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use dflow::LexerWrapper;
+use parser::lexer_wrapper::LexerWrapper;
 use hex_literal::hex;
 use sha2::{Sha256, Digest};
 

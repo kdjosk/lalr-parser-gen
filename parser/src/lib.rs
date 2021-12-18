@@ -1,10 +1,12 @@
+#![allow(dead_code)]
 pub mod grammar;
 pub mod lalr_parsing_tables;
+pub mod lexer_wrapper;
+pub mod abstract_syntax_tree;
 mod lookaheads_table;
 mod lr0_items;
 pub mod lr_parser;
 mod test_utils;
-use grammar::{Grammar, Production, ProductionWithLookahead, Symbol, DOT, EOT};
-use std::collections::HashSet;
+
 #[macro_use]
 extern crate prettytable;

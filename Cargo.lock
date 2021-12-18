@@ -321,6 +321,7 @@ dependencies = [
  "generic-array",
  "hex-literal",
  "lazy_static",
+ "lexer",
  "prettytable-rs",
  "regex",
  "serde",

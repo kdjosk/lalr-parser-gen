@@ -2,987 +2,457 @@
 action:
   - - Error
     - Error
-    - Shift: 17
+    - Error
+    - Error
+    - Error
     - Error
     - Error
     - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Shift: 7
-    - Shift: 8
-    - Shift: 15
-    - Error
-  - - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: inversion
-        rhs:
-          - id: comparison
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: inversion
-        rhs:
-          - id: comparison
-    - Reduce:
-        lhs:
-          id: inversion
-        rhs:
-          - id: comparison
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: expr
-        rhs:
-          - id: conjunction
     - Shift: 19
     - Error
     - Error
     - Error
+    - Shift: 1
+    - Shift: 7
+    - Shift: 8
     - Error
-    - Error
-  - - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Shift: 20
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
-    - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
-    - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
     - Shift: 21
     - Error
+    - Error
+    - Error
+    - Shift: 16
+    - Shift: 15
+    - Error
+  - - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
     - Reduce:
         lhs:
-          id: sum
+          id: literal
         rhs:
-          - id: term
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Error
+    - Error
     - Error
     - Reduce:
         lhs:
-          id: sum
+          id: literal
         rhs:
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
+          - id: FloatingLiteral
     - Error
     - Reduce:
         lhs:
-          id: sum
+          id: literal
         rhs:
-          - id: term
+          - id: FloatingLiteral
     - Reduce:
         lhs:
-          id: sum
+          id: literal
         rhs:
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: term
+          - id: FloatingLiteral
     - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: FloatingLiteral
     - Error
     - Error
     - Error
   - - Error
     - Error
-    - Shift: 17
     - Error
     - Error
-    - Error
-    - Shift: 11
-    - Error
-    - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
     - Error
     - Error
     - Accept
     - Error
-    - Error
-    - Error
-    - Shift: 7
-    - Shift: 8
-    - Shift: 15
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: IntegerLiteral
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: StringLiteral
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: FloatingLiteral
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Shift: 23
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: conjunction
-        rhs:
-          - id: inversion
-    - Reduce:
-        lhs:
-          id: conjunction
-        rhs:
-          - id: inversion
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmt
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "False"
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: literal
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Reduce:
-        lhs:
-          id: literal
-        rhs:
-          - id: booleanLiteral
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: atom
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Reduce:
-        lhs:
-          id: atom
-        rhs:
-          - id: Identifier
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Error
-    - Shift: 17
-    - Error
-    - Error
-    - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
+    - Shift: 19
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
+    - Shift: 1
     - Shift: 7
     - Shift: 8
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 16
     - Shift: 15
     - Error
+  - - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: assignmentStmt
+    - Error
   - - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Reduce:
-        lhs:
-          id: booleanLiteral
-        rhs:
-          - id: "True"
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Shift: 27
-    - Error
-    - Shift: 26
     - Shift: 31
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+    - Error
+    - Error
+    - Error
+    - Shift: 30
+    - Error
+    - Shift: 32
     - Shift: 28
     - Error
-    - Shift: 29
-    - Error
-    - Error
     - Shift: 33
-    - Error
+    - Shift: 26
     - Reduce:
         lhs:
           id: comparison
         rhs:
           - id: sum
-    - Shift: 32
     - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 24
+    - Shift: 27
     - Reduce:
         lhs:
           id: comparison
         rhs:
           - id: sum
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
     - Reduce:
         lhs:
-          id: comparison
+          id: atom
         rhs:
-          - id: sum
-    - Shift: 25
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
     - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: literal
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: expr
+        rhs:
+          - id: conjunction
+    - Shift: 34
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: expr
+        rhs:
+          - id: conjunction
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "True"
     - Error
     - Error
     - Error
@@ -991,253 +461,1903 @@ action:
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Shift: 35
-  - - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Reduce:
-        lhs:
-          id: stmt
-        rhs:
-          - id: expr
-          - id: Semi
-    - Error
-  - - Shift: 37
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Reduce:
-        lhs:
-          id: stmtSeq
-        rhs:
-          - id: stmtSeq
-          - id: stmt
-    - Error
-  - - Error
-    - Error
-    - Shift: 17
     - Error
     - Error
     - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
+    - Shift: 19
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
+    - Shift: 1
     - Shift: 7
-    - Shift: 8
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
     - Shift: 15
     - Error
   - - Error
     - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 37
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmt
+    - Error
+  - - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: IntegerLiteral
+    - Error
+    - Error
+    - Error
+  - - Shift: 38
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: term
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: atom
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: booleanLiteral
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 11
+    - Error
+    - Error
+    - Shift: 19
+    - Error
+    - Error
+    - Error
+    - Shift: 1
+    - Shift: 7
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
+    - Shift: 15
+    - Error
+  - - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Shift: 40
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: exprStmt
+    - Error
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: comparison
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: comparison
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: comparison
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: comparison
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Reduce:
+        lhs:
+          id: literal
+        rhs:
+          - id: StringLiteral
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 41
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Reduce:
+        lhs:
+          id: booleanLiteral
+        rhs:
+          - id: "False"
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Reduce:
+        lhs:
+          id: stmt
+        rhs:
+          - id: ifStmt
+    - Error
+  - - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Reduce:
+        lhs:
+          id: stmtSeq
+        rhs:
+          - id: stmtSeq
+          - id: stmt
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: GreaterEqual
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 11
+    - Error
+    - Error
+    - Shift: 19
+    - Error
+    - Error
+    - Error
+    - Shift: 1
+    - Shift: 7
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Greater
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Minus
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: addOperator
+        rhs:
+          - id: Plus
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 11
+    - Error
+    - Error
+    - Shift: 19
+    - Error
+    - Error
+    - Error
+    - Shift: 1
+    - Shift: 7
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Equal
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: NotEqual
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: LessEqual
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Reduce:
+        lhs:
+          id: relOperator
+        rhs:
+          - id: Less
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 45
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Shift: 46
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Reduce:
+        lhs:
+          id: atom
+        rhs:
+          - id: Identifier
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Reduce:
+        lhs:
+          id: exprStmt
+        rhs:
+          - id: expr
+          - id: Semi
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 47
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: Not
+          - id: inversion
+    - Reduce:
+        lhs:
+          id: inversion
+        rhs:
+          - id: Not
+          - id: inversion
     - Error
     - Error
     - Error
@@ -1256,513 +2376,44 @@ action:
           - id: inversion
     - Error
     - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
     - Reduce:
         lhs:
           id: inversion
         rhs:
           - id: Not
           - id: inversion
-    - Reduce:
-        lhs:
-          id: inversion
-        rhs:
-          - id: Not
-          - id: inversion
-    - Error
-    - Error
     - Error
     - Error
     - Error
   - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
     - Error
     - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
     - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
     - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Equal
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: GreaterEqual
-    - Error
-  - - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Plus
-    - Error
-  - - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Reduce:
-        lhs:
-          id: addOperator
-        rhs:
-          - id: Minus
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: NotEqual
-    - Error
-  - - Error
-    - Error
-    - Shift: 17
     - Error
     - Error
     - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
+    - Shift: 19
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
+    - Shift: 1
     - Shift: 7
-    - Shift: 8
-    - Shift: 15
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
     - Error
     - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
+    - Shift: 21
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Less
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: Greater
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Reduce:
-        lhs:
-          id: relOperator
-        rhs:
-          - id: LessEqual
-    - Error
-  - - Error
-    - Error
-    - Shift: 17
-    - Error
-    - Error
-    - Error
-    - Shift: 11
-    - Error
-    - Error
-    - Shift: 6
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Shift: 7
-    - Shift: 8
+    - Shift: 36
     - Shift: 15
     - Error
   - - Error
@@ -1773,8 +2424,93 @@ action:
     - Error
     - Error
     - Error
+    - Shift: 11
     - Error
     - Error
+    - Shift: 19
+    - Error
+    - Error
+    - Error
+    - Shift: 1
+    - Shift: 7
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
+    - Shift: 15
+    - Error
+  - - Shift: 38
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Error
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
     - Error
     - Error
     - Error
@@ -1782,24 +2518,88 @@ action:
     - Error
     - Reduce:
         lhs:
-          id: conjunctionSeq
+          id: sum
         rhs:
-          - id: conjuction
+          - id: sum
+          - id: addOperator
+          - id: term
     - Reduce:
         lhs:
-          id: conjunctionSeq
+          id: sum
         rhs:
-          - id: conjuction
-    - Error
-    - Error
+          - id: sum
+          - id: addOperator
+          - id: term
+    - Reduce:
+        lhs:
+          id: sum
+        rhs:
+          - id: sum
+          - id: addOperator
+          - id: term
     - Error
     - Error
     - Error
   - - Error
     - Error
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+          - id: relOperator
+          - id: sum
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+          - id: relOperator
+          - id: sum
     - Error
     - Error
     - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 28
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+          - id: relOperator
+          - id: sum
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 27
+    - Reduce:
+        lhs:
+          id: comparison
+        rhs:
+          - id: sum
+          - id: relOperator
+          - id: sum
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: expr
+        rhs:
+          - id: conjunction
+          - id: Or
+          - id: conjunctionSeq
+    - Shift: 51
     - Error
     - Error
     - Error
@@ -1817,108 +2617,29 @@ action:
           - id: conjunction
           - id: Or
           - id: conjunctionSeq
-    - Shift: 42
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
     - Error
     - Error
     - Error
     - Error
     - Error
   - - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
     - Error
     - Reduce:
         lhs:
-          id: term
+          id: conjunctionSeq
         rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
+          - id: conjuction
     - Reduce:
         lhs:
-          id: term
+          id: conjunctionSeq
         rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Error
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Reduce:
-        lhs:
-          id: term
-        rhs:
-          - id: term
-          - id: multOperator
-          - id: factor
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Error
+          - id: conjuction
     - Error
     - Error
     - Error
@@ -1931,21 +2652,15 @@ action:
     - Error
     - Reduce:
         lhs:
-          id: inversionSeq
+          id: conjunctionSeq
         rhs:
-          - id: inversion
+          - id: conjuction
     - Error
     - Error
-    - Reduce:
-        lhs:
-          id: inversionSeq
-        rhs:
-          - id: inversion
-    - Reduce:
-        lhs:
-          id: inversionSeq
-        rhs:
-          - id: inversion
+    - Error
+    - Error
+    - Error
+    - Error
     - Error
     - Error
     - Error
@@ -1959,218 +2674,421 @@ action:
     - Error
     - Error
     - Error
+    - Shift: 11
+    - Error
+    - Error
+    - Shift: 19
     - Error
     - Error
     - Error
+    - Shift: 1
+    - Shift: 7
+    - Shift: 8
     - Error
-    - Shift: 43
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: conjunction
-        rhs:
-          - id: inversion
-          - id: And
-          - id: inversionSeq
-    - Reduce:
-        lhs:
-          id: conjunction
-        rhs:
-          - id: inversion
-          - id: And
-          - id: inversionSeq
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Shift: 27
-    - Error
-    - Error
-    - Error
-    - Shift: 28
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: comparison
-        rhs:
-          - id: sum
-          - id: relOperator
-          - id: sum
-    - Error
-    - Error
-    - Reduce:
-        lhs:
-          id: comparison
-        rhs:
-          - id: sum
-          - id: relOperator
-          - id: sum
-    - Reduce:
-        lhs:
-          id: comparison
-        rhs:
-          - id: sum
-          - id: relOperator
-          - id: sum
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-  - - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
-    - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
-    - Error
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
     - Shift: 21
     - Error
+    - Error
+    - Error
+    - Shift: 16
+    - Shift: 15
+    - Error
+  - - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
     - Reduce:
         lhs:
-          id: sum
+          id: term
         rhs:
-          - id: sum
-          - id: addOperator
           - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Error
+    - Error
     - Error
     - Reduce:
         lhs:
-          id: sum
+          id: term
         rhs:
-          - id: sum
-          - id: addOperator
           - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
+          - id: multOperator
+          - id: factor
     - Error
     - Reduce:
         lhs:
-          id: sum
+          id: term
         rhs:
-          - id: sum
-          - id: addOperator
           - id: term
+          - id: multOperator
+          - id: factor
     - Reduce:
         lhs:
-          id: sum
+          id: term
         rhs:
-          - id: sum
-          - id: addOperator
           - id: term
-    - Reduce:
-        lhs:
-          id: sum
-        rhs:
-          - id: sum
-          - id: addOperator
-          - id: term
+          - id: multOperator
+          - id: factor
     - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Reduce:
+        lhs:
+          id: term
+        rhs:
+          - id: term
+          - id: multOperator
+          - id: factor
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Reduce:
+        lhs:
+          id: assignmentStmt
+        rhs:
+          - id: Identifier
+          - id: Assign
+          - id: exprStmt
+    - Error
+  - - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+          - id: And
+          - id: inversionSeq
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+          - id: And
+          - id: inversionSeq
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: conjunction
+        rhs:
+          - id: inversion
+          - id: And
+          - id: inversionSeq
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Shift: 53
     - Error
     - Error
     - Error
   - - Error
     - Error
-    - Shift: 17
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversion
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversion
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversion
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversion
+    - Error
+    - Error
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
     - Error
     - Error
     - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
+    - Shift: 19
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
+    - Shift: 1
     - Shift: 7
-    - Shift: 8
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
     - Shift: 15
     - Error
   - - Error
     - Error
-    - Shift: 17
+    - Error
+    - Error
+    - Error
+    - Shift: 55
+    - Error
+    - Error
+    - Shift: 11
+    - Error
+    - Error
+    - Shift: 19
+    - Error
+    - Error
+    - Error
+    - Shift: 1
+    - Shift: 7
+    - Shift: 8
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 16
+    - Shift: 15
+    - Error
+  - - Error
+    - Error
+    - Error
+    - Error
+    - Error
     - Error
     - Error
     - Error
     - Shift: 11
     - Error
     - Error
-    - Shift: 6
-    - Error
-    - Shift: 16
+    - Shift: 19
     - Error
     - Error
     - Error
-    - Error
-    - Error
-    - Error
+    - Shift: 1
     - Shift: 7
-    - Shift: 8
+    - Error
+    - Error
+    - Shift: 21
+    - Error
+    - Error
+    - Error
+    - Shift: 36
     - Shift: 15
     - Error
   - - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
-    - Error
     - Error
     - Reduce:
         lhs:
@@ -2191,8 +3109,207 @@ action:
     - Error
     - Error
     - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: conjunctionSeq
+        rhs:
+          - id: conjunctionSeq
+          - id: Or
+          - id: conjunction
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
+  - - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Reduce:
+        lhs:
+          id: ifStmt
+        rhs:
+          - id: If
+          - id: expr
+          - id: LBrace
+          - id: stmtSeq
+          - id: RBrace
+    - Error
   - - Error
     - Error
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversionSeq
+          - id: And
+          - id: inversion
+    - Reduce:
+        lhs:
+          id: inversionSeq
+        rhs:
+          - id: inversionSeq
+          - id: And
+          - id: inversion
     - Error
     - Error
     - Error
@@ -2212,6 +3329,11 @@ action:
           - id: inversion
     - Error
     - Error
+    - Error
+    - Error
+    - Error
+    - Error
+    - Error
     - Reduce:
         lhs:
           id: inversionSeq
@@ -2219,600 +3341,595 @@ action:
           - id: inversionSeq
           - id: And
           - id: inversion
-    - Reduce:
-        lhs:
-          id: inversionSeq
-        rhs:
-          - id: inversionSeq
-          - id: And
-          - id: inversion
-    - Error
-    - Error
     - Error
     - Error
     - Error
 goto:
-  - - 10
-    - 1
+  - - 0
+    - 10
+    - 17
+    - 12
+    - 4
+    - 6
+    - 0
+    - 13
+    - 22
+    - 9
+    - 0
+    - 3
+    - 0
+    - 14
+    - 0
+    - 2
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 23
+    - 17
+    - 12
+    - 4
+    - 6
+    - 0
+    - 13
+    - 22
+    - 9
+    - 0
+    - 3
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 29
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 25
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 12
+    - 4
+    - 6
+    - 0
+    - 13
+    - 0
+    - 35
+    - 0
+    - 0
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 12
+    - 4
+    - 0
+    - 0
+    - 13
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 39
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 42
+    - 0
+    - 0
+    - 0
+    - 13
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 14
+    - 0
+    - 0
     - 5
     - 0
     - 0
-    - 13
-    - 18
     - 0
-    - 3
+  - - 0
     - 0
-    - 14
     - 0
-    - 4
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
     - 12
-    - 0
-    - 2
-    - 9
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 22
-    - 1
-    - 0
-    - 0
-    - 0
-    - 13
-    - 18
-    - 0
-    - 3
-    - 0
-    - 14
-    - 0
-    - 4
-    - 12
-    - 0
-    - 2
-    - 9
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 13
-    - 18
-    - 0
-    - 0
-    - 0
-    - 14
-    - 0
-    - 4
-    - 12
-    - 0
-    - 0
-    - 24
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 34
-    - 0
-    - 0
-    - 0
-    - 30
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 36
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 13
-    - 18
-    - 0
-    - 0
-    - 0
-    - 14
-    - 0
-    - 4
-    - 12
-    - 39
-    - 0
-    - 38
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 13
-    - 40
-    - 0
-    - 0
-    - 0
-    - 14
-    - 0
-    - 4
-    - 12
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
+    - 43
     - 0
     - 0
     - 13
@@ -2820,166 +3937,254 @@ goto:
     - 0
     - 0
     - 0
-    - 14
-    - 0
-    - 41
-    - 12
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 34
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-  - - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 13
-    - 18
-    - 0
-    - 0
     - 0
     - 14
     - 0
-    - 4
-    - 12
+    - 0
+    - 5
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 44
-    - 9
+    - 0
   - - 0
-    - 1
     - 0
     - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 48
+    - 12
+    - 4
+    - 6
     - 0
     - 13
-    - 18
+    - 0
+    - 9
     - 0
     - 0
     - 0
     - 14
     - 0
-    - 4
+    - 0
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
     - 12
+    - 4
     - 0
     - 0
-    - 45
+    - 13
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 14
+    - 49
+    - 0
+    - 5
+    - 18
+    - 0
+    - 50
   - - 0
     - 0
     - 0
@@ -2997,7 +4202,273 @@ goto:
     - 0
     - 0
     - 0
+    - 0
+    - 0
+    - 0
   - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 25
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 10
+    - 17
+    - 12
+    - 4
+    - 6
+    - 0
+    - 13
+    - 22
+    - 9
+    - 0
+    - 3
+    - 0
+    - 14
+    - 0
+    - 52
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 12
+    - 4
+    - 54
+    - 0
+    - 13
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 23
+    - 17
+    - 12
+    - 4
+    - 6
+    - 0
+    - 13
+    - 22
+    - 9
+    - 0
+    - 3
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 20
+  - - 0
+    - 0
+    - 0
+    - 12
+    - 4
+    - 0
+    - 0
+    - 13
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 14
+    - 0
+    - 0
+    - 5
+    - 18
+    - 0
+    - 56
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
@@ -3015,123 +4486,144 @@ goto:
     - 0
     - 0
 symbol_to_idx:
-  ? id: inversion
-  : 16
-  ? id: stmtSeq
-  : 2
-  ? id: atom
-  : 10
   ? id: And
+  : 22
+  ? id: If
+  : 17
+  ? id: booleanLiteral
+  : 13
+  ? id: Assign
+  : 4
+  ? id: addOperator
   : 12
+  ? id: EOT
+  : 6
+  ? id: RBrace
+  : 5
+  ? id: StringLiteral
+  : 11
   ? id: Greater
   : 13
-  ? id: inversionSeq
-  : 14
-  ? id: FloatingLiteral
+  ? id: conjunction
+  : 5
+  ? id: stmtSeq
+  : 15
+  ? id: inversion
   : 19
-  ? id: conjunctionSeq
-  : 4
-  ? id: expr
-  : 8
-  ? id: multOperator
+  ? id: Semi
+  : 14
+  ? id: conjuction
+  : 18
+  ? id: Or
+  : 3
+  ? id: Minus
+  : 21
+  ? id: Equal
+  : 7
+  ? id: IntegerLiteral
   : 8
   ? id: term
-  : 12
-  ? id: conjunction
-  : 15
-  ? id: relOperator
-  : 11
-  ? id: Or
-  : 16
-  ? id: LessEqual
-  : 10
-  ? id: EOT
-  : 14
-  ? id: NotEqual
-  : 7
-  ? id: sum
-  : 6
-  ? id: addOperator
-  : 7
-  ? id: factor
-  : 0
-  ? id: Semi
-  : 15
-  ? id: booleanLiteral
-  : 5
-  ? id: literal
-  : 13
-  ? id: program
   : 3
-  ? id: "False"
-  : 6
-  ? id: Minus
-  : 5
-  ? id: GreaterEqual
-  : 3
-  ? id: Less
-  : 4
-  ? id: Equal
-  : 17
-  ? id: Plus
-  : 1
-  ? id: Identifier
-  : 20
-  ? id: "True"
-  : 2
-  ? id: conjuction
-  : 21
-  ? id: stmt
-  : 0
-  ? id: unaryOperator
-  : 9
-  ? id: StringLiteral
-  : 18
   ? id: Not
-  : 11
-  ? id: comparison
+  : 24
+  ? id: stmt
   : 1
-  ? id: IntegerLiteral
+  ? id: LessEqual
   : 9
+  ? id: "False"
+  : 19
+  ? id: expr
+  : 9
+  ? id: factor
+  : 25
+  ? id: inversionSeq
+  : 14
+  ? id: ifStmt
+  : 8
+  ? id: GreaterEqual
+  : 20
+  ? id: exprStmt
+  : 2
+  ? id: sum
+  : 4
+  ? id: atom
+  : 7
+  ? id: comparison
+  : 17
+  ? id: FloatingLiteral
+  : 15
+  ? id: Plus
+  : 10
+  ? id: NotEqual
+  : 1
+  ? id: conjunctionSeq
+  : 18
+  ? id: relOperator
+  : 0
+  ? id: Identifier
+  : 23
+  ? id: program
+  : 6
+  ? id: unaryOperator
+  : 10
+  ? id: "True"
+  : 16
+  ? id: Less
+  : 12
+  ? id: multOperator
+  : 0
+  ? id: LBrace
+  : 2
+  ? id: assignmentStmt
+  : 11
+  ? id: literal
+  : 16
 terminals:
-  - id: factor
-  - id: Plus
-  - id: "True"
-  - id: GreaterEqual
-  - id: Less
-  - id: Minus
-  - id: "False"
-  - id: NotEqual
   - id: multOperator
+  - id: NotEqual
+  - id: LBrace
+  - id: Or
+  - id: Assign
+  - id: RBrace
+  - id: EOT
+  - id: Equal
   - id: IntegerLiteral
   - id: LessEqual
-  - id: Not
-  - id: And
-  - id: Greater
-  - id: EOT
-  - id: Semi
-  - id: Or
-  - id: Equal
+  - id: Plus
   - id: StringLiteral
+  - id: Less
+  - id: Greater
+  - id: Semi
   - id: FloatingLiteral
-  - id: Identifier
+  - id: "True"
+  - id: If
   - id: conjuction
+  - id: "False"
+  - id: GreaterEqual
+  - id: Minus
+  - id: And
+  - id: Identifier
+  - id: Not
+  - id: factor
 nonterminals:
+  - id: relOperator
   - id: stmt
-  - id: comparison
-  - id: stmtSeq
-  - id: program
-  - id: conjunctionSeq
-  - id: booleanLiteral
+  - id: exprStmt
+  - id: term
   - id: sum
-  - id: addOperator
+  - id: conjunction
+  - id: program
+  - id: atom
+  - id: ifStmt
   - id: expr
   - id: unaryOperator
-  - id: atom
-  - id: relOperator
-  - id: term
-  - id: literal
+  - id: assignmentStmt
+  - id: addOperator
+  - id: booleanLiteral
   - id: inversionSeq
-  - id: conjunction
+  - id: stmtSeq
+  - id: literal
+  - id: comparison
+  - id: conjunctionSeq
   - id: inversion
-grammar_description_hash: 4407aaa484c8b2fcd049456d216170235d54a9e11c7956fbf61da8804716a205
+grammar_description_hash: 965a14b61cc368fce6ebef76ffe91a8d21e5da859952a73cc0160b9f3e7a7589

@@ -3,19 +3,27 @@ program -> stmtSeq
 stmtSeq -> stmtSeq stmt
 stmtSeq -> stmt
 
-stmt -> expr Semi
+stmt -> exprStmt
+stmt -> assignmentStmt
+stmt -> ifStmt
 
-expr -> conjunction Or conjunctionSeq
-expr -> conjunction
+exprStmt -> expr Semi
 
-conjunctionSeq -> conjunctionSeq Or conjunction
-conjunctionSeq -> conjuction
+assignmentStmt -> Identifier Assign exprStmt
 
-conjunction -> inversion And inversionSeq
+ifStmt -> If expr LBrace stmtSeq RBrace
+
+expr -> disjunction
+
+disjunction -> conjuction conjuctionSeq
+disjunction -> conjunction
+conjunctionSeq -> conjuctionSeq Or conjuction
+conjunctionSeq -> Or conjuction
+
+conjunction -> inversion inversionSeq
 conjunction -> inversion
-
-inversionSeq -> inversionSeq And inversion
-inversionSeq -> inversion
+inversionSeq -> inversionSeq And inversion 
+inversionSeq -> And inversion 
 
 inversion -> Not inversion
 inversion -> comparison
@@ -27,6 +35,10 @@ sum -> sum addOperator term
 sum -> term
 
 term -> term multOperator factor
+term -> factor
+
+factor
+
 term -> atom
 
 atom -> Identifier

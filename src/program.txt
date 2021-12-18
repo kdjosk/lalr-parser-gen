@@ -1,1 +1,5 @@
 not 2 + 2 > five and not true and chocolate;
+
+if not is_chocolate {
+    is_cream = true;
+}
