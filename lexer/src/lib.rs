@@ -39,7 +39,17 @@ impl<T: Source> Lexer<T> {
         if let Some(t) = self.try_build_whitespace() {
             return t;
         }
+        if self.is_end_of_text(c) {
+            return Token::EndOfText;
+        }
         unreachable!("Could not recognize token!")
+    }
+
+    fn is_end_of_text(&self, c: char) -> bool {
+        match c {
+            '$' => true,
+            _ => false,
+        }
     }
 
     fn try_build_comment(&mut self) -> Option<Token> {

@@ -4,6 +4,13 @@ use crate::lr0_items::LR0Items;
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::{fmt, mem, panic, vec};
+use std::fs::File;
+use std::io::{self, prelude::*};
+use std::path::Path;
+use serde::__private::de;
+use serde::{Serialize, Deserialize};
+use serde_yaml;
+use generic_array::{GenericArray, ArrayLength};
 
 use prettytable::{Cell, Row, Table};
 
@@ -16,7 +23,7 @@ impl CanonicalLALRSets {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum Action {
     Shift(usize),
     Reduce(Production),
@@ -24,18 +31,21 @@ pub enum Action {
     Error,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LALRParsingTables {
     action: Vec<Vec<Action>>,
     goto: Vec<Vec<usize>>,
     symbol_to_idx: HashMap<Symbol, usize>,
     terminals: HashSet<Symbol>,
     nonterminals: HashSet<Symbol>,
+    grammar_description_hash: String,
 }
 impl LALRParsingTables {
     pub fn new(
         no_sets: usize,
         terminals: HashSet<Symbol>,
         nonterminals: HashSet<Symbol>,
+        grammar_description_hash: String,
     ) -> LALRParsingTables {
         let mut symbol_to_idx = HashMap::new();
         for (idx, sym) in terminals.iter().enumerate() {
@@ -50,7 +60,27 @@ impl LALRParsingTables {
             symbol_to_idx,
             terminals,
             nonterminals,
+            grammar_description_hash,
         }
+    }
+
+    pub fn dump_to_file(&self, path: &Path) -> io::Result<()> {
+        let handle = File::create(path)?;
+        if let Result::Err(err) = serde_yaml::to_writer(handle, self) {
+            panic!("{}", err.to_string());
+        }
+        Ok(())
+    }
+
+    pub fn try_load_from_file(path: &Path, grammar_description_hash: String) -> io::Result<Option<LALRParsingTables>> {
+        let handle = File::open(path)?;
+        let deserialized: LALRParsingTables = serde_yaml::from_reader(handle).unwrap();
+        if deserialized.grammar_description_hash != grammar_description_hash {
+            println!("Previous grammar description hash: {}", deserialized.grammar_description_hash);
+            println!("New grammar description hash: {}", grammar_description_hash);
+            return Ok(None);
+        }
+        Ok(Some(deserialized))
     }
 
     pub fn set_action(&mut self, set_idx: usize, terminal: &Symbol, act: Action) {
@@ -68,7 +98,10 @@ impl LALRParsingTables {
     }
 
     pub fn get_action(&self, set_idx: usize, terminal: &Symbol) -> Action {
-        self.action[set_idx][*self.symbol_to_idx.get(terminal).unwrap()].clone()
+        match self.symbol_to_idx.get(terminal) {
+            Some(&i) => self.action[set_idx][i].clone(),
+            None => panic!("Syntax error on symbol {}", terminal),
+        }
     }
 
     pub fn get_goto(&self, from_state: usize, nonterminal: &Symbol) -> usize {
@@ -159,10 +192,13 @@ impl LALRParsingTablesGenerator {
         }
 
         let mut lalr_tables =
-            LALRParsingTables::new(sets.get_n_sets(), terminals, nonterminals.clone());
+            LALRParsingTables::new(
+                sets.get_n_sets(),
+                terminals, 
+                nonterminals.clone(),
+                grammar.description_hash.clone());
         LALRParsingTablesGenerator::populate_action(grammar, &sets, &mut lalr_tables);
         LALRParsingTablesGenerator::populate_goto(grammar, &sets, &mut lalr_tables, &nonterminals);
-        lalr_tables.print();
         lalr_tables
     }
 

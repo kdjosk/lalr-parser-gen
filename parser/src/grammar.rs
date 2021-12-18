@@ -1,8 +1,10 @@
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{collections::HashSet, hash::Hash};
+use serde::{Serialize, Deserialize};
+use sha2::{Sha256, Digest};
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Production {
     pub lhs: Symbol,
     pub rhs: Vec<Symbol>,
@@ -121,7 +123,7 @@ lazy_static! {
     pub static ref UNKNOWN: Symbol = Symbol::new("UNKNOWN");
 }
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Hash, Eq, PartialOrd, Ord)]
 pub struct Symbol {
     pub id: String,
 }
@@ -135,11 +137,17 @@ pub struct Grammar {
     pub start: Symbol,
     pub productions: Vec<Production>,
     pub symbols: HashSet<Symbol>,
+    pub description_hash: String,
     terminals: HashSet<Symbol>,
 }
 
 impl Grammar {
     pub fn new(description: String) -> Grammar {
+        let mut hasher = Sha256::new();
+        hasher.update(description.as_bytes());
+        let description_hash = hasher.finalize();
+        let description_hash = format!("{:x}", description_hash);
+
         let mut productions = Vec::new();
         let mut symbols = HashSet::new();
 
@@ -169,6 +177,7 @@ impl Grammar {
             start: productions[0].lhs.clone(),
             productions,
             symbols,
+            description_hash,
             terminals,
         }
     }

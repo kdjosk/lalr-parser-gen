@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate enum_map;
-use enum_map::EnumMap;
 use lexer::{Lexer, Source, Token};
 use parser::lr_parser::{SymbolSource};
 use std::collections::HashSet;
@@ -37,6 +34,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             Token::LBracket => Symbol::new("LBracket"),
             Token::RBracket => Symbol::new("RBracket"),
             Token::Not => Symbol::new("Not"),
+            Token::And => Symbol::new("And"),
             Token::Plus => Symbol::new("Plus"),
             Token::Minus => Symbol::new("Minus"),
             Token::Star => Symbol::new("Star"),
@@ -62,6 +60,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             Token::FloatingLiteral(f) => Symbol::new("FloatingLiteral"),
             Token::StringLiteral(s) => Symbol::new("StringLiteral"),
             Token::Identifier(s) => Symbol::new("Identifier"),
+            Token::EndOfText => Symbol::new("EOT"),
             t => panic!("I don't know of token {:?}", t),
         }
     }
