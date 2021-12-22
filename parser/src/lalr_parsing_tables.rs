@@ -90,7 +90,9 @@ impl LALRParsingTables {
             return;
         } else {
             panic!(
-                "CONFLICT IN ACTION, {:?}, {:?}",
+                "CONFLICT IN ACTION, From {} through {} {:?}, {:?}",
+                set_idx,
+                terminal,
                 self.action[set_idx][*self.symbol_to_idx.get(terminal).unwrap()],
                 act
             );

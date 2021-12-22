@@ -15,15 +15,16 @@ ifStmt -> If expr LBrace stmtSeq RBrace
 
 expr -> disjunction
 
-disjunction -> conjuction conjuctionSeq
+disjunction -> conjunction Or conjunctionSeq
 disjunction -> conjunction
-conjunctionSeq -> conjuctionSeq Or conjuction
-conjunctionSeq -> Or conjuction
+conjunctionSeq -> conjunctionSeq Or conjunction
+conjunctionSeq -> conjunction
 
-conjunction -> inversion inversionSeq
+
+conjunction -> inversion And inversionSeq
 conjunction -> inversion
 inversionSeq -> inversionSeq And inversion 
-inversionSeq -> And inversion 
+inversionSeq -> inversion 
 
 inversion -> Not inversion
 inversion -> comparison
@@ -37,9 +38,7 @@ sum -> term
 term -> term multOperator factor
 term -> factor
 
-factor
-
-term -> atom
+factor -> atom
 
 atom -> Identifier
 atom -> literal
@@ -50,6 +49,9 @@ relOperator -> LessEqual
 relOperator -> GreaterEqual
 relOperator -> Equal
 relOperator -> NotEqual
+
+multOperator -> Star
+multOperator -> Div
 
 unaryOperator -> Minus
 unaryOperator -> Not

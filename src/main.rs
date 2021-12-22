@@ -2,15 +2,13 @@ use lexer::{self, FileSource, Token, Lexer};
 use parser::grammar::{Grammar, Symbol};
 use parser::lalr_parsing_tables::{self, LALRParsingTablesGenerator, LALRParsingTables};
 use parser::lr_parser::{LRParser, SymbolSource};
-use sha2::digest::generic_array::GenericArray;
-use std::env;
+use ptree::{TreeBuilder, print_tree};
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use parser::lexer_wrapper::LexerWrapper;
-use hex_literal::hex;
 use sha2::{Sha256, Digest};
-
+use parser::abstract_syntax_tree::{Node, Leaf, Interior};
 struct MockSource {
     symbols: Vec<Symbol>,
 }
@@ -21,8 +19,8 @@ impl MockSource {
     }
 }
 impl SymbolSource for MockSource {
-    fn next_symbol(&mut self) -> Symbol {
-        self.symbols.pop().unwrap()
+    fn next_symbol(&mut self) -> (Symbol, Token) {
+        (self.symbols.pop().unwrap(), Token::Empty)
     }
 }
 
@@ -52,9 +50,41 @@ fn main() {
 
     let symbol_source = LexerWrapper::new(lexer);
     let mut parser = LRParser::new(parsing_tables, symbol_source);
-    let output = parser.parse();
+    let (output, root_node) = parser.parse();
 
-    for p in output {
-        println!("{}", p);
+    print_ast(&root_node);
+
+}
+
+fn print_ast(root: &Box<dyn Node>) {
+    let mut tree = TreeBuilder::new(root.get_label());
+    let children = root.get_children();
+    match children {
+        Some(c) => {
+            for child in c.iter().rev() {
+                inner_print_ast(child, &mut tree)
+            }
+            tree.end_child();
+        }
+        None => ()
+    }
+    let top_item = tree.build();
+    print_tree(&top_item).unwrap();
+}
+
+fn inner_print_ast(node: &Box<dyn Node>, tree: &mut TreeBuilder) {
+    tree.begin_child(node.get_label());
+    let children = node.get_children();
+    match children {
+        Some(c) => {
+            for child in c.iter().rev() {
+                inner_print_ast(child, tree)
+            }
+            tree.end_child();
+        }
+        None => {
+           tree.add_empty_child(node.get_label());
+           tree.end_child(); 
+        }
     }
 }
