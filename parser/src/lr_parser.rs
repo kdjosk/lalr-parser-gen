@@ -1,8 +1,11 @@
+use std::mem::Discriminant;
+use std::ops::Mul;
+
 use generic_array::typenum::Integer;
 use lexer::Token;
 use crate::grammar::{Production, Symbol};
 use crate::lalr_parsing_tables::{Action, LALRParsingTables};
-use crate::abstract_syntax_tree::{Leaf, Interior, Node};
+use crate::abstract_syntax_tree::*;
 
 
 pub trait SymbolSource {
@@ -24,7 +27,7 @@ impl StackElement {
     pub fn starting() -> StackElement {
         StackElement {
             state: 0,
-            parse_tree_node: Box::new(Interior::new("program".to_string(), vec![])),
+            parse_tree_node: Box::new(Interior::new(Box::new(Program{}), vec![])),
         }
     }
 }
@@ -57,11 +60,11 @@ impl<T: SymbolSource> LRParser<T> {
                         StackElement::new(
                             state, 
                             match token {
-                                Token::IntegerLiteral(i) => Box::new(Leaf::new(terminal.id, i)),
-                                Token::StringLiteral(s) => Box::new(Leaf::new(terminal.id, s)),
-                                Token::FloatingLiteral(f) => Box::new(Leaf::new(terminal.id, f)),
-                                Token::Identifier(id) => Box::new(Leaf::new(terminal.id, id)),
-                                _ => Box::new(Leaf::new(terminal.id, ())),
+                                Token::IntegerLiteral(i) => Box::new(Leaf::new(i)),
+                                Token::StringLiteral(s) => Box::new(Leaf::new(s)),
+                                Token::FloatingLiteral(f) => Box::new(Leaf::new(f)),
+                                Token::Identifier(id) => Box::new(Leaf::new(id)),
+                                _ => Box::new(Leaf::new(terminal.id)),
                             }
                         )
                     );
@@ -71,7 +74,9 @@ impl<T: SymbolSource> LRParser<T> {
                 }
                 Action::Reduce(p) => {
                     let rhs_len = p.rhs.len();
-                    let mut parse_tree_node = Interior::new(p.lhs.id.clone(), vec![]);
+                    let mut parse_tree_node = Interior::new(
+                        LRParser::<T>::ast_operation_from_grammar_symbol(&p.lhs),
+                        vec![]);
                     for _ in 0..rhs_len {
                         let stack_el = self.stack.pop().unwrap();
                         parse_tree_node.add_child(stack_el.parse_tree_node);
@@ -100,6 +105,34 @@ impl<T: SymbolSource> LRParser<T> {
                     panic!("ERROR AT SYMBOL {}", terminal);
                 }
             }
+        }
+    }
+
+    fn ast_operation_from_grammar_symbol(s: &Symbol) -> Box<dyn Operation> {
+        match s.id.as_str() {
+            "program" => Box::new(Program{}),
+            "stmtSeq" => Box::new(StatementSeqence{}),
+            "stmt" => Box::new(Statement{}),
+            "exprStmt" => Box::new(ExpressionStatement{}),
+            "assignmentStmt" => Box::new(AssignmentStatement{}),
+            "ifStmt" => Box::new(ConditionalStatement{}),
+            "expr" => Box::new(Expression{}),
+            "disjunction" => Box::new(Disjunction{}),
+            "conjunctionSeq" => Box::new(ConjunctionSequence{}),
+            "conjunction" => Box::new(Conjunction{}),
+            "inversionSeq" => Box::new(InversionSequence{}),
+            "inversion" => Box::new(Inversion{}),
+            "comparison" => Box::new(Comparison{}),
+            "sum" => Box::new(Sum{}),
+            "term" => Box::new(Term{}),
+            "factor" => Box::new(Factor{}),
+            "atom" => Box::new(Atom{}),
+            "relOperator" => Box::new(RelationalOperator{}),
+            "multOperator" => Box::new(MultiplicativeOperator{}),
+            "addOperator" => Box::new(AdditiveOperator{}),
+            "literal" => Box::new(Literal{}),
+            "booleanLiteral" => Box::new(BooleanLiteral{}),
+            s => panic!("unknown symbol {}", s),
         }
     }
 }
