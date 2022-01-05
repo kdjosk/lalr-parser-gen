@@ -1,11 +1,9 @@
-use std::mem::Discriminant;
-use std::ops::Mul;
-
-use generic_array::typenum::Integer;
+use std::any::Any;
+use std::fmt::Display;
 use lexer::Token;
 use crate::grammar::{Production, Symbol};
 use crate::lalr_parsing_tables::{Action, LALRParsingTables};
-use crate::abstract_syntax_tree::*;
+use crate::parse_tree::*;
 
 
 pub trait SymbolSource {
@@ -27,7 +25,7 @@ impl StackElement {
     pub fn starting() -> StackElement {
         StackElement {
             state: 0,
-            parse_tree_node: Box::new(Interior::new(Box::new(Program{}), vec![])),
+            parse_tree_node: Box::new(Nonterminal::new(Box::new(Program{}), vec![])),
         }
     }
 }
@@ -56,16 +54,13 @@ impl<T: SymbolSource> LRParser<T> {
                 &terminal);
             match action {
                 Action::Shift(state) => {
+                    let lex_val = self.get_lexical_value_from_token(token);
+                    let func = self.ast_operation_from_grammar_symbol(&terminal);
+                    let leaf = Box::new(Terminal::new(func, lex_val));
                     self.stack.push(
                         StackElement::new(
                             state, 
-                            match token {
-                                Token::IntegerLiteral(i) => Box::new(Leaf::new(i)),
-                                Token::StringLiteral(s) => Box::new(Leaf::new(s)),
-                                Token::FloatingLiteral(f) => Box::new(Leaf::new(f)),
-                                Token::Identifier(id) => Box::new(Leaf::new(id)),
-                                _ => Box::new(Leaf::new(terminal.id)),
-                            }
+                            leaf,
                         )
                     );
                     let temp = self.symbol_source.next_symbol();
@@ -74,8 +69,8 @@ impl<T: SymbolSource> LRParser<T> {
                 }
                 Action::Reduce(p) => {
                     let rhs_len = p.rhs.len();
-                    let mut parse_tree_node = Interior::new(
-                        LRParser::<T>::ast_operation_from_grammar_symbol(&p.lhs),
+                    let mut parse_tree_node = Nonterminal::new(
+                        self.ast_operation_from_grammar_symbol(&p.lhs),
                         vec![]);
                     for _ in 0..rhs_len {
                         let stack_el = self.stack.pop().unwrap();
@@ -108,30 +103,64 @@ impl<T: SymbolSource> LRParser<T> {
         }
     }
 
-    fn ast_operation_from_grammar_symbol(s: &Symbol) -> Box<dyn Operation> {
+    fn get_lexical_value_from_token(&self, t: Token) -> Option<Box<dyn Display>> {
+        match t {
+            Token::IntegerLiteral(i) => Some(Box::new(i)),
+            Token::StringLiteral(s) => Some(Box::new(s)),
+            Token::FloatingLiteral(f) => Some(Box::new(f)),
+            Token::Identifier(id) => Some(Box::new(id)),
+            _ => None,
+        }
+    }
+
+    fn ast_operation_from_grammar_symbol(&self, s: &Symbol) -> Box<dyn SyntaxFunction> {
         match s.id.as_str() {
             "program" => Box::new(Program{}),
-            "stmtSeq" => Box::new(StatementSeqence{}),
-            "stmt" => Box::new(Statement{}),
-            "exprStmt" => Box::new(ExpressionStatement{}),
-            "assignmentStmt" => Box::new(AssignmentStatement{}),
-            "ifStmt" => Box::new(ConditionalStatement{}),
-            "expr" => Box::new(Expression{}),
+            "stmtSeq" => Box::new(StmtSeq{}),
+            "stmt" => Box::new(Stmt{}),
+            "exprStmt" => Box::new(ExprStmt{}),
+            "assignmentStmt" => Box::new(AssignmentStmt{}),
+            "ifStmt" => Box::new(IfStmt{}),    
+            "expr" => Box::new(Expr{}),
             "disjunction" => Box::new(Disjunction{}),
-            "conjunctionSeq" => Box::new(ConjunctionSequence{}),
+            "conjunctionSeq" => Box::new(ConjunctionSeq{}),
             "conjunction" => Box::new(Conjunction{}),
-            "inversionSeq" => Box::new(InversionSequence{}),
+            "inversionSeq" => Box::new(InversionSeq{}),
             "inversion" => Box::new(Inversion{}),
             "comparison" => Box::new(Comparison{}),
             "sum" => Box::new(Sum{}),
             "term" => Box::new(Term{}),
             "factor" => Box::new(Factor{}),
             "atom" => Box::new(Atom{}),
-            "relOperator" => Box::new(RelationalOperator{}),
-            "multOperator" => Box::new(MultiplicativeOperator{}),
-            "addOperator" => Box::new(AdditiveOperator{}),
+            "relOperator" => Box::new(RelOperator{}),
+            "multOperator" => Box::new(MultOperator{}),
+            "addOperator" => Box::new(AddOperator{}),
             "literal" => Box::new(Literal{}),
             "booleanLiteral" => Box::new(BooleanLiteral{}),
+            "Semi" => Box::new(Semi{}),
+            "Identifier" => Box::new(Identifier{}),
+            "Assign" => Box::new(Assign{}),
+            "If" => Box::new(If{}),
+            "LBrace" => Box::new(LBrace{}),
+            "RBrace" => Box::new(RBrace{}),
+            "Or" => Box::new(Or{}),
+            "And" => Box::new(And{}),
+            "Not" => Box::new(Not{}),
+            "Less" => Box::new(Less{}),
+            "Greater" => Box::new(Greater{}),
+            "LessEqual" => Box::new(LessEqual{}),
+            "GreaterEqual" => Box::new(GreaterEqual{}),
+            "Equal" => Box::new(Equal{}),
+            "NotEqual" => Box::new(NotEqual{}),
+            "Star" => Box::new(Star{}),
+            "Div" => Box::new(Div{}),
+            "Minus" => Box::new(Minus{}),
+            "Plus" => Box::new(Plus{}),
+            "IntegerLiteral" => Box::new(IntegerLiteral{}),
+            "FloatingLiteral" => Box::new(FloatingLiteral{}),
+            "StringLiteral" => Box::new(StringLiteral{}),
+            "True" => Box::new(True{}),
+            "False" => Box::new(False{}),
             s => panic!("unknown symbol {}", s),
         }
     }

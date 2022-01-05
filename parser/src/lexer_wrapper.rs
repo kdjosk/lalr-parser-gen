@@ -25,6 +25,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
                 _ => break,
             }   
         }
+
         match t {
             Token::Assign => (Symbol::new("Assign"), Token::Assign),
             Token::LBrace => (Symbol::new("LBrace"), Token::LBrace),

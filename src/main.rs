@@ -8,7 +8,7 @@ use std::io::Read;
 use std::path::Path;
 use parser::lexer_wrapper::LexerWrapper;
 use sha2::{Sha256, Digest};
-use parser::abstract_syntax_tree::{Node, Leaf, Interior};
+use parser::parse_tree::{Node, Terminal, Nonterminal};
 struct MockSource {
     symbols: Vec<Symbol>,
 }
@@ -83,7 +83,6 @@ fn inner_print_ast(node: &Box<dyn Node>, tree: &mut TreeBuilder) {
             tree.end_child();
         }
         None => {
-           tree.add_empty_child(node.get_label());
            tree.end_child(); 
         }
     }
