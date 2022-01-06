@@ -1,5 +1,24 @@
-not 2 + 2 > five and not true and chocolate;
+fn explode() {
+    print('Boom');
+}
+
+fn countdown(from: u32, to: u32) {
+    for i in range(from, to - 1, -1) {
+        print(i);
+    }
+}
+
+let is_cream = false;
+let is_chocolate = true;
+let is_cookie = true;
 
 if not is_chocolate {
     is_cream = true;
+} else if not is_cookie {
+    is_cream = false;
+} else if is_lasagne {
+    is_cream = false;
+} else {
+    countdown(from=3, to=0);
+    explode();
 }

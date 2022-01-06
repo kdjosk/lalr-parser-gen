@@ -6,12 +6,47 @@ stmtSeq -> stmt
 stmt -> exprStmt
 stmt -> assignmentStmt
 stmt -> ifStmt
+stmt -> varDeclStmt
+stmt -> funDefStmt
+stmt -> forLoopStmt
 
 exprStmt -> expr Semi
 
 assignmentStmt -> Identifier Assign exprStmt
 
-ifStmt -> If expr LBrace stmtSeq RBrace
+ifStmt -> If expr LBrace stmtSeq RBrace elseTail
+elseTail -> Else ifStmt
+elseTail -> Else LBrace stmtSeq RBrace
+elseTail ->
+
+varDeclStmt -> Let assignmentStmt
+
+funDefStmt -> Fn Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
+
+paramSeq -> param paramSeqTail
+paramSeq ->
+paramSeqTail -> Coma param paramSeqTail
+paramSeqTail ->
+
+param -> Identifier Colon typeSpecifier
+
+returnDeclaration -> RightArrow typeSpecifier
+returnDeclaration ->
+
+
+typeSpecifier -> primitiveTypeSpecifier
+
+primitiveTypeSpecifier -> U32
+primitiveTypeSpecifier -> I32
+primitiveTypeSpecifier -> F32
+primitiveTypeSpecifier -> U64
+primitiveTypeSpecifier -> I64
+primitiveTypeSpecifier -> F64
+primitiveTypeSpecifier -> U8
+primitiveTypeSpecifier -> Bool
+primitiveTypeSpecifier -> StringType
+
+forLoopStmt -> For Identifier In expr LBrace stmtSeq RBrace
 
 expr -> disjunction
 
@@ -38,7 +73,21 @@ sum -> term
 term -> term multOperator factor
 term -> factor
 
-factor -> atom
+factor -> primary
+factor -> unaryOperator primary
+
+primary -> callExpr 
+primary -> atom
+
+callExpr -> primary LParen argSeq RParen
+
+argSeq -> arg argSeqTail
+argSeq ->
+argSeqTail -> Coma arg argSeqTail
+argSeqTail ->
+
+arg -> expr
+arg -> Identifier Assign expr
 
 atom -> Identifier
 atom -> literal
@@ -54,7 +103,6 @@ multOperator -> Star
 multOperator -> Div
 
 unaryOperator -> Minus
-unaryOperator -> Not
 
 addOperator -> Plus 
 addOperator -> Minus 

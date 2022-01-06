@@ -17,7 +17,7 @@ impl Production {
         let mut lhs = Symbol::new(String::new().as_str());
         let mut rhs = Vec::new();
         lazy_static! {
-            static ref SYMBOL_REGEX: Regex = Regex::new(r"[a-zA-Z\.']").unwrap();
+            static ref SYMBOL_REGEX: Regex = Regex::new(r"[a-zA-Z0-9\.']").unwrap();
         }
         let description = description.trim();
         let chars: Vec<_> = description.chars().collect();

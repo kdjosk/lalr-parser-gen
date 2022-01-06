@@ -3,8 +3,7 @@ use std::fmt::Display;
 use lexer::Token;
 use crate::grammar::{Production, Symbol};
 use crate::lalr_parsing_tables::{Action, LALRParsingTables};
-use crate::parse_tree::*;
-
+use crate::parse_tree::{self, *};
 
 pub trait SymbolSource {
     fn next_symbol(&mut self) -> (Symbol, Token);
@@ -121,6 +120,7 @@ impl<T: SymbolSource> LRParser<T> {
             "exprStmt" => Box::new(ExprStmt{}),
             "assignmentStmt" => Box::new(AssignmentStmt{}),
             "ifStmt" => Box::new(IfStmt{}),    
+            "elseTail" => Box::new(ElseTail{}),
             "expr" => Box::new(Expr{}),
             "disjunction" => Box::new(Disjunction{}),
             "conjunctionSeq" => Box::new(ConjunctionSeq{}),
@@ -131,12 +131,22 @@ impl<T: SymbolSource> LRParser<T> {
             "sum" => Box::new(Sum{}),
             "term" => Box::new(Term{}),
             "factor" => Box::new(Factor{}),
+            "primary" => Box::new(Primary{}),
+            "callExpr" => Box::new(CallExpr{}),
+            "argSeq" => Box::new(ArgSeq{}),
+            "arg" => Box::new(Arg{}),
+            "argSeqTail" => Box::new(ArgSeqTail{}),
             "atom" => Box::new(Atom{}),
             "relOperator" => Box::new(RelOperator{}),
             "multOperator" => Box::new(MultOperator{}),
             "addOperator" => Box::new(AddOperator{}),
             "literal" => Box::new(Literal{}),
             "booleanLiteral" => Box::new(BooleanLiteral{}),
+            "varDeclStmt" => Box::new(VarDeclStmt{}),
+            "forLoopStmt" => Box::new(ForLoopStmt{}),
+            "Let" => Box::new(Let{}),
+            "For" => Box::new(For{}),
+            "In" => Box::new(In{}),
             "Semi" => Box::new(Semi{}),
             "Identifier" => Box::new(Identifier{}),
             "Assign" => Box::new(Assign{}),
@@ -161,6 +171,30 @@ impl<T: SymbolSource> LRParser<T> {
             "StringLiteral" => Box::new(StringLiteral{}),
             "True" => Box::new(True{}),
             "False" => Box::new(False{}),
+            "Else" => Box::new(Else{}),
+            "LParen" => Box::new(LParen{}),
+            "RParen" => Box::new(RParen{}),
+            "Coma" => Box::new(Coma{}),
+            "funDefStmt" => Box::new(FunDefStmt{}),
+            "paramSeq" => Box::new(ParamSeq{}),
+            "paramSeqTail" => Box::new(ParamSeqTail{}),
+            "param" => Box::new(Param{}),
+            "returnDeclaration" => Box::new(ReturnDeclaration{}),
+            "typeSpecifier" => Box::new(TypeSpecifier{}),
+            "primitiveTypeSpecifier" => Box::new(PrimitiveTypeSpecifier{}),
+            "unaryOperator" => Box::new(UnaryOperator{}),
+            "Colon" => Box::new(Colon{}),
+            "RightArrow" => Box::new(RightArrow{}),
+            "Fn" => Box::new(parse_tree::Fn{}),
+            "U32" => Box::new(U32{}),
+            "I32" => Box::new(I32{}),
+            "F32" => Box::new(F32{}),
+            "U64" => Box::new(U64{}),
+            "I64" => Box::new(I64{}),
+            "F64" => Box::new(F64{}),
+            "U8" => Box::new(U8{}),
+            "Bool" => Box::new(Bool{}),
+            "StringType" => Box::new(StringType{}),
             s => panic!("unknown symbol {}", s),
         }
     }
