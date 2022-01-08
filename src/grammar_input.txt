@@ -9,6 +9,7 @@ stmt -> ifStmt
 stmt -> varDeclStmt
 stmt -> funDefStmt
 stmt -> forLoopStmt
+stmt -> returnStmt
 
 exprStmt -> expr Semi
 
@@ -21,7 +22,9 @@ elseTail ->
 
 varDeclStmt -> Let assignmentStmt
 
-funDefStmt -> Fn Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
+funDefStmt -> Fun Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
+
+returnStmt -> Return expr Semi
 
 paramSeq -> param paramSeqTail
 paramSeq ->
@@ -30,7 +33,7 @@ paramSeqTail ->
 
 param -> Identifier Colon typeSpecifier
 
-returnDeclaration -> RightArrow typeSpecifier
+returnDeclaration -> RArrow typeSpecifier
 returnDeclaration ->
 
 

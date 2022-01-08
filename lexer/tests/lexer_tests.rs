@@ -63,10 +63,7 @@ fn invalid_string_literal_test() {
 
 #[test]
 fn comment_test() {
-    lexer_test(
-        "# aaabbbccc\n",
-        &Token::Comment(String::from(" aaabbbccc")),
-    );
+    lexer_test("# aaabbbccc\n", &Token::Comment(String::from(" aaabbbccc")));
 }
 
 fn lbrace_test() {
@@ -179,7 +176,6 @@ fn greaterequal_test() {
 }
 
 #[test]
-
 #[test]
 fn space_test() {
     lexer_test(" ", &Token::Space);
@@ -222,7 +218,7 @@ fn return_test() {
 
 #[test]
 fn fn_test() {
-    lexer_test("fn", &Token::Fn);
+    lexer_test("fn", &Token::Fun);
 }
 
 #[test]

@@ -1,8 +1,8 @@
 use lazy_static::lazy_static;
 use regex::Regex;
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::{collections::HashSet, hash::Hash};
-use serde::{Serialize, Deserialize};
-use sha2::{Sha256, Digest};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Production {
@@ -183,7 +183,7 @@ impl Grammar {
     }
 
     // page 221 in the Dragon Book
-    pub fn first(&self, sequence: &Vec<Symbol>, ) -> HashSet<Symbol> {
+    pub fn first(&self, sequence: &Vec<Symbol>) -> HashSet<Symbol> {
         let mut first_set = HashSet::new();
         for s in sequence {
             let mut symbols_already_called = HashSet::new();
@@ -195,13 +195,16 @@ impl Grammar {
                 first_set_of_s.remove(&EPSILON);
                 first_set.extend(first_set_of_s)
             }
-            
         }
         first_set.insert(EPSILON.clone());
         first_set
     }
 
-    fn first_for_symbol(&self, sym: &Symbol, symbols_already_called: &mut HashSet<Symbol>) -> HashSet<Symbol> {
+    fn first_for_symbol(
+        &self,
+        sym: &Symbol,
+        symbols_already_called: &mut HashSet<Symbol>,
+    ) -> HashSet<Symbol> {
         symbols_already_called.insert(sym.clone());
         let mut first_set = HashSet::new();
         if self.is_terminal(sym) {

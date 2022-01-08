@@ -1,16 +1,16 @@
 use crate::grammar::{Grammar, Production, ProductionWithLookahead, Symbol, DOT, EOT};
 use crate::lookaheads_table::{LookaheadsTable, SetItem};
 use crate::lr0_items::LR0Items;
+use generic_array::{ArrayLength, GenericArray};
+use serde::__private::de;
+use serde::{Deserialize, Serialize};
+use serde_yaml;
 use std::collections::{HashMap, HashSet};
-use std::hash::Hash;
-use std::{fmt, mem, panic, vec};
 use std::fs::File;
+use std::hash::Hash;
 use std::io::{self, prelude::*};
 use std::path::Path;
-use serde::__private::de;
-use serde::{Serialize, Deserialize};
-use serde_yaml;
-use generic_array::{GenericArray, ArrayLength};
+use std::{fmt, mem, panic, vec};
 
 use prettytable::{Cell, Row, Table};
 
@@ -72,11 +72,17 @@ impl LALRParsingTables {
         Ok(())
     }
 
-    pub fn try_load_from_file(path: &Path, grammar_description_hash: String) -> io::Result<Option<LALRParsingTables>> {
+    pub fn try_load_from_file(
+        path: &Path,
+        grammar_description_hash: String,
+    ) -> io::Result<Option<LALRParsingTables>> {
         let handle = File::open(path)?;
         let deserialized: LALRParsingTables = serde_yaml::from_reader(handle).unwrap();
         if deserialized.grammar_description_hash != grammar_description_hash {
-            println!("Previous grammar description hash: {}", deserialized.grammar_description_hash);
+            println!(
+                "Previous grammar description hash: {}",
+                deserialized.grammar_description_hash
+            );
             println!("New grammar description hash: {}", grammar_description_hash);
             return Ok(None);
         }
@@ -193,12 +199,12 @@ impl LALRParsingTablesGenerator {
             }
         }
 
-        let mut lalr_tables =
-            LALRParsingTables::new(
-                sets.get_n_sets(),
-                terminals, 
-                nonterminals.clone(),
-                grammar.description_hash.clone());
+        let mut lalr_tables = LALRParsingTables::new(
+            sets.get_n_sets(),
+            terminals,
+            nonterminals.clone(),
+            grammar.description_hash.clone(),
+        );
         LALRParsingTablesGenerator::populate_action(grammar, &sets, &mut lalr_tables);
         LALRParsingTablesGenerator::populate_goto(grammar, &sets, &mut lalr_tables, &nonterminals);
         lalr_tables

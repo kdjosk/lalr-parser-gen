@@ -1,607 +1,279 @@
-use std::{any::Any, fmt::Display};
+use std::{any::Any, fmt::{Display, self}};
 
 // TODO(kjoskowi) This whole file should be automatically generated from grammar description
+pub trait ParseTreeVisitor {
+    fn visit_stmt_seq(&mut self, stmt_seq: NonterminalNode<StmtSeq>);
+}
 
-pub trait Node {
+pub enum ParseTreeNode {
+    Leaf(Box<dyn TerminalNodeT>),
+    Internal(Box<dyn NonterminalNodeT>)
+}
+
+pub trait Labeled {
     fn get_label(&self) -> String;
-    fn get_children(&self) -> Option<&Vec<Box<dyn Node>>>;
 }
 
-impl Node for Nonterminal {
-    fn get_label(&self) -> String {
-        self.function.get_name()
-    }
-    fn get_children(&self) -> Option<&Vec<Box<dyn Node>>> {
-        Some(&self.children)
-    }
+pub trait Nonterminal {
+    fn get_children_ref(&self) -> &Vec<ParseTreeNode>;
+    fn add_child(&mut self, child: ParseTreeNode); 
 }
-pub struct Nonterminal {
-    function: Box<dyn SyntaxFunction>,
-    children: Vec<Box<dyn Node>>,
+
+pub trait Terminal {
+    fn get_lexical_value(&self) -> LexicalValue;
 }
-impl Nonterminal {
-    pub fn new(operation: Box<dyn SyntaxFunction>, children: Vec<Box<dyn Node>>) -> Nonterminal {
-        Nonterminal {
-            function: operation,
-            children,
+
+
+pub trait NonterminalNodeT: Nonterminal + Labeled {}
+impl<T> NonterminalNodeT for T where
+    T: Nonterminal + Labeled {}
+pub trait TerminalNodeT: Terminal + Labeled {}
+impl<T>  TerminalNodeT for T where
+    T: Terminal + Labeled {}
+
+
+pub struct NonterminalNode<T> {
+    children: Vec<ParseTreeNode>,
+    label: String,
+    t: T,
+}
+
+impl<T: SyntaxFunction> NonterminalNode<T> {
+    pub fn new(label: &str, t: T) -> NonterminalNode<T> {
+        let label = label.to_string();
+        NonterminalNode{
+            children: Vec::new(),
+            label,
+            t,
         }
     }
-
-    pub fn add_child(&mut self, child: Box<dyn Node>) {
+}
+impl<T: SyntaxFunction> Labeled for NonterminalNode<T> {
+    fn get_label(&self) -> String {
+        self.label.clone()
+    }
+}
+impl<T: SyntaxFunction> Nonterminal for NonterminalNode<T> {
+    fn get_children_ref(&self) -> &Vec<ParseTreeNode> {
+        &self.children
+    }
+    fn add_child(&mut self, child: ParseTreeNode) {
         self.children.push(child);
     }
+}
 
-    pub fn add_children(&mut self, children: Vec<Box<dyn Node>>) {
-        self.children.extend(children);
+#[derive(Clone)]
+pub enum LexicalValue {
+    StringType(String),
+    IntegerType(u64),
+    FloatingType(f64),
+    BooleanType(bool),
+    IdentifierType(String),
+    NoLexicalValue,
+}
+impl Display for LexicalValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            LexicalValue::StringType(v) => write!(f, "{}", v),
+            LexicalValue::IntegerType(v) => write!(f, "{}", v),
+            LexicalValue::FloatingType(v) => write!(f, "{}", v),
+            LexicalValue::BooleanType(v) => write!(f, "{}", v),
+            LexicalValue::IdentifierType(v) => write!(f, "{}", v),
+            LexicalValue::NoLexicalValue => write!(f, ""),
+        }
     }
 }
 
-
-pub struct Terminal {
-    function: Box<dyn SyntaxFunction>,
-    lexical_value: Option<Box<dyn Display>>,
+pub struct TerminalNode<T> {
+    lex_value: LexicalValue,
+    label: String,
+    t: T,
 }
-impl Node for Terminal {
+impl<T: SyntaxFunction> TerminalNode<T> {
+    pub fn new(label: &str, lex_value: LexicalValue, t: T) -> TerminalNode<T> {
+        let label = label.to_string();
+        TerminalNode{
+            lex_value,
+            label,
+            t,
+        }
+    }
+}
+impl<T: SyntaxFunction> Labeled for TerminalNode<T> {
     fn get_label(&self) -> String {
-        let fun = self.function.get_name();
-        match &self.lexical_value {
-            Some(l) => {
-                format!("{} = {}", fun, l)
-            }
-            None => fun,
-        }
-    }
-
-    fn get_children(&self) -> Option<&Vec<Box<dyn Node>>> {
-        None
+        format!("{}({})", self.label.clone(), self.lex_value)
     }
 }
-impl Terminal{
-    pub fn new(function: Box<dyn SyntaxFunction>, lexical_value: Option<Box<dyn Display>>) -> Terminal {
-        Terminal {
-            function,
-            lexical_value,
-        }
+impl<T: SyntaxFunction> Terminal for TerminalNode<T> {
+    fn get_lexical_value(&self) -> LexicalValue {
+        self.lex_value.clone()
     }
 }
 
-pub trait SyntaxFunction {
-    fn get_name(&self) -> String;
-}
-
+pub trait SyntaxFunction{}
 pub struct Program {}
-impl SyntaxFunction for Program {
-    fn get_name(&self) -> String {
-        return "program".to_string()
-    }
-}
-
+impl SyntaxFunction for Program {}
 pub struct StmtSeq {}
-impl SyntaxFunction for StmtSeq {
-    fn get_name(&self) -> String {
-        return "StmtSeq".to_string()
-    }
-}
+impl SyntaxFunction for StmtSeq {}
 pub struct Stmt {}
-impl SyntaxFunction for Stmt {
-    fn get_name(&self) -> String {
-        return "Stmt".to_string()
-    }
-}
-
+impl SyntaxFunction for Stmt {}
 pub struct ExprStmt {}
-impl SyntaxFunction for ExprStmt {
-    fn get_name(&self) -> String {
-        return "ExprStmt".to_string()
-    }
-}
+impl SyntaxFunction for ExprStmt {}
 pub struct AssignmentStmt {}
-impl SyntaxFunction for AssignmentStmt {
-    fn get_name(&self) -> String {
-        return "AssignmentStmt".to_string()
-    }
-}
-
+impl SyntaxFunction for AssignmentStmt {}
 pub struct IfStmt {}
-impl SyntaxFunction for IfStmt {
-    fn get_name(&self) -> String {
-        return "IfStmt".to_string()
-    }
-}
-
+impl SyntaxFunction for IfStmt {}
 pub struct ElseTail {}
-impl SyntaxFunction for ElseTail {
-    fn get_name(&self) -> String {
-        return "ElseTail".to_string()
-    }
-}
-
+impl SyntaxFunction for ElseTail {}
 pub struct VarDeclStmt {}
-impl SyntaxFunction for VarDeclStmt {
-    fn get_name(&self) -> String {
-        return "VarDeclStmt".to_string()
-    }
-}
-
+impl SyntaxFunction for VarDeclStmt {}
 pub struct FunDefStmt {}
-impl SyntaxFunction for FunDefStmt {
-    fn get_name(&self) -> String {
-        return "FunDefStmt".to_string()
-    }
-}
+impl SyntaxFunction for FunDefStmt {}
 pub struct ParamSeq {}
-impl SyntaxFunction for ParamSeq {
-    fn get_name(&self) -> String {
-        return "ParamSeq".to_string()
-    }
-}
+impl SyntaxFunction for ParamSeq {}
 pub struct ParamSeqTail {}
-impl SyntaxFunction for ParamSeqTail {
-    fn get_name(&self) -> String {
-        return "ParamSeqTail".to_string()
-    }
-}
+impl SyntaxFunction for ParamSeqTail {}
 pub struct Param {}
-impl SyntaxFunction for Param {
-    fn get_name(&self) -> String {
-        return "Param".to_string()
-    }
-}
-
-
+impl SyntaxFunction for Param {}
 pub struct ReturnDeclaration {}
-impl SyntaxFunction for ReturnDeclaration {
-    fn get_name(&self) -> String {
-        return "ReturnDeclaration".to_string()
-    }
-}
+impl SyntaxFunction for ReturnDeclaration {}
+pub struct ReturnStmt {}
+impl SyntaxFunction for ReturnStmt {}
 pub struct TypeSpecifier {}
-impl SyntaxFunction for TypeSpecifier {
-    fn get_name(&self) -> String {
-        return "TypeSpecifier".to_string()
-    }
-}
+impl SyntaxFunction for TypeSpecifier {}
 pub struct PrimitiveTypeSpecifier {}
-impl SyntaxFunction for PrimitiveTypeSpecifier {
-    fn get_name(&self) -> String {
-        return "PrimitiveTypeSpecifier".to_string()
-    }
-}
-
+impl SyntaxFunction for PrimitiveTypeSpecifier {}
 pub struct ForLoopStmt {}
-impl SyntaxFunction for ForLoopStmt {
-    fn get_name(&self) -> String {
-        return "VarDeclStmt".to_string()
-    }
-}
-
+impl SyntaxFunction for ForLoopStmt {}
 pub struct Let {}
-impl SyntaxFunction for Let {
-    fn get_name(&self) -> String {
-        return "Let".to_string()
-    }
-}
-
+impl SyntaxFunction for Let {}
 pub struct For {}
-impl SyntaxFunction for For {
-    fn get_name(&self) -> String {
-        return "For".to_string()
-    }
-}
-
+impl SyntaxFunction for For {}
 pub struct In {}
-impl SyntaxFunction for In {
-    fn get_name(&self) -> String {
-        return "Inl".to_string()
-    }
-}
-
+impl SyntaxFunction for In {}
 pub struct Expr {}
-impl SyntaxFunction for Expr {
-    fn get_name(&self) -> String {
-        return "Expr".to_string()
-    }
-}
-
+impl SyntaxFunction for Expr {}
 pub struct Disjunction {}
-impl SyntaxFunction for Disjunction {
-    fn get_name(&self) -> String {
-        return "Disjunction".to_string()
-    }
-}
-
+impl SyntaxFunction for Disjunction {}
 pub struct ConjunctionSeq {}
-impl SyntaxFunction for ConjunctionSeq {
-    fn get_name(&self) -> String {
-        return "ConjunctionSeq".to_string()
-    }
-}
-
+impl SyntaxFunction for ConjunctionSeq {}
 pub struct Conjunction {}
-impl SyntaxFunction for Conjunction {
-    fn get_name(&self) -> String {
-        return "Conjunction".to_string()
-    }
-}
+impl SyntaxFunction for Conjunction {}
 pub struct InversionSeq {}
-impl SyntaxFunction for InversionSeq {
-    fn get_name(&self) -> String {
-        return "InversionSeq".to_string()
-    }
-}
-
+impl SyntaxFunction for InversionSeq {}
 pub struct Inversion {}
-impl SyntaxFunction for Inversion {
-    fn get_name(&self) -> String {
-        return "Inversion".to_string()
-    }
-}
-
+impl SyntaxFunction for Inversion {}
 pub struct Comparison {}
-impl SyntaxFunction for Comparison {
-    fn get_name(&self) -> String {
-        return "Comparison".to_string()
-    }
-}
-
+impl SyntaxFunction for Comparison {}
 pub struct Sum {}
-impl SyntaxFunction for Sum {
-    fn get_name(&self) -> String {
-        return "Sum".to_string()
-    }
-}
-
+impl SyntaxFunction for Sum {}
 pub struct Term {}
-impl SyntaxFunction for Term {
-    fn get_name(&self) -> String {
-        return "Term".to_string()
-    }
-}
-
+impl SyntaxFunction for Term {}
 pub struct Factor {}
-impl SyntaxFunction for Factor {
-    fn get_name(&self) -> String {
-        return "Factor".to_string()
-    }
-}
-
+impl SyntaxFunction for Factor {}
 pub struct CallExpr {}
-impl SyntaxFunction for CallExpr {
-    fn get_name(&self) -> String {
-        return "CallExpr".to_string()
-    }
-}
-
-pub struct Fn {}
-impl SyntaxFunction for Fn {
-    fn get_name(&self) -> String {
-        return "Fn".to_string()
-    }
-}
-
+impl SyntaxFunction for CallExpr {}
+pub struct Fun {}
+impl SyntaxFunction for Fun {}
 pub struct ArgSeq {}
-impl SyntaxFunction for ArgSeq {
-    fn get_name(&self) -> String {
-        return "ArgSeq".to_string()
-    }
-}
-
+impl SyntaxFunction for ArgSeq {}
 pub struct ArgSeqTail {}
-impl SyntaxFunction for ArgSeqTail {
-    fn get_name(&self) -> String {
-        return "ArgSeqTail".to_string()
-    }
-}
-
+impl SyntaxFunction for ArgSeqTail {}
 pub struct Arg {}
-impl SyntaxFunction for Arg {
-    fn get_name(&self) -> String {
-        return "Arg".to_string()
-    }
-}
-
+impl SyntaxFunction for Arg {}
 pub struct Primary {}
-impl SyntaxFunction for Primary {
-    fn get_name(&self) -> String {
-        return "Primary".to_string()
-    }
-}
-
+impl SyntaxFunction for Primary {}
 pub struct Atom {}
-impl SyntaxFunction for Atom {
-    fn get_name(&self) -> String {
-        return "Atom".to_string()
-    }
-}
-
+impl SyntaxFunction for Atom {}
 pub struct RelOperator {}
-impl SyntaxFunction for RelOperator {
-    fn get_name(&self) -> String {
-        return "RelOperator".to_string()
-    }
-}
-
+impl SyntaxFunction for RelOperator {}
 pub struct MultOperator {}
-impl SyntaxFunction for MultOperator {
-    fn get_name(&self) -> String {
-        return "MultOperator".to_string()
-    }
-}
-
+impl SyntaxFunction for MultOperator {}
 pub struct AddOperator {}
-impl SyntaxFunction for AddOperator {
-    fn get_name(&self) -> String {
-        return "AddOperator".to_string()
-    }
-}
+impl SyntaxFunction for AddOperator {}
 pub struct Literal {}
-impl SyntaxFunction for Literal {
-    fn get_name(&self) -> String {
-        return "Literal".to_string()
-    }
-}
-
+impl SyntaxFunction for Literal {}
 pub struct BooleanLiteral {}
-impl SyntaxFunction for BooleanLiteral {
-    fn get_name(&self) -> String {
-        return "BooleanLiteral".to_string()
-    }
-}
-
+impl SyntaxFunction for BooleanLiteral {}
 pub struct Semi {}
-impl SyntaxFunction for Semi {
-    fn get_name(&self) -> String {
-        return "Semi".to_string()
-    }
-}
-
+impl SyntaxFunction for Semi {}
 pub struct Coma {}
-impl SyntaxFunction for Coma {
-    fn get_name(&self) -> String {
-        return "Coma".to_string()
-    }
-}
-
-
-pub struct Identifier {} 
-impl SyntaxFunction for Identifier {
-    fn get_name(&self) -> String {
-        return "Identifier".to_string()
-    }
-}
-pub struct Assign {} 
-impl SyntaxFunction for Assign {
-    fn get_name(&self) -> String {
-        return "Assign".to_string()
-    }
-}
+impl SyntaxFunction for Coma {}
+pub struct Return {}
+impl SyntaxFunction for Return {}
+pub struct RArrow {}
+impl SyntaxFunction for RArrow {}
+pub struct Identifier {}
+impl SyntaxFunction for Identifier {}
+pub struct Assign {}
+impl SyntaxFunction for Assign {}
 pub struct If {}
-impl SyntaxFunction for If {
-    fn get_name(&self) -> String {
-        return "If".to_string()
-    }
-}
-
+impl SyntaxFunction for If {}
 pub struct Else {}
-impl SyntaxFunction for Else {
-    fn get_name(&self) -> String {
-        return "Else".to_string()
-    }
-}
-
+impl SyntaxFunction for Else {}
 pub struct LBrace {}
-impl SyntaxFunction for LBrace {
-    fn get_name(&self) -> String {
-        return "LBrace".to_string()
-    }
-}
+impl SyntaxFunction for LBrace {}
 pub struct RBrace {}
-impl SyntaxFunction for RBrace {
-    fn get_name(&self) -> String {
-        return "RBrace".to_string()
-    }
-}
-
+impl SyntaxFunction for RBrace {}
 pub struct LParen {}
-impl SyntaxFunction for LParen {
-    fn get_name(&self) -> String {
-        return "LParen".to_string()
-    }
-}
+impl SyntaxFunction for LParen {}
 pub struct RParen {}
-impl SyntaxFunction for RParen {
-    fn get_name(&self) -> String {
-        return "RParen".to_string()
-    }
-}
-
+impl SyntaxFunction for RParen {}
 pub struct Or {}
-impl SyntaxFunction for Or {
-    fn get_name(&self) -> String {
-        return "Or".to_string()
-    }
-}
+impl SyntaxFunction for Or {}
 pub struct And {}
-impl SyntaxFunction for And {
-    fn get_name(&self) -> String {
-        return "And".to_string()
-    }
-}
-pub struct Not {} 
-impl SyntaxFunction for Not {
-    fn get_name(&self) -> String {
-        return "Not".to_string()
-    }
-}
+impl SyntaxFunction for And {}
+pub struct Not {}
+impl SyntaxFunction for Not {}
 pub struct Less {}
-impl SyntaxFunction for Less {
-    fn get_name(&self) -> String {
-        return "Less".to_string()
-    }
-}
+impl SyntaxFunction for Less {}
 pub struct Greater {}
-impl SyntaxFunction for Greater {
-    fn get_name(&self) -> String {
-        return "Greater".to_string()
-    }
-}
+impl SyntaxFunction for Greater {}
 pub struct LessEqual {}
-impl SyntaxFunction for LessEqual {
-    fn get_name(&self) -> String {
-        return "LessEqual".to_string()
-    }
-}
+impl SyntaxFunction for LessEqual {}
 pub struct GreaterEqual {}
-impl SyntaxFunction for GreaterEqual {
-    fn get_name(&self) -> String {
-        return "GreaterEqual".to_string()
-    }
-}
+impl SyntaxFunction for GreaterEqual {}
 pub struct Equal {}
-impl SyntaxFunction for Equal {
-    fn get_name(&self) -> String {
-        return "Equal".to_string()
-    }
-}
+impl SyntaxFunction for Equal {}
 pub struct NotEqual {}
-impl SyntaxFunction for NotEqual {
-    fn get_name(&self) -> String {
-        return "NotEqual".to_string()
-    }
-}
+impl SyntaxFunction for NotEqual {}
 pub struct Star {}
-impl SyntaxFunction for Star {
-    fn get_name(&self) -> String {
-        return "Star".to_string()
-    }
-}
+impl SyntaxFunction for Star {}
 pub struct Div {}
-impl SyntaxFunction for Div {
-    fn get_name(&self) -> String {
-        return "Div".to_string()
-    }
-}
+impl SyntaxFunction for Div {}
 pub struct Minus {}
-impl SyntaxFunction for Minus {
-    fn get_name(&self) -> String {
-        return "Minus".to_string()
-    }
-}
-pub struct Plus {} 
-impl SyntaxFunction for Plus {
-    fn get_name(&self) -> String {
-        return "Plus".to_string()
-    }
-}
+impl SyntaxFunction for Minus {}
+pub struct Plus {}
+impl SyntaxFunction for Plus {}
 pub struct IntegerLiteral {}
-impl SyntaxFunction for IntegerLiteral {
-    fn get_name(&self) -> String {
-        return "IntegerLiteral".to_string()
-    }
-}
+impl SyntaxFunction for IntegerLiteral {}
 pub struct FloatingLiteral {}
-impl SyntaxFunction for FloatingLiteral {
-    fn get_name(&self) -> String {
-        return "FloatingLiteral".to_string()
-    }
-}
+impl SyntaxFunction for FloatingLiteral {}
 pub struct StringLiteral {}
-impl SyntaxFunction for StringLiteral {
-    fn get_name(&self) -> String {
-        return "StringLiteral".to_string()
-    }
-}
+impl SyntaxFunction for StringLiteral {}
 pub struct True {}
-impl SyntaxFunction for True {
-    fn get_name(&self) -> String {
-        return "True".to_string()
-    }
-}
+impl SyntaxFunction for True {}
 pub struct False {}
-impl SyntaxFunction for False {
-    fn get_name(&self) -> String {
-        return "False".to_string()
-    }
-}
-
-pub struct RightArrow {}
-impl SyntaxFunction for RightArrow {
-    fn get_name(&self) -> String {
-        return "RightArrow".to_string()
-    }
-}
-
+impl SyntaxFunction for False {}
 pub struct Colon {}
-impl SyntaxFunction for Colon {
-    fn get_name(&self) -> String {
-        return "Colon".to_string()
-    }
-}
-
+impl SyntaxFunction for Colon {}
 pub struct UnaryOperator {}
-impl SyntaxFunction for UnaryOperator {
-    fn get_name(&self) -> String {
-        return "UnaryOperator".to_string()
-    }
-}
-
-
+impl SyntaxFunction for UnaryOperator {}
 pub struct U32 {}
-impl SyntaxFunction for U32 {
-    fn get_name(&self) -> String {
-        return "U32".to_string()
-    }
-}
+impl SyntaxFunction for U32 {}
 pub struct I32 {}
-impl SyntaxFunction for I32 {
-    fn get_name(&self) -> String {
-        return "I32".to_string()
-    }
-}
+impl SyntaxFunction for I32 {}
 pub struct F32 {}
-impl SyntaxFunction for F32 {
-    fn get_name(&self) -> String {
-        return "F32".to_string()
-    }
-}
+impl SyntaxFunction for F32 {}
 pub struct U64 {}
-impl SyntaxFunction for U64 {
-    fn get_name(&self) -> String {
-        return "U64".to_string()
-    }
-}
+impl SyntaxFunction for U64 {}
 pub struct I64 {}
-impl SyntaxFunction for I64 {
-    fn get_name(&self) -> String {
-        return "I64".to_string()
-    }
-}
+impl SyntaxFunction for I64 {}
 pub struct F64 {}
-impl SyntaxFunction for F64 {
-    fn get_name(&self) -> String {
-        return "F64".to_string()
-    }
-}
+impl SyntaxFunction for F64 {}
 pub struct U8 {}
-impl SyntaxFunction for U8 {
-    fn get_name(&self) -> String {
-        return "U8".to_string()
-    }
-}
+impl SyntaxFunction for U8 {}
 pub struct Bool {}
-impl SyntaxFunction for Bool {
-    fn get_name(&self) -> String {
-        return "Bool".to_string()
-    }
-}
+impl SyntaxFunction for Bool {}
 pub struct StringType {}
-impl SyntaxFunction for StringType {
-    fn get_name(&self) -> String {
-        return "StringType".to_string()
-    }
-}
-
-
-
-
-
+impl SyntaxFunction for StringType {}

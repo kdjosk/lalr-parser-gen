@@ -1,20 +1,20 @@
-use lexer::{Lexer, Source, Token};
-use crate::lr_parser::{SymbolSource};
-use std::collections::HashSet;
-use lazy_static::lazy_static;
-use std::{collections::HashMap};
 use crate::grammar::Symbol;
+use crate::lr_parser::SymbolSource;
+use lazy_static::lazy_static;
+use lexer::{Lexer, Source, Token};
+use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub struct LexerWrapper<T: Source> {
     lexer: Lexer<T>,
 }
 impl<T: Source> LexerWrapper<T> {
     pub fn new(lexer: Lexer<T>) -> LexerWrapper<T> {
-        LexerWrapper{ lexer }
+        LexerWrapper { lexer }
     }
 }
 impl<T: Source> SymbolSource for LexerWrapper<T> {
-    fn next_symbol(&mut self) -> (Symbol, Token)  { 
+    fn next_symbol(&mut self) -> (Symbol, Token) {
         let mut t = Token::Empty;
         loop {
             t = self.lexer.next_token();
@@ -23,7 +23,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
                 Token::Comment(_) => continue,
                 Token::Tab | Token::Newline | Token::Space => continue,
                 _ => break,
-            }   
+            }
         }
 
         match t {
@@ -57,7 +57,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             Token::Let => (Symbol::new("Let"), Token::Let),
             Token::For => (Symbol::new("For"), Token::For),
             Token::In => (Symbol::new("In"), Token::In),
-            Token::Fn => (Symbol::new("Fn"), Token::Fn),
+            Token::Fun => (Symbol::new("Fun"), Token::Fun),
             Token::U32 => (Symbol::new("U32"), Token::U32),
             Token::I32 => (Symbol::new("I32"), Token::I32),
             Token::F32 => (Symbol::new("F32"), Token::F32),
@@ -67,8 +67,12 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             Token::U8 => (Symbol::new("U8"), Token::U8),
             Token::Bool => (Symbol::new("Bool"), Token::Bool),
             Token::String => (Symbol::new("StringType"), Token::String),
+            Token::Return => (Symbol::new("Return"), Token::Return),
+            Token::RArrow => (Symbol::new("RArrow"), Token::RArrow),
             Token::IntegerLiteral(i) => (Symbol::new("IntegerLiteral"), Token::IntegerLiteral(i)),
-            Token::FloatingLiteral(f) => (Symbol::new("FloatingLiteral"), Token::FloatingLiteral(f)),
+            Token::FloatingLiteral(f) => {
+                (Symbol::new("FloatingLiteral"), Token::FloatingLiteral(f))
+            }
             Token::StringLiteral(s) => (Symbol::new("StringLiteral"), Token::StringLiteral(s)),
             Token::Identifier(s) => (Symbol::new("Identifier"), Token::Identifier(s)),
             Token::EndOfText => (Symbol::new("EOT"), Token::EndOfText),

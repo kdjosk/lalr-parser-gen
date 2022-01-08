@@ -1,6 +1,6 @@
+use enum_map::Enum;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
-use enum_map::Enum;
 
 lazy_static! {
     pub static ref ONE_CHAR_OPERATORS: HashMap<&'static str, Token> = HashMap::from([
@@ -35,7 +35,7 @@ lazy_static! {
         ("library", Token::Library),
         ("component", Token::Component),
         ("return", Token::Return),
-        ("fn", Token::Fn),
+        ("fn", Token::Fun),
         ("let", Token::Let),
         ("while", Token::While),
         ("for", Token::For),
@@ -79,7 +79,7 @@ pub enum Token {
     Library,
     Component,
     Return,
-    Fn,
+    Fun,
     Let,
     While,
     For,

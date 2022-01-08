@@ -55,7 +55,7 @@ impl<T: Source> Lexer<T> {
     fn try_build_comment(&mut self) -> Option<Token> {
         static MAX_COMMENT_LEN: usize = 1024;
         match self.peek() {
-           '#' => {
+            '#' => {
                 self.get_char();
                 let mut comment = String::new();
                 while comment.len() < MAX_COMMENT_LEN {
@@ -65,8 +65,8 @@ impl<T: Source> Lexer<T> {
                     }
                 }
                 panic!("Max comment length exceeded! {}", comment);
-           }
-           _ => None,
+            }
+            _ => None,
         }
     }
 
@@ -118,9 +118,8 @@ impl<T: Source> Lexer<T> {
             _ => {
                 self.cache(c);
                 None
-            } 
+            }
         }
-        
     }
 
     fn try_build_operator(&mut self) -> Option<Token> {
@@ -129,6 +128,7 @@ impl<T: Source> Lexer<T> {
         op.push(c);
         op.push(self.peek());
         if TWO_CHAR_OPERATORS.contains_key(op.as_str()) {
+            self.get_char();
             return Some(TWO_CHAR_OPERATORS.get(op.as_str()).unwrap().clone());
         }
         op.pop();
