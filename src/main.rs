@@ -3,7 +3,7 @@ use parser::grammar::{Grammar, Symbol};
 use parser::lalr_parsing_tables::{self, LALRParsingTables, LALRParsingTablesGenerator};
 use parser::lexer_wrapper::LexerWrapper;
 use parser::lr_parser::{LRParser, SymbolSource};
-use parser::parse_tree::{Labeled, Nonterminal, Terminal, ParseTreeNode, Param};
+use parser::parse_tree::{Labeled, Nonterminal, Terminal, ParseTreeNode};
 use ptree::{print_tree, TreeBuilder};
 use sha2::{Digest, Sha256};
 use std::fs::File;
@@ -62,8 +62,8 @@ fn print_ast(root: &ParseTreeNode) {
     match root {
         ParseTreeNode::Internal(node) => {
             let mut tree = TreeBuilder::new(node.get_label());
-            let children = node.get_children_ref();
-            for child in children.iter().rev() {
+            let children = node.children_ref();
+            for child in children {
                 inner_print_ast(child, &mut tree)
             }
             tree.end_child();
@@ -79,8 +79,8 @@ fn inner_print_ast(node: &ParseTreeNode, tree: &mut TreeBuilder) {
     match node {
         ParseTreeNode::Internal(n) => {
             tree.begin_child(n.get_label());
-            let children = n.get_children_ref();
-            for child in children.iter().rev() {
+            let children = n.children_ref();
+            for child in children {
                 inner_print_ast(child, tree)
             }
             tree.end_child();

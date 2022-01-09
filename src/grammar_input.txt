@@ -22,7 +22,7 @@ elseTail ->
 
 varDeclStmt -> Let assignmentStmt
 
-funDefStmt -> Fun Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
+funDefStmt -> Fn Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
 
 returnStmt -> Return expr Semi
 
@@ -36,33 +36,26 @@ param -> Identifier Colon typeSpecifier
 returnDeclaration -> RArrow typeSpecifier
 returnDeclaration ->
 
-
-typeSpecifier -> primitiveTypeSpecifier
-
-primitiveTypeSpecifier -> U32
-primitiveTypeSpecifier -> I32
-primitiveTypeSpecifier -> F32
-primitiveTypeSpecifier -> U64
-primitiveTypeSpecifier -> I64
-primitiveTypeSpecifier -> F64
-primitiveTypeSpecifier -> U8
-primitiveTypeSpecifier -> Bool
-primitiveTypeSpecifier -> StringType
+typeSpecifier -> U32
+typeSpecifier -> I32
+typeSpecifier -> F32
+typeSpecifier -> U64
+typeSpecifier -> I64
+typeSpecifier -> F64
+typeSpecifier -> U8
+typeSpecifier -> Bool
+typeSpecifier -> StringType
+typeSpecifier -> Identifier
 
 forLoopStmt -> For Identifier In expr LBrace stmtSeq RBrace
 
 expr -> disjunction
 
-disjunction -> conjunction Or conjunctionSeq
+disjunction -> conjunction Or disjunction
 disjunction -> conjunction
-conjunctionSeq -> conjunctionSeq Or conjunction
-conjunctionSeq -> conjunction
 
-
-conjunction -> inversion And inversionSeq
+conjunction -> inversion And conjunction
 conjunction -> inversion
-inversionSeq -> inversionSeq And inversion 
-inversionSeq -> inversion 
 
 inversion -> Not inversion
 inversion -> comparison
@@ -82,7 +75,7 @@ factor -> unaryOperator primary
 primary -> callExpr 
 primary -> atom
 
-callExpr -> primary LParen argSeq RParen
+callExpr -> Identifier LParen argSeq RParen
 
 argSeq -> arg argSeqTail
 argSeq ->
