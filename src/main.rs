@@ -3,7 +3,8 @@ use parser::grammar::{Grammar, Symbol};
 use parser::lalr_parsing_tables::{self, LALRParsingTables, LALRParsingTablesGenerator};
 use parser::lexer_wrapper::LexerWrapper;
 use parser::lr_parser::{LRParser, SymbolSource};
-use parser::parse_tree::{Labeled, Nonterminal, Terminal, ParseTreeNode};
+use parser::parse_tree::{Labeled, Nonterminal, ParseTreeNode, Terminal};
+use interpreter::parse_tree_to_ast::{DflowParseTreeToAst, ParseTreeToAst};
 use ptree::{print_tree, TreeBuilder};
 use sha2::{Digest, Sha256};
 use std::fs::File;
@@ -56,6 +57,9 @@ fn main() {
     let (output, root_node) = parser.parse();
 
     print_ast(&root_node);
+
+    let parse_tree_to_ast = DflowParseTreeToAst::new();
+    let ast = parse_tree_to_ast.get_ast(&root_node);
 }
 
 fn print_ast(root: &ParseTreeNode) {
@@ -72,7 +76,6 @@ fn print_ast(root: &ParseTreeNode) {
         }
         ParseTreeNode::Leaf(_) => panic!("Leaf node can't be a root"),
     }
-   
 }
 
 fn inner_print_ast(node: &ParseTreeNode, tree: &mut TreeBuilder) {

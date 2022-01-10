@@ -218,7 +218,7 @@ fn return_test() {
 
 #[test]
 fn fn_test() {
-    lexer_test("fn", &Token::Fun);
+    lexer_test("fn", &Token::Fn);
 }
 
 #[test]

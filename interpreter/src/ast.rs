@@ -2,20 +2,21 @@ pub struct Program {
     stmt_seq: Vec<Stmt>,
 }
 impl Program {
-    pub fn new() -> Program {
-        Program { stmt_seq: Vec::new() }
-    }
-
-    pub fn add_stmt(&mut self, stmt: Stmt) {
-        self.stmt_seq.push(stmt);
+    pub fn new(stmt_seq: Vec<Stmt>) -> Program {
+        Program {
+            stmt_seq,
+        }
     }
 }
 
 pub enum Stmt {
-    If(Expr, TrueBlock, FalseBlock),
+    If(IfBlock),
     Expr(Expr),
     Assignment(Name, Expr),
     FunDef(FunDef),
+    VarDecl(Name, Expr),
+    ForLoop(ForLoopBlock),
+    Return(Expr)
 }
 
 pub struct Name {
@@ -23,46 +24,49 @@ pub struct Name {
 }
 impl Name {
     pub fn new(value: String) -> Name {
-        Name {
-            value
-        }
+        Name { value }
     }
 }
 
-pub struct TrueBlock {
+pub struct ForLoopBlock {
+    iterator: Name,
+    iterable: Expr,
     stmt_seq: Vec<Stmt>,
 }
-impl TrueBlock {
-    pub fn new(stmt_seq: Vec<Stmt>) -> TrueBlock {
-        TrueBlock {
+impl ForLoopBlock {
+    pub fn new(iterator: Name, iterable: Expr, stmt_seq: Vec<Stmt>) -> ForLoopBlock {
+        ForLoopBlock {
+            iterator,
+            iterable,
             stmt_seq,
         }
     }
 }
 
-pub struct FalseBlock {
-    else_if_blocks: Vec<ElseIfBlock>,
-    else_block: ElseBlock,
+pub struct IfBlock {
+    expr: Expr,
+    stmt_seq: Vec<Stmt>,
+    else_tail: Option<ElseTail>,
 }
-impl FalseBlock {
-    pub fn new(else_if_blocks: Vec<ElseIfBlock>, else_block: ElseBlock) -> FalseBlock {
-        FalseBlock {
-            else_if_blocks,
-            else_block,
+impl IfBlock {
+    pub fn new(expr: Expr, stmt_seq: Vec<Stmt>, else_tail: Option<ElseTail>) -> IfBlock {
+        IfBlock {
+            expr,
+            stmt_seq,
+            else_tail,
         }
     }
 }
 
-
-pub struct ElseIfBlock {
-    condition: Expr,
-    stmt_seq: Vec<Stmt>,
+pub struct ElseTail {
+    else_if_block: Option<Box<IfBlock>>,
+    else_block: Option<ElseBlock>,
 }
-impl ElseIfBlock {
-    pub fn new(condition: Expr, stmt_seq: Vec<Stmt>) -> ElseIfBlock {
-        ElseIfBlock {
-            condition,
-            stmt_seq
+impl ElseTail {
+    pub fn new(else_if_block: Option<Box<IfBlock>>, else_block: Option<ElseBlock>) -> ElseTail {
+        ElseTail {
+            else_if_block,
+            else_block,
         }
     }
 }
@@ -72,9 +76,7 @@ pub struct ElseBlock {
 }
 impl ElseBlock {
     pub fn new(stmt_seq: Vec<Stmt>) -> ElseBlock {
-        ElseBlock {
-            stmt_seq
-        }
+        ElseBlock { stmt_seq }
     }
 }
 
@@ -97,10 +99,7 @@ pub struct Param {
 }
 impl Param {
     pub fn new(name: Name, typev: Type) -> Param {
-        Param {
-            name,
-            typev,
-        }
+        Param { name, typev }
     }
 }
 
@@ -122,7 +121,7 @@ pub struct FunDef {
 }
 impl FunDef {
     pub fn new(name: Name, params: Vec<Param>, ret_type: Type, stmt_seq: Vec<Stmt>) -> FunDef {
-        FunDef { 
+        FunDef {
             name,
             params,
             ret_type,
@@ -137,10 +136,7 @@ pub struct CallExpr {
 }
 impl CallExpr {
     pub fn new(name: Name, args: Vec<Arg>) -> CallExpr {
-        CallExpr {
-            name,
-            args,
-        }
+        CallExpr { name, args }
     }
 }
 

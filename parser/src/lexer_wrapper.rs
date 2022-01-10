@@ -57,7 +57,7 @@ impl<T: Source> SymbolSource for LexerWrapper<T> {
             Token::Let => (Symbol::new("Let"), Token::Let),
             Token::For => (Symbol::new("For"), Token::For),
             Token::In => (Symbol::new("In"), Token::In),
-            Token::Fun => (Symbol::new("Fun"), Token::Fun),
+            Token::Fn => (Symbol::new("Fn"), Token::Fn),
             Token::U32 => (Symbol::new("U32"), Token::U32),
             Token::I32 => (Symbol::new("I32"), Token::I32),
             Token::F32 => (Symbol::new("F32"), Token::F32),

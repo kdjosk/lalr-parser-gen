@@ -1,7 +1,8 @@
-use std::{fmt::{Display, self}};
+use std::fmt::{self, Display};
 
 // TODO(kjoskowi) This whole file should be automatically generated from grammar description
 
+#[derive(Debug)]
 pub enum ParseTreeNode {
     Leaf(TerminalNode),
     Internal(NonterminalNode),
@@ -15,10 +16,9 @@ pub trait Functional {
     fn syntax_function(&self) -> SyntaxFunction;
 }
 
-
 pub trait Nonterminal {
     fn children_ref(&self) -> &Vec<ParseTreeNode>;
-    fn add_child(&mut self, child: ParseTreeNode); 
+    fn add_child(&mut self, child: ParseTreeNode);
     fn reverse_children(&mut self);
 }
 
@@ -29,6 +29,7 @@ pub trait Terminal {
 pub trait NonterminalNodeT: Nonterminal + Labeled + Functional {}
 pub trait TerminalNodeT: Terminal + Labeled + Functional {}
 
+#[derive(Debug)]
 pub struct NonterminalNode {
     children: Vec<ParseTreeNode>,
     label: String,
@@ -38,14 +39,14 @@ pub struct NonterminalNode {
 impl NonterminalNode {
     pub fn new(label: &str, func: SyntaxFunction) -> NonterminalNode {
         let label = label.to_string();
-        NonterminalNode{
+        NonterminalNode {
             children: Vec::new(),
             label,
             func,
         }
     }
 }
-impl  NonterminalNodeT for NonterminalNode {}
+impl NonterminalNodeT for NonterminalNode {}
 impl Labeled for NonterminalNode {
     fn get_label(&self) -> String {
         self.label.clone()
@@ -66,9 +67,9 @@ impl Functional for NonterminalNode {
     fn syntax_function(&self) -> SyntaxFunction {
         self.func
     }
-}   
+}
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum LexicalValue {
     StringType(String),
     IntegerType(u64),
@@ -90,6 +91,7 @@ impl Display for LexicalValue {
     }
 }
 
+#[derive(Debug)]
 pub struct TerminalNode {
     lex_value: LexicalValue,
     label: String,
@@ -98,7 +100,7 @@ pub struct TerminalNode {
 impl TerminalNode {
     pub fn new(label: &str, lex_value: LexicalValue, func: SyntaxFunction) -> TerminalNode {
         let label = label.to_string();
-        TerminalNode{
+        TerminalNode {
             lex_value,
             label,
             func,
@@ -121,7 +123,7 @@ impl Functional for TerminalNode {
     fn syntax_function(&self) -> SyntaxFunction {
         self.func
     }
-}   
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SyntaxFunction {

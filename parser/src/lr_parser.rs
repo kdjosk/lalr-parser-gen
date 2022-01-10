@@ -25,9 +25,10 @@ impl StackElement {
     pub fn starting() -> StackElement {
         StackElement {
             state: 0,
-            parse_tree_node: ParseTreeNode::Internal(
-                NonterminalNode::new("program", SyntaxFunction::Program)
-            ),
+            parse_tree_node: ParseTreeNode::Internal(NonterminalNode::new(
+                "program",
+                SyntaxFunction::Program,
+            )),
         }
     }
 }
@@ -77,19 +78,15 @@ impl<T: SymbolSource> LRParser<T> {
                     let goto_state = self
                         .parsing_tables
                         .get_goto(self.stack.last().unwrap().state, &p.lhs);
-                    self.stack
-                        .push(StackElement::new(
-                            goto_state, 
-                            ParseTreeNode::Internal(parse_tree_node))
-                        );
+                    self.stack.push(StackElement::new(
+                        goto_state,
+                        ParseTreeNode::Internal(parse_tree_node),
+                    ));
                     self.output.push(p.clone());
                 }
                 Action::Accept => {
                     let node = self.stack.pop().unwrap().parse_tree_node;
-                    return (
-                        self.output.clone(),
-                        node,
-                    );
+                    return (self.output.clone(), node);
                 }
                 Action::Error => {
                     println!("STACK: ");
@@ -108,12 +105,16 @@ impl<T: SymbolSource> LRParser<T> {
             "stmtSeq" => NonterminalNode::new("stmtSeq", SyntaxFunction::StmtSeq),
             "stmt" => NonterminalNode::new("stmt", SyntaxFunction::Stmt),
             "exprStmt" => NonterminalNode::new("exprStmt", SyntaxFunction::ExprStmt),
-            "assignmentStmt" => NonterminalNode::new("assignmentStmt", SyntaxFunction::AssignmentStmt),
+            "assignmentStmt" => {
+                NonterminalNode::new("assignmentStmt", SyntaxFunction::AssignmentStmt)
+            }
             "ifStmt" => NonterminalNode::new("ifStmt", SyntaxFunction::IfStmt),
             "elseTail" => NonterminalNode::new("elseTail", SyntaxFunction::ElseTail),
             "expr" => NonterminalNode::new("expr", SyntaxFunction::Expr),
             "disjunction" => NonterminalNode::new("disjunction", SyntaxFunction::Disjunction),
-            "conjunctionSeq" => NonterminalNode::new("conjunctionSeq", SyntaxFunction::ConjunctionSeq),
+            "conjunctionSeq" => {
+                NonterminalNode::new("conjunctionSeq", SyntaxFunction::ConjunctionSeq)
+            }
             "conjunction" => NonterminalNode::new("conjunction", SyntaxFunction::Conjunction),
             "inversionSeq" => NonterminalNode::new("inversionSeq", SyntaxFunction::InversionSeq),
             "inversion" => NonterminalNode::new("inversion", SyntaxFunction::Inversion),
@@ -131,17 +132,24 @@ impl<T: SymbolSource> LRParser<T> {
             "multOperator" => NonterminalNode::new("multOperator", SyntaxFunction::MultOperator),
             "addOperator" => NonterminalNode::new("addOperator", SyntaxFunction::AddOperator),
             "literal" => NonterminalNode::new("literal", SyntaxFunction::Literal),
-            "booleanLiteral" => NonterminalNode::new("booleanLiteral", SyntaxFunction::BooleanLiteral),
+            "booleanLiteral" => {
+                NonterminalNode::new("booleanLiteral", SyntaxFunction::BooleanLiteral)
+            }
             "varDeclStmt" => NonterminalNode::new("varDeclStmt", SyntaxFunction::VarDeclStmt),
             "forLoopStmt" => NonterminalNode::new("forLoopStmt", SyntaxFunction::ForLoopStmt),
             "funDefStmt" => NonterminalNode::new("funDefStmt", SyntaxFunction::FunDefStmt),
             "paramSeq" => NonterminalNode::new("paramSeq", SyntaxFunction::ParamSeq),
             "paramSeqTail" => NonterminalNode::new("paramSeqTail", SyntaxFunction::ParamSeqTail),
             "param" => NonterminalNode::new("param", SyntaxFunction::Param),
-            "returnDeclaration" => NonterminalNode::new("returnDeclaration", SyntaxFunction::ReturnDeclaration),
+            "returnDeclaration" => {
+                NonterminalNode::new("returnDeclaration", SyntaxFunction::ReturnDeclaration)
+            }
             "returnStmt" => NonterminalNode::new("returnStmt", SyntaxFunction::ReturnStmt),
             "typeSpecifier" => NonterminalNode::new("typeSpecifier", SyntaxFunction::TypeSpecifier),
-            "primitiveTypeSpecifier" => NonterminalNode::new("primitiveTypeSpecifier", SyntaxFunction::PrimitiveTypeSpecifier),
+            "primitiveTypeSpecifier" => NonterminalNode::new(
+                "primitiveTypeSpecifier",
+                SyntaxFunction::PrimitiveTypeSpecifier,
+            ),
             "unaryOperator" => NonterminalNode::new("unaryOperator", SyntaxFunction::UnaryOperator),
             s => panic!("Unknown nonterminal symbol {}", s),
         }
@@ -157,7 +165,11 @@ impl<T: SymbolSource> LRParser<T> {
         }
     }
 
-    fn terminal_node_from_grammar_symbol(&self, s: &Symbol, lex_value: LexicalValue) -> TerminalNode {
+    fn terminal_node_from_grammar_symbol(
+        &self,
+        s: &Symbol,
+        lex_value: LexicalValue,
+    ) -> TerminalNode {
         match s.id.as_str() {
             "Let" => TerminalNode::new("Let", lex_value, SyntaxFunction::Let),
             "For" => TerminalNode::new("For", lex_value, SyntaxFunction::For),
@@ -174,16 +186,26 @@ impl<T: SymbolSource> LRParser<T> {
             "Less" => TerminalNode::new("Less", lex_value, SyntaxFunction::Less),
             "Greater" => TerminalNode::new("Greater", lex_value, SyntaxFunction::Greater),
             "LessEqual" => TerminalNode::new("LessEqual", lex_value, SyntaxFunction::LessEqual),
-            "GreaterEqual" => TerminalNode::new("GreaterEqual", lex_value, SyntaxFunction::GreaterEqual),
+            "GreaterEqual" => {
+                TerminalNode::new("GreaterEqual", lex_value, SyntaxFunction::GreaterEqual)
+            }
             "Equal" => TerminalNode::new("Equal", lex_value, SyntaxFunction::Equal),
             "NotEqual" => TerminalNode::new("NotEqual", lex_value, SyntaxFunction::NotEqual),
             "Star" => TerminalNode::new("Star", lex_value, SyntaxFunction::Star),
             "Div" => TerminalNode::new("Div", lex_value, SyntaxFunction::Div),
             "Minus" => TerminalNode::new("Minus", lex_value, SyntaxFunction::Minus),
             "Plus" => TerminalNode::new("Plus", lex_value, SyntaxFunction::Plus),
-            "IntegerLiteral" => TerminalNode::new("IntegerLiteral", lex_value, SyntaxFunction::IntegerLiteral),
-            "FloatingLiteral" => TerminalNode::new("FloatingLiteral", lex_value, SyntaxFunction::FloatingLiteral),
-            "StringLiteral" => TerminalNode::new("StringLiteral", lex_value, SyntaxFunction::StringLiteral),
+            "IntegerLiteral" => {
+                TerminalNode::new("IntegerLiteral", lex_value, SyntaxFunction::IntegerLiteral)
+            }
+            "FloatingLiteral" => TerminalNode::new(
+                "FloatingLiteral",
+                lex_value,
+                SyntaxFunction::FloatingLiteral,
+            ),
+            "StringLiteral" => {
+                TerminalNode::new("StringLiteral", lex_value, SyntaxFunction::StringLiteral)
+            }
             "True" => TerminalNode::new("True", lex_value, SyntaxFunction::True),
             "False" => TerminalNode::new("False", lex_value, SyntaxFunction::False),
             "Else" => TerminalNode::new("Else", lex_value, SyntaxFunction::Else),
