@@ -162,7 +162,7 @@ impl DflowParseTreeToAst {
         let children = node.children_ref();
         match &children[..] {
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(expr_stmt)] => {
-                (self.process_id(id), self.process_expr_stmt(node))
+                (self.process_id(id), self.process_expr_stmt(expr_stmt))
             }
             _ => panic!(),
         }
@@ -184,7 +184,8 @@ impl DflowParseTreeToAst {
         let children = node.children_ref();
         match &children[..] {
             [Node::Internal(n)] => self.process_conjunction(n),
-            [Node::Internal(lhs), Node::Leaf(_), Node::Internal(rhs)] => Expr::LogicOr(
+            [Node::Internal(lhs), Node::Leaf(_), Node::Internal(rhs)] => Expr::Binary(
+                BinOp::LogicOr,
                 Box::new(self.process_conjunction(lhs)),
                 Box::new(self.process_disjunction(rhs)),
             ),
@@ -197,7 +198,8 @@ impl DflowParseTreeToAst {
         let children = node.children_ref();
         match &children[..] {
             [Node::Internal(n)] => self.process_inversion(n),
-            [Node::Internal(lhs), Node::Leaf(_), Node::Internal(rhs)] => Expr::LogicAnd(
+            [Node::Internal(lhs), Node::Leaf(_), Node::Internal(rhs)] => Expr::Binary(
+                BinOp::LogicAnd,
                 Box::new(self.process_inversion(lhs)),
                 Box::new(self.process_conjunction(rhs)),
             ),
@@ -210,7 +212,7 @@ impl DflowParseTreeToAst {
         match &children[..] {
             [Node::Internal(n)] => self.process_comparison(n),
             [Node::Leaf(_), Node::Internal(n)] => {
-                Expr::LogicNot(Box::new(self.process_comparison(n)))
+                Expr::Unary(UnOp::Not, Box::new(self.process_comparison(n)))
             }
             _ => panic!(),
         }
@@ -225,11 +227,11 @@ impl DflowParseTreeToAst {
                 let lhs = Box::new(self.process_sum(lhs));
                 let rhs = Box::new(self.process_sum(rhs));
                 match self.process_op(op) {
-                    SynFunc::Greater => Expr::Greater(lhs, rhs),
-                    SynFunc::GreaterEqual => Expr::GreaterEq(lhs, rhs),
-                    SynFunc::Less => Expr::Less(lhs, rhs),
-                    SynFunc::LessEqual => Expr::LessEq(lhs, rhs),
-                    SynFunc::Equal => Expr::Eq(lhs, rhs),
+                    SynFunc::Greater => Expr::Binary(BinOp::Greater, lhs, rhs),
+                    SynFunc::GreaterEqual => Expr::Binary(BinOp::GreaterEq, lhs, rhs),
+                    SynFunc::Less => Expr::Binary(BinOp::Less, lhs, rhs),
+                    SynFunc::LessEqual => Expr::Binary(BinOp::LessEq, lhs, rhs),
+                    SynFunc::Equal => Expr::Binary(BinOp::Eq, lhs, rhs),
                     _ => panic!(),
                 }
             }
@@ -246,8 +248,8 @@ impl DflowParseTreeToAst {
                 let lhs = Box::new(self.process_sum(lhs));
                 let rhs = Box::new(self.process_term(rhs));
                 match self.process_op(op){
-                    SynFunc::Plus => Expr::Add(lhs, rhs),
-                    SynFunc::Minus => Expr::Sub(lhs, rhs),
+                    SynFunc::Plus => Expr::Binary(BinOp::Add, lhs, rhs),
+                    SynFunc::Minus => Expr::Binary(BinOp::Sub, lhs, rhs),
                     _ => panic!(),
                 }
             }
@@ -264,8 +266,8 @@ impl DflowParseTreeToAst {
                 let lhs = Box::new(self.process_term(lhs));
                 let rhs = Box::new(self.process_factor(rhs));
                 match self.process_op(op) {
-                    SynFunc::Div => Expr::Div(lhs, rhs),
-                    SynFunc::Star => Expr::Mult(lhs, rhs),
+                    SynFunc::Div => Expr::Binary(BinOp::Div, lhs, rhs),
+                    SynFunc::Star => Expr::Binary(BinOp::Mult, lhs, rhs),
                     _ => panic!(),
                 }
             }
@@ -281,7 +283,7 @@ impl DflowParseTreeToAst {
             [Node::Internal(op), Node::Internal(n)] => {
                 let expr = Box::new(self.process_primary(n));
                 match self.process_op(op) {
-                    SynFunc::Minus => Expr::UnaryMinus(expr),
+                    SynFunc::Minus => Expr::Unary(UnOp::Minus, expr),
                     _ => panic!(),
                 }
             }
@@ -359,7 +361,7 @@ impl DflowParseTreeToAst {
 
     fn process_arg(&self, node: &NonterminalNode) -> Arg {
         // arg -> expr | Identifier Assign expr
-        let mut children = node.children_ref();
+        let children = node.children_ref();
         match &children[..] {
             [Node::Internal(expr)] => Arg::new(None, self.process_expr(expr)),
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(expr)] => {
@@ -371,7 +373,7 @@ impl DflowParseTreeToAst {
 
     fn process_atom(&self, node: &NonterminalNode) -> Expr {
         // atom -> Identifier | literal
-        let mut children = node.children_ref();
+        let children = node.children_ref();
         match &children[..] {
             [Node::Internal(lit)] => self.process_lit(lit),
             [Node::Leaf(id)] => Expr::Identifier(self.process_id(id)),
@@ -381,7 +383,7 @@ impl DflowParseTreeToAst {
 
     fn process_lit(&self, node: &NonterminalNode) -> Expr {
         // literal -> IntegerLiteral | FloatingLiteral | StringLiteral | booleanLiteral
-        let mut child = &node.children_ref()[0];
+        let child = &node.children_ref()[0];
         match child {
             Node::Leaf(n) => match n.lexical_value() {
                 LexVal::IntegerType(i) => Expr::IntLit(i),
@@ -390,12 +392,11 @@ impl DflowParseTreeToAst {
                 _ => panic!(),
             },
             Node::Internal(lit) => self.process_boolean_lit(lit),
-            _ => panic!(),
         }
     }
 
     fn process_boolean_lit(&self, node: &NonterminalNode) -> Expr {
-        let mut child = &node.children_ref()[0];
+        let child = &node.children_ref()[0];
         match child {
             Node::Leaf(n) => match n.syntax_function() {
                 SynFunc::True => Expr::BoolLit(true),

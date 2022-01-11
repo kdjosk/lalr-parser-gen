@@ -1,5 +1,5 @@
 pub struct Program {
-    stmt_seq: Vec<Stmt>,
+    pub stmt_seq: Vec<Stmt>,
 }
 impl Program {
     pub fn new(stmt_seq: Vec<Stmt>) -> Program {
@@ -19,6 +19,7 @@ pub enum Stmt {
     Return(Expr)
 }
 
+#[derive(Debug)]
 pub struct Name {
     value: String,
 }
@@ -29,9 +30,9 @@ impl Name {
 }
 
 pub struct ForLoopBlock {
-    iterator: Name,
-    iterable: Expr,
-    stmt_seq: Vec<Stmt>,
+    pub iterator: Name,
+    pub iterable: Expr,
+    pub stmt_seq: Vec<Stmt>,
 }
 impl ForLoopBlock {
     pub fn new(iterator: Name, iterable: Expr, stmt_seq: Vec<Stmt>) -> ForLoopBlock {
@@ -44,9 +45,9 @@ impl ForLoopBlock {
 }
 
 pub struct IfBlock {
-    expr: Expr,
-    stmt_seq: Vec<Stmt>,
-    else_tail: Option<ElseTail>,
+    pub expr: Expr,
+    pub stmt_seq: Vec<Stmt>,
+    pub else_tail: Option<ElseTail>,
 }
 impl IfBlock {
     pub fn new(expr: Expr, stmt_seq: Vec<Stmt>, else_tail: Option<ElseTail>) -> IfBlock {
@@ -59,8 +60,8 @@ impl IfBlock {
 }
 
 pub struct ElseTail {
-    else_if_block: Option<Box<IfBlock>>,
-    else_block: Option<ElseBlock>,
+    pub else_if_block: Option<Box<IfBlock>>,
+    pub else_block: Option<ElseBlock>,
 }
 impl ElseTail {
     pub fn new(else_if_block: Option<Box<IfBlock>>, else_block: Option<ElseBlock>) -> ElseTail {
@@ -72,7 +73,7 @@ impl ElseTail {
 }
 
 pub struct ElseBlock {
-    stmt_seq: Vec<Stmt>,
+    pub stmt_seq: Vec<Stmt>,
 }
 impl ElseBlock {
     pub fn new(stmt_seq: Vec<Stmt>) -> ElseBlock {
@@ -80,6 +81,7 @@ impl ElseBlock {
     }
 }
 
+#[derive(Debug)]
 pub enum Type {
     Int32,
     Int64,
@@ -94,18 +96,18 @@ pub enum Type {
 }
 
 pub struct Param {
-    name: Name,
-    typev: Type,
+    pub name: Name,
+    pub ptype: Type,
 }
 impl Param {
-    pub fn new(name: Name, typev: Type) -> Param {
-        Param { name, typev }
+    pub fn new(name: Name, ptype: Type) -> Param {
+        Param { name, ptype }
     }
 }
 
 pub struct Arg {
-    kword: Option<Name>,
-    expr: Expr,
+    pub kword: Option<Name>,
+    pub expr: Expr,
 }
 impl Arg {
     pub fn new(kword: Option<Name>, expr: Expr) -> Arg {
@@ -114,10 +116,10 @@ impl Arg {
 }
 
 pub struct FunDef {
-    name: Name,
-    params: Vec<Param>,
-    ret_type: Type,
-    stmt_seq: Vec<Stmt>,
+    pub name: Name,
+    pub params: Vec<Param>,
+    pub ret_type: Type,
+    pub stmt_seq: Vec<Stmt>,
 }
 impl FunDef {
     pub fn new(name: Name, params: Vec<Param>, ret_type: Type, stmt_seq: Vec<Stmt>) -> FunDef {
@@ -131,13 +133,35 @@ impl FunDef {
 }
 
 pub struct CallExpr {
-    name: Name,
-    args: Vec<Arg>,
+    pub name: Name,
+    pub args: Vec<Arg>,
 }
 impl CallExpr {
     pub fn new(name: Name, args: Vec<Arg>) -> CallExpr {
         CallExpr { name, args }
     }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum BinOp {
+    Add,
+    Sub,
+    Mult,
+    Div,
+    GreaterEq,
+    LessEq,
+    Greater,
+    Less,
+    Eq,
+    LogicOr,
+    LogicAnd,
+    LogicNot,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum UnOp {
+    Minus,
+    Not,
 }
 
 pub enum Expr {
@@ -146,18 +170,7 @@ pub enum Expr {
     FloatLit(f64),
     BoolLit(bool),
     Identifier(Name),
-    Add(Box<Expr>, Box<Expr>),
-    Sub(Box<Expr>, Box<Expr>),
-    Mult(Box<Expr>, Box<Expr>),
-    Div(Box<Expr>, Box<Expr>),
-    GreaterEq(Box<Expr>, Box<Expr>),
-    LessEq(Box<Expr>, Box<Expr>),
-    Greater(Box<Expr>, Box<Expr>),
-    Less(Box<Expr>, Box<Expr>),
-    Eq(Box<Expr>, Box<Expr>),
-    LogicOr(Box<Expr>, Box<Expr>),
-    LogicAnd(Box<Expr>, Box<Expr>),
-    LogicNot(Box<Expr>),
-    UnaryMinus(Box<Expr>),
+    Binary(BinOp, Box<Expr>, Box<Expr>),
+    Unary(UnOp, Box<Expr>),
     Call(CallExpr),
 }

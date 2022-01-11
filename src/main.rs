@@ -1,3 +1,4 @@
+use interpreter::ast_printer::AstPrinter;
 use lexer::{self, FileSource, Lexer, Token};
 use parser::grammar::{Grammar, Symbol};
 use parser::lalr_parsing_tables::{self, LALRParsingTables, LALRParsingTablesGenerator};
@@ -56,19 +57,21 @@ fn main() {
     let mut parser = LRParser::new(parsing_tables, symbol_source);
     let (output, root_node) = parser.parse();
 
-    print_ast(&root_node);
+    print_parse_tree(&root_node);
 
     let parse_tree_to_ast = DflowParseTreeToAst::new();
     let ast = parse_tree_to_ast.get_ast(&root_node);
+    let mut ast_printer = AstPrinter::new();
+    ast_printer.print_ast(&ast);
 }
 
-fn print_ast(root: &ParseTreeNode) {
+fn print_parse_tree(root: &ParseTreeNode) {
     match root {
         ParseTreeNode::Internal(node) => {
             let mut tree = TreeBuilder::new(node.get_label());
             let children = node.children_ref();
             for child in children {
-                inner_print_ast(child, &mut tree)
+                inner_print_parse_tree(child, &mut tree)
             }
             tree.end_child();
             let top_item = tree.build();
@@ -78,13 +81,13 @@ fn print_ast(root: &ParseTreeNode) {
     }
 }
 
-fn inner_print_ast(node: &ParseTreeNode, tree: &mut TreeBuilder) {
+fn inner_print_parse_tree(node: &ParseTreeNode, tree: &mut TreeBuilder) {
     match node {
         ParseTreeNode::Internal(n) => {
             tree.begin_child(n.get_label());
             let children = n.children_ref();
             for child in children {
-                inner_print_ast(child, tree)
+                inner_print_parse_tree(child, tree)
             }
             tree.end_child();
         }
