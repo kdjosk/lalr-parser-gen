@@ -77,8 +77,9 @@ pub fn walk_stmt<V: AstVisitor>(visitor: &mut V, stmt: &Stmt) {
             visitor.visit_expr(expr)
         }
         Stmt::FunDef(fun_def) => visitor.visit_fun_def(fun_def),
-        Stmt::VarDecl(name, expr) => {
+        Stmt::VarDecl(name, typ, expr) => {
             visitor.visit_name(name);
+            visitor.visit_type(typ);
             visitor.visit_expr(expr)
         }
         Stmt::ForLoop(for_loop) => visitor.visit_for_loop(for_loop),
@@ -169,5 +170,5 @@ pub fn walk_arg<V: AstVisitor>(visitor: &mut V, arg: &Arg) {
 
 pub fn walk_param<V: AstVisitor>(visitor: &mut V, param: &Param) {
     visitor.visit_name(&param.name);
-    visitor.visit_type(&param.ptype)
+    visitor.visit_type(&param.typ)
 }

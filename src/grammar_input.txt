@@ -20,7 +20,7 @@ elseTail -> Else ifStmt
 elseTail -> Else LBrace stmtSeq RBrace
 elseTail ->
 
-varDeclStmt -> Let assignmentStmt
+varDeclStmt -> Let Identifier Colon typeSpecifier Assign exprStmt
 
 funDefStmt -> Fn Identifier LParen paramSeq RParen returnDeclaration LBrace stmtSeq RBrace
 

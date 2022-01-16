@@ -9,17 +9,18 @@ impl Program {
     }
 }
 
+#[derive(Clone)]
 pub enum Stmt {
     If(IfBlock),
     Expr(Expr),
     Assignment(Name, Expr),
     FunDef(FunDef),
-    VarDecl(Name, Expr),
+    VarDecl(Name, Type, Expr),
     ForLoop(ForLoopBlock),
     Return(Expr)
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub struct Name {
     value: String,
 }
@@ -29,6 +30,7 @@ impl Name {
     }
 }
 
+#[derive(Clone)]
 pub struct ForLoopBlock {
     pub iterator: Name,
     pub iterable: Expr,
@@ -44,6 +46,7 @@ impl ForLoopBlock {
     }
 }
 
+#[derive(Clone)]
 pub struct IfBlock {
     pub expr: Expr,
     pub stmt_seq: Vec<Stmt>,
@@ -59,6 +62,7 @@ impl IfBlock {
     }
 }
 
+#[derive(Clone)]
 pub struct ElseTail {
     pub else_if_block: Option<Box<IfBlock>>,
     pub else_block: Option<ElseBlock>,
@@ -72,6 +76,7 @@ impl ElseTail {
     }
 }
 
+#[derive(Clone)]
 pub struct ElseBlock {
     pub stmt_seq: Vec<Stmt>,
 }
@@ -81,7 +86,7 @@ impl ElseBlock {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub enum Type {
     Int32,
     Int64,
@@ -95,16 +100,18 @@ pub enum Type {
     UserDefined(Name),
 }
 
+#[derive(Clone, Hash, PartialEq, Eq)]
 pub struct Param {
     pub name: Name,
-    pub ptype: Type,
+    pub typ: Type,
 }
 impl Param {
-    pub fn new(name: Name, ptype: Type) -> Param {
-        Param { name, ptype }
+    pub fn new(name: Name, typ: Type) -> Param {
+        Param { name, typ }
     }
 }
 
+#[derive(Clone)]
 pub struct Arg {
     pub kword: Option<Name>,
     pub expr: Expr,
@@ -115,6 +122,7 @@ impl Arg {
     }
 }
 
+#[derive(Clone)]
 pub struct FunDef {
     pub name: Name,
     pub params: Vec<Param>,
@@ -131,6 +139,8 @@ impl FunDef {
         }
     }
 }
+
+#[derive(Clone)]
 
 pub struct CallExpr {
     pub name: Name,
@@ -155,15 +165,15 @@ pub enum BinOp {
     Eq,
     LogicOr,
     LogicAnd,
-    LogicNot,
 }
 
 #[derive(Clone, Copy, Debug)]
 pub enum UnOp {
     Minus,
-    Not,
+    LogicNot,
 }
 
+#[derive(Clone)]
 pub enum Expr {
     IntLit(u64),
     StrLit(String),

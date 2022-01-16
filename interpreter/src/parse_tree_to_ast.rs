@@ -1,4 +1,4 @@
-use std::panic;
+use std::unreachable;
 
 use crate::ast::*;
 use parser::parse_tree::{
@@ -16,7 +16,7 @@ impl ParseTreeToAst for DflowParseTreeToAst {
             Node::Internal(n) => {
                 Program::new(self.process_stmt_seq(n))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 }
@@ -37,7 +37,7 @@ impl DflowParseTreeToAst {
                 stmt_seq.extend(self.process_stmt_seq(seq));
                 stmt_seq.push(self.process_stmt(stmt));
             } 
-            _ => panic!(),
+            _ => unreachable!(),
         }
         stmt_seq
     }
@@ -57,10 +57,10 @@ impl DflowParseTreeToAst {
                     SynFunc::FunDefStmt => Stmt::FunDef(self.process_fun_def_stmt(n)),
                     SynFunc::ForLoopStmt => Stmt::ForLoop(self.process_for_loop_stmt(n)),
                     SynFunc::ReturnStmt => self.process_return_stmt(n),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 }
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
 
     }
@@ -74,7 +74,7 @@ impl DflowParseTreeToAst {
              Node::Leaf(_)] => {
                 Stmt::Return(self.process_expr(expr))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -95,20 +95,27 @@ impl DflowParseTreeToAst {
                     self.process_stmt_seq(stmt_seq),
                 )
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     } 
 
     fn process_var_decl_stmt(&self, node: &NonterminalNode) -> Stmt {
-        // varDeclStmt -> Let assignmentStmt
+        // varDeclStmt -> Let Identifier Colon typeSpecifier Assign exprStmt
         let children = node.children_ref();
         match &children[..] {
             [Node::Leaf(_), 
-             Node::Internal(assign_stmt)] => {
-                let (n, e) = self.process_assignment_stmt(assign_stmt);
-                Stmt::VarDecl(n, e)
+             Node::Leaf(id),
+             Node::Leaf(_),
+             Node::Internal(type_spec),
+             Node::Leaf(_),
+             Node::Internal(expr),] => {
+                Stmt::VarDecl(
+                    self.process_id(id),
+                    self.process_type_specifier(type_spec),
+                    self.process_expr_stmt(expr),
+                )
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -128,7 +135,7 @@ impl DflowParseTreeToAst {
                     self.process_else_tail(else_tail),
                 )
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -144,7 +151,7 @@ impl DflowParseTreeToAst {
             [Node::Leaf(_), Node::Leaf(_), Node::Internal(stmt_seq), Node::Leaf(_)] => Some(
                 ElseTail::new(None, Some(ElseBlock::new(self.process_stmt_seq(stmt_seq)))),
             ),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -153,7 +160,7 @@ impl DflowParseTreeToAst {
         let children = node.children_ref();
         match &children[..] {
             [Node::Internal(expr), Node::Leaf(_)] => self.process_expr(expr),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -164,7 +171,7 @@ impl DflowParseTreeToAst {
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(expr_stmt)] => {
                 (self.process_id(id), self.process_expr_stmt(expr_stmt))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -173,9 +180,9 @@ impl DflowParseTreeToAst {
         match &children[..] {
             [Node::Internal(n)] => match n.syntax_function() {
                 SynFunc::Disjunction => self.process_disjunction(n),
-                _ => panic!(),
+                _ => unreachable!(),
             },
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -189,7 +196,7 @@ impl DflowParseTreeToAst {
                 Box::new(self.process_conjunction(lhs)),
                 Box::new(self.process_disjunction(rhs)),
             ),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -203,7 +210,7 @@ impl DflowParseTreeToAst {
                 Box::new(self.process_inversion(lhs)),
                 Box::new(self.process_conjunction(rhs)),
             ),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -212,9 +219,9 @@ impl DflowParseTreeToAst {
         match &children[..] {
             [Node::Internal(n)] => self.process_comparison(n),
             [Node::Leaf(_), Node::Internal(n)] => {
-                Expr::Unary(UnOp::Not, Box::new(self.process_comparison(n)))
+                Expr::Unary(UnOp::LogicNot, Box::new(self.process_comparison(n)))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -232,10 +239,10 @@ impl DflowParseTreeToAst {
                     SynFunc::Less => Expr::Binary(BinOp::Less, lhs, rhs),
                     SynFunc::LessEqual => Expr::Binary(BinOp::LessEq, lhs, rhs),
                     SynFunc::Equal => Expr::Binary(BinOp::Eq, lhs, rhs),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 }
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -250,10 +257,10 @@ impl DflowParseTreeToAst {
                 match self.process_op(op){
                     SynFunc::Plus => Expr::Binary(BinOp::Add, lhs, rhs),
                     SynFunc::Minus => Expr::Binary(BinOp::Sub, lhs, rhs),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 }
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -268,10 +275,10 @@ impl DflowParseTreeToAst {
                 match self.process_op(op) {
                     SynFunc::Div => Expr::Binary(BinOp::Div, lhs, rhs),
                     SynFunc::Star => Expr::Binary(BinOp::Mult, lhs, rhs),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 }
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -284,10 +291,10 @@ impl DflowParseTreeToAst {
                 let expr = Box::new(self.process_primary(n));
                 match self.process_op(op) {
                     SynFunc::Minus => Expr::Unary(UnOp::Minus, expr),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 }
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -297,7 +304,7 @@ impl DflowParseTreeToAst {
             Node::Leaf(op) => {
                 op.syntax_function()
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -308,9 +315,9 @@ impl DflowParseTreeToAst {
             Node::Internal(n) => match n.syntax_function() {
                 SynFunc::CallExpr => self.process_call_expr(n),
                 SynFunc::Atom => self.process_atom(n),
-                _ => panic!(),
+                _ => unreachable!(),
             },
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -321,7 +328,7 @@ impl DflowParseTreeToAst {
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(arg_seq), Node::Leaf(_)] => Expr::Call(
                 CallExpr::new(self.process_id(id), self.process_arg_seq(arg_seq)),
             ),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -339,7 +346,7 @@ impl DflowParseTreeToAst {
                 args.push(self.process_arg(arg));
                 args.extend(self.process_arg_seq_tail(arg_seq_tail));
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
         args
     }
@@ -354,7 +361,7 @@ impl DflowParseTreeToAst {
                 args.push(self.process_arg(arg));
                 args.extend(self.process_arg_seq_tail(arg_seq_tail));
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
         args
     }
@@ -367,7 +374,7 @@ impl DflowParseTreeToAst {
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(expr)] => {
                 Arg::new(Some(self.process_id(id)), self.process_expr(expr))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -377,7 +384,7 @@ impl DflowParseTreeToAst {
         match &children[..] {
             [Node::Internal(lit)] => self.process_lit(lit),
             [Node::Leaf(id)] => Expr::Identifier(self.process_id(id)),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -389,7 +396,7 @@ impl DflowParseTreeToAst {
                 LexVal::IntegerType(i) => Expr::IntLit(i),
                 LexVal::FloatingType(f) => Expr::FloatLit(f),
                 LexVal::StringType(s) => Expr::StrLit(s),
-                _ => panic!(),
+                _ => unreachable!(),
             },
             Node::Internal(lit) => self.process_boolean_lit(lit),
         }
@@ -401,9 +408,9 @@ impl DflowParseTreeToAst {
             Node::Leaf(n) => match n.syntax_function() {
                 SynFunc::True => Expr::BoolLit(true),
                 SynFunc::False => Expr::BoolLit(false),
-                _ => panic!(),
+                _ => unreachable!(),
             },
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -419,7 +426,7 @@ impl DflowParseTreeToAst {
                     self.process_stmt_seq(stmt_seq),
                 )
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -427,7 +434,7 @@ impl DflowParseTreeToAst {
         if let LexVal::IdentifierType(i) = node.lexical_value() {
             Name::new(i)
         } else {
-            panic!();
+            unreachable!();
         }
     }
 
@@ -436,7 +443,7 @@ impl DflowParseTreeToAst {
         // returnDeclaration -> RArrow typeSpecifier
         match &children[..] {
             [Node::Leaf(_), Node::Internal(type_spec)] => self.process_type_specifier(type_spec),
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -450,7 +457,7 @@ impl DflowParseTreeToAst {
                 params.push(self.process_param(param));
                 params.extend(self.process_param_seq_tail(tail));
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
         params
     }
@@ -465,7 +472,7 @@ impl DflowParseTreeToAst {
                 params.push(self.process_param(param));
                 params.extend(self.process_param_seq_tail(tail));
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
         params
     }
@@ -478,7 +485,7 @@ impl DflowParseTreeToAst {
             [Node::Leaf(id), Node::Leaf(_), Node::Internal(type_spec)] => {
                 Param::new(self.process_id(id), self.process_type_specifier(type_spec))
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 
@@ -497,11 +504,11 @@ impl DflowParseTreeToAst {
                 SynFunc::StringType => Type::String,
                 SynFunc::Identifier => match t.lexical_value() {
                     LexVal::IdentifierType(i) => Type::UserDefined(Name::new(i)),
-                    _ => panic!(),
+                    _ => unreachable!(),
                 },
-                _ => panic!(),
+                _ => unreachable!(),
             },
-            _ => panic!(),
+            _ => unreachable!(),
         }
     }
 }
