@@ -9,7 +9,7 @@ impl Program {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Stmt {
     If(IfBlock),
     Expr(Expr),
@@ -30,14 +30,14 @@ impl Name {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ForLoopBlock {
     pub iterator: Name,
-    pub iterable: Expr,
+    pub iterable: RangeExpr,
     pub stmt_seq: Vec<Stmt>,
 }
 impl ForLoopBlock {
-    pub fn new(iterator: Name, iterable: Expr, stmt_seq: Vec<Stmt>) -> ForLoopBlock {
+    pub fn new(iterator: Name, iterable: RangeExpr, stmt_seq: Vec<Stmt>) -> ForLoopBlock {
         ForLoopBlock {
             iterator,
             iterable,
@@ -46,7 +46,7 @@ impl ForLoopBlock {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct IfBlock {
     pub expr: Expr,
     pub stmt_seq: Vec<Stmt>,
@@ -62,7 +62,7 @@ impl IfBlock {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ElseTail {
     pub else_if_block: Option<Box<IfBlock>>,
     pub else_block: Option<ElseBlock>,
@@ -76,7 +76,7 @@ impl ElseTail {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ElseBlock {
     pub stmt_seq: Vec<Stmt>,
 }
@@ -100,7 +100,7 @@ pub enum Type {
     UserDefined(Name),
 }
 
-#[derive(Clone, Hash, PartialEq, Eq)]
+#[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub struct Param {
     pub name: Name,
     pub typ: Type,
@@ -111,7 +111,7 @@ impl Param {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Arg {
     pub kword: Option<Name>,
     pub expr: Expr,
@@ -122,7 +122,7 @@ impl Arg {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct FunDef {
     pub name: Name,
     pub params: Vec<Param>,
@@ -140,7 +140,7 @@ impl FunDef {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 
 pub struct CallExpr {
     pub name: Name,
@@ -167,15 +167,27 @@ pub enum BinOp {
     LogicAnd,
 }
 
+#[derive(Clone, Debug)]
+pub struct RangeExpr {
+    pub from: Expr,
+    pub to: Expr,
+}
+
+impl RangeExpr {
+    pub fn new(from: Expr, to: Expr) -> RangeExpr {
+        RangeExpr { from, to }
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum UnOp {
     Minus,
     LogicNot,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum Expr {
-    IntLit(u64),
+    IntLit(i32),
     StrLit(String),
     FloatLit(f64),
     BoolLit(bool),

@@ -72,7 +72,7 @@ impl Functional for NonterminalNode {
 #[derive(Clone, Debug)]
 pub enum LexicalValue {
     StringType(String),
-    IntegerType(u64),
+    IntegerType(i32),
     FloatingType(f64),
     BooleanType(bool),
     IdentifierType(String),
@@ -144,6 +144,7 @@ pub enum SyntaxFunction {
     TypeSpecifier,
     PrimitiveTypeSpecifier,
     ForLoopStmt,
+    RangeExpr,
     Let,
     For,
     In,
@@ -180,6 +181,8 @@ pub enum SyntaxFunction {
     LBrace,
     RBrace,
     LParen,
+    RBracket,
+    LBracket,
     RParen,
     Or,
     And,

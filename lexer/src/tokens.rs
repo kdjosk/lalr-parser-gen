@@ -137,7 +137,7 @@ pub enum Token {
     False,
     M,
     StringLiteral(String),
-    IntegerLiteral(u64),
+    IntegerLiteral(i32),
     FloatingLiteral(f64),
     Identifier(String),
     Space,

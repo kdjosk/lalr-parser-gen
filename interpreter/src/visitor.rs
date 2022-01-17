@@ -1,4 +1,6 @@
-use crate::ast::*;
+use std::rc::Rc;
+
+use crate::{ast::*, ast_printer::AstPrinter};
 pub trait AstVisitor: Sized {
     fn visit_program(&mut self, p: &Program) {
         walk_program(self, p)
@@ -16,7 +18,7 @@ pub trait AstVisitor: Sized {
         walk_if_block(self, i)
     }
 
-    fn visit_int_lit(&mut self, i: u64);
+    fn visit_int_lit(&mut self, i: i32);
 
     fn visit_str_lit(&mut self, s: &String);
 
@@ -42,12 +44,16 @@ pub trait AstVisitor: Sized {
         walk_else_block(self, e)
     }
 
-    fn visit_fun_def(&mut self, f: &FunDef) {
+    fn visit_fun_def(&mut self, f: Rc<FunDef>) {
         walk_fun_def(self, f)
     }
-
+    
     fn visit_for_loop(&mut self, f: &ForLoopBlock) {
         walk_for_loop_block(self, f)
+    }
+
+    fn visit_range_expr(&mut self, r: &RangeExpr) {
+        walk_range_expr(self, r)
     }
 
     fn visit_param(&mut self, p: &Param) {
@@ -76,7 +82,7 @@ pub fn walk_stmt<V: AstVisitor>(visitor: &mut V, stmt: &Stmt) {
             visitor.visit_name(name);
             visitor.visit_expr(expr)
         }
-        Stmt::FunDef(fun_def) => visitor.visit_fun_def(fun_def),
+        Stmt::FunDef(fun_def) => visitor.visit_fun_def(Rc::new(fun_def.clone())),
         Stmt::VarDecl(name, typ, expr) => {
             visitor.visit_name(name);
             visitor.visit_type(typ);
@@ -135,7 +141,7 @@ pub fn walk_else_block<V: AstVisitor>(visitor: &mut V, else_block: &ElseBlock) {
     }
 }
 
-pub fn walk_fun_def<V: AstVisitor>(visitor: &mut V, fun_def: &FunDef) {
+pub fn walk_fun_def<V: AstVisitor>(visitor: &mut V, fun_def: Rc<FunDef>) {
     visitor.visit_name(&fun_def.name);
     for param in &fun_def.params {
         visitor.visit_param(param);
@@ -148,10 +154,15 @@ pub fn walk_fun_def<V: AstVisitor>(visitor: &mut V, fun_def: &FunDef) {
 
 pub fn walk_for_loop_block<V: AstVisitor>(visitor: &mut V, for_loop: &ForLoopBlock) {
     visitor.visit_name(&for_loop.iterator);
-    visitor.visit_expr(&for_loop.iterable);
+    visitor.visit_range_expr(&for_loop.iterable);
     for stmt in &for_loop.stmt_seq {
         visitor.visit_stmt(stmt)
     }
+}
+
+pub fn walk_range_expr<V: AstVisitor>(visitor: &mut V, range_expr: &RangeExpr) {
+    visitor.visit_expr(&range_expr.from);
+    visitor.visit_expr(&range_expr.to);
 }
 
 pub fn walk_call_expr<V: AstVisitor>(visitor: &mut V, call: &CallExpr) {

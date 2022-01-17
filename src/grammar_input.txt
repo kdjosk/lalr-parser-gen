@@ -1,6 +1,6 @@
 program -> stmtSeq
 
-stmtSeq -> stmtSeq stmt
+stmtSeq -> stmtSeq stmt 
 stmtSeq -> stmt
 
 stmt -> exprStmt
@@ -47,7 +47,9 @@ typeSpecifier -> Bool
 typeSpecifier -> StringType
 typeSpecifier -> Identifier
 
-forLoopStmt -> For Identifier In expr LBrace stmtSeq RBrace
+forLoopStmt -> For Identifier In rangeExpr LBrace stmtSeq RBrace
+
+rangeExpr -> LBracket expr Coma expr RBracket 
 
 expr -> disjunction
 

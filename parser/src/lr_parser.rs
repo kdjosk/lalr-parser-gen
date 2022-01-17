@@ -137,6 +137,7 @@ impl<T: SymbolSource> LRParser<T> {
             }
             "varDeclStmt" => NonterminalNode::new("varDeclStmt", SyntaxFunction::VarDeclStmt),
             "forLoopStmt" => NonterminalNode::new("forLoopStmt", SyntaxFunction::ForLoopStmt),
+            "rangeExpr" => NonterminalNode::new("rangeExpr", SyntaxFunction::RangeExpr),
             "funDefStmt" => NonterminalNode::new("funDefStmt", SyntaxFunction::FunDefStmt),
             "paramSeq" => NonterminalNode::new("paramSeq", SyntaxFunction::ParamSeq),
             "paramSeqTail" => NonterminalNode::new("paramSeqTail", SyntaxFunction::ParamSeqTail),
@@ -180,6 +181,8 @@ impl<T: SymbolSource> LRParser<T> {
             "If" => TerminalNode::new("If", lex_value, SyntaxFunction::If),
             "LBrace" => TerminalNode::new("LBrace", lex_value, SyntaxFunction::LBrace),
             "RBrace" => TerminalNode::new("RBrace", lex_value, SyntaxFunction::RBrace),
+            "LBracket" => TerminalNode::new("LBracket", lex_value, SyntaxFunction::LBracket),
+            "RBracket" => TerminalNode::new("RBracket", lex_value, SyntaxFunction::RBracket),
             "Or" => TerminalNode::new("Or", lex_value, SyntaxFunction::Or),
             "And" => TerminalNode::new("And", lex_value, SyntaxFunction::And),
             "Not" => TerminalNode::new("Not", lex_value, SyntaxFunction::Not),

@@ -3,4 +3,8 @@ fn times_two(a: i32) -> i32 {
 }
 
 let num: i32 = 3;
-let res: i32 = times_two(num);
+times_two(num);
+
+for i in [1,5] {
+    num = 2 * num;
+}

@@ -1,4 +1,5 @@
 use interpreter::ast_printer::AstPrinter;
+use interpreter::interpreter::Interpreter;
 use lexer::{self, FileSource, Lexer, Token};
 use parser::grammar::{Grammar, Symbol};
 use parser::lalr_parsing_tables::{self, LALRParsingTables, LALRParsingTablesGenerator};
@@ -60,9 +61,12 @@ fn main() {
     print_parse_tree(&root_node);
 
     let parse_tree_to_ast = DflowParseTreeToAst::new();
-    let ast = parse_tree_to_ast.get_ast(&root_node);
+    let program = parse_tree_to_ast.get_ast(&root_node);
     let mut ast_printer = AstPrinter::new();
-    ast_printer.print_ast(&ast);
+    ast_printer.print_ast(&program);
+
+    let mut interp = Interpreter::new();
+    interp.interpret(&program);   
 }
 
 fn print_parse_tree(root: &ParseTreeNode) {

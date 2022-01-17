@@ -79,25 +79,43 @@ impl DflowParseTreeToAst {
     }
 
     fn process_for_loop_stmt(&self, node: &NonterminalNode) -> ForLoopBlock {
-        // forLoopStmt -> For Identifier In expr LBrace stmtSeq RBrace
+        // forLoopStmt -> For Identifier In rangeExpr LBrace stmtSeq RBrace
         let children = node.children_ref();
         match &children[..] {
             [Node::Leaf(_), 
              Node::Leaf(id),
              Node::Leaf(_),
-             Node::Internal(expr),
+             Node::Internal(range_expr),
              Node::Leaf(_),
              Node::Internal(stmt_seq),
              Node::Leaf(_)] => {
                 ForLoopBlock::new(
                     self.process_id(id),
-                    self.process_expr(expr),
+                    self.process_range_expr(range_expr),
                     self.process_stmt_seq(stmt_seq),
                 )
             }
             _ => unreachable!(),
         }
     } 
+
+    fn process_range_expr(&self, node: &NonterminalNode) -> RangeExpr {
+        // rangeExpr -> LBracket expr Coma expr RBracket 
+        let children = node.children_ref();
+        match &children[..] {
+            [Node::Leaf(_), 
+             Node::Internal(from),
+             Node::Leaf(_),
+             Node::Internal(to),
+             Node::Leaf(_)] => {
+                RangeExpr::new(
+                    self.process_expr(from),
+                    self.process_expr(to),
+                )
+            }
+            _ => unreachable!(),
+        }
+    }
 
     fn process_var_decl_stmt(&self, node: &NonterminalNode) -> Stmt {
         // varDeclStmt -> Let Identifier Colon typeSpecifier Assign exprStmt

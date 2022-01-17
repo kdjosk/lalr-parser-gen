@@ -2,6 +2,7 @@ use crate::visitor::*;
 use crate::ast::*;
 use std::collections::{HashMap, HashSet};
 use std::panic;
+use std::rc::Rc;
 
 #[derive(Clone, Debug)]
 enum Value {
@@ -16,10 +17,15 @@ enum Value {
     Bool(bool),
 }
 
+#[derive(Debug)]
 struct Scope {
     variables: HashMap<Name, Value>,
-    fun_defs: HashMap<Name, FunDef>,
+    fun_defs: HashMap<Name, Rc<FunDef>>,
 }
+
+#[derive(Debug)]
+struct UndeclaredVariableError;
+
 
 impl Scope {
     pub fn new() -> Scope {
@@ -37,15 +43,27 @@ impl Scope {
         self.variables.insert(name, value);
     }
 
-    pub fn get_fun_def(&self, name: &Name) -> Option<&FunDef> {
+    pub fn has_variable(&self, name: &Name) -> bool {
+        self.variables.contains_key(name)
+    }
+
+    pub fn assign_to_variable(&mut self, name: Name, value: Value) {
+        match self.variables.insert(name, value) {
+            None => panic!(),
+            _ => ()
+        }
+    }
+
+    pub fn get_fun_def(&self, name: &Name) -> Option<&Rc<FunDef>> {
         self.fun_defs.get(name)
     }
 
-    pub fn add_fun_def(&mut self, fun_def: FunDef) {
+    pub fn add_fun_def(&mut self, fun_def: Rc<FunDef>) {
         self.fun_defs.insert(fun_def.name.clone(), fun_def);
     }
 }
 
+#[derive(Debug)]
 struct Context {
     scope_hierarchy: Vec<Scope>,
 }
@@ -53,7 +71,7 @@ struct Context {
 impl Context {
     pub fn new() -> Context {
         Context { 
-            scope_hierarchy: Vec::new()
+            scope_hierarchy: vec![Scope::new()],
         }
     }
 
@@ -66,10 +84,10 @@ impl Context {
         None
     }
 
-    pub fn try_find_fun_def_in_scope_hierarchy(&self, name: &Name) -> Option<&FunDef> {
+    pub fn try_find_fun_def_in_scope_hierarchy(&self, name: &Name) -> Option<Rc<FunDef>> {
         for scope in self.scope_hierarchy.iter().rev() {
             if let Some(f) = scope.get_fun_def(name) {
-                return Some(f);
+                return Some(f.clone());
             }
         }
         None
@@ -79,14 +97,28 @@ impl Context {
         self.scope_hierarchy.last_mut().unwrap().add_variable(name, value);
     }
 
-    pub fn add_fun_def_to_current_scope(&mut self, fun_def: FunDef) {
+    pub fn assign_to_variable(&mut self, name: Name, value: Value) -> Result<(), UndeclaredVariableError> {
+        for scope in self.scope_hierarchy.iter_mut().rev() {
+            if scope.has_variable(&name) {
+                scope.assign_to_variable(name, value);
+                return Ok(());
+            }
+        }
+        Err(UndeclaredVariableError)
+    }
+
+    pub fn add_fun_def_to_current_scope(&mut self, fun_def: Rc<FunDef>) {
         self.scope_hierarchy.last_mut().unwrap().add_fun_def(fun_def);
     }
 }
 
 pub struct Interpreter {
     call_context_stack: Vec<Context>,
+    returned_value: Option<Value>,
+    type_to_be_returned: Option<Type>,
+    should_return: bool,
     last_expr_value: Option<Value>,
+    was_las_expr_a_literal: Option<bool>,
     next_bin_op: Option<BinOp>,
     next_un_op: Option<UnOp>,
     variable_type: Option<Type>,
@@ -96,13 +128,30 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn new() -> Interpreter{
         Interpreter {
-            call_context_stack: Vec::new(),
+            call_context_stack: vec![Context::new()],
+            returned_value: None,
+            type_to_be_returned: None,
+            should_return: false,
             last_expr_value: None,
+            was_las_expr_a_literal: None,
             next_bin_op: None,
             next_un_op: None,
             variable_type: None,
             args: Vec::new(),
         }
+    }
+
+    pub fn interpret(&mut self, program: &Program) {
+        self.visit_program(program);
+        println!("{:?}\n", self.last_expr_value);
+    }
+
+    fn push_new_scope(&mut self) {
+        self.call_context_stack.last_mut().unwrap().scope_hierarchy.push(Scope::new());
+    }
+
+    fn add_variable_to_scope(&mut self, name: &Name, val: &Value) {
+        self.call_context_stack.last_mut().unwrap().scope_hierarchy.last_mut().unwrap().add_variable(name.clone(), val.clone());
     }
 
     fn retrieve_variable_value(&self, name: &Name) -> Value {
@@ -113,10 +162,15 @@ impl Interpreter {
         panic!("Use of undeclared variable {:?}", name);
     }
 
-    fn push_new_context_and_instantiate_params(&mut self, name: &Name) {
+    fn update_variable_value(&mut self, name: &Name, value: &Value) {
+        let ctx = self.call_context_stack.last_mut().unwrap();
+        ctx.assign_to_variable(name.clone(), value.clone());
+    }
+
+    fn push_new_context_and_instantiate_params(&mut self, fn_name: &Name) {
         let ctx = self.call_context_stack.last().unwrap();
         let mut new_ctx = Context::new();
-        if let Some(f) = ctx.try_find_fun_def_in_scope_hierarchy(name) {
+        if let Some(f) = ctx.try_find_fun_def_in_scope_hierarchy(fn_name) {
             let param_name_to_val = self.map_params_to_value(&f.params);
             for (param_name, val) in param_name_to_val {
                 new_ctx.add_variable_to_current_scope(param_name, val);
@@ -130,6 +184,9 @@ impl Interpreter {
         let mut params_left: HashSet<_> = params.clone().into_iter().collect();
         if params_left.len() < params.len() {
             panic!("All function parameters should be unique");
+        }
+        if self.args.len() < params_left.len() {
+            panic!("Number of args doesn't match number of params");
         }
 
         let mut param_name_to_val = HashMap::new();
@@ -376,17 +433,178 @@ impl AstVisitor for Interpreter {
     }
 
     fn visit_stmt(&mut self, s: &Stmt) {
+        //println!("{:?}", s);
         match s {
             Stmt::If(if_block) => {
-                self.visit_expr(&if_block.expr);
+                self.visit_if_block(if_block);
+            }
+            Stmt::Expr(expr) => self.visit_expr(expr),
+            Stmt::Assignment(name, expr) => {
+                self.visit_expr(expr);
+                if let Some(mut new_val) = self.last_expr_value.clone() {
+                    let old_val = self.call_context_stack.last().unwrap().try_find_variable_in_scope_hierarchy(name).unwrap();
 
+                    // TODO(kjoskowi) Proper type coercion for literals
+                    match new_val {
+                        Value::I32(new) => {
+                            match old_val {
+                                Value::I32(_) => (),
+                                Value::U32(_) => new_val = Value::U32(new as u32),
+                                Value::F32(_) => new_val = Value::F32(new as f32),
+                                Value::I64(_) => new_val = Value::I64(new as i64),
+                                Value::U64(_) => new_val = Value::U64(new as u64),
+                                Value::F64(_) => new_val = Value::F64(new as f64),
+                                Value::U8(_) => new_val = Value::U8(new as u8),
+                                _ => panic!()
+                            }
+                        }
+                        _ => ()
+                    }
+
+                    match (&new_val, old_val) {
+                        (Value::I32(_), Value::I32(_)) => (),
+                        (Value::U32(_), Value::U32(_)) => (),
+                        (Value::I64(_), Value::I64(_)) => (),
+                        (Value::U64(_), Value::U64(_)) => (),
+                        (Value::F32(_), Value::F32(_)) => (),
+                        (Value::F64(_), Value::F64(_)) => (),
+                        (Value::Str(_), Value::Str(_)) => (),
+                        (Value::Bool(_), Value::Bool(_)) => (),
+                        (o, n) => panic!("Incompatible types for assignment {:?}, {:?}", o, n),
+                    }
+
+                    self.call_context_stack
+                    .last_mut()
+                    .unwrap()
+                    .assign_to_variable(name.clone(), new_val).unwrap();
+                }
+            }
+            Stmt::FunDef(fun_def) => {
+                self.call_context_stack
+                    .last_mut()
+                    .unwrap()
+                    .add_fun_def_to_current_scope(Rc::new(fun_def.clone()));
             },
-            Stmt::Expr(_) => todo!(),
-            Stmt::Assignment(_, _) => todo!(),
-            Stmt::FunDef(_) => todo!(),
-            Stmt::VarDecl(_, _, _) => todo!(),
-            Stmt::ForLoop(_) => todo!(),
-            Stmt::Return(_) => todo!(),
+            Stmt::VarDecl(name, typ, expr) => {
+                self.visit_expr(expr);
+                if let Some(mut val) = self.last_expr_value.clone() {
+                    // TODO(kjoskowi) Proper type coercion for literals
+                    match val {
+                        Value::I32(v) => {
+                            match typ {
+                                Type::Int32 => (),
+                                Type::Int64 => val = Value::I64(v as i64),
+                                Type::Uint32 => val = Value::U32(v as u32),
+                                Type::Uint64 => val = Value::U64(v as u64),
+                                Type::Uint8 => val = Value::U8(v as u8),
+                                Type::Float32 => val = Value::F32(v as f32),
+                                Type::Float64 => val = Value::F64(v as f64),
+                                _ => panic!("Expr has incompatible type {:?} for declared type {:?}", val, typ),
+                            }
+                        }
+                        _ => ()
+                    }
+
+                    match (typ, &val) {
+                        (Type::Int32, Value::I32(_)) => (),
+                        (Type::Uint32, Value::U32(_)) => (),
+                        (Type::Int64, Value::I64(_)) => (),
+                        (Type::Uint64, Value::U64(_)) => (),
+                        (Type::Float32, Value::F32(_)) => (),
+                        (Type::Float64, Value::F64(_)) => (),
+                        (Type::Bool, Value::Bool(_)) => (),
+                        (Type::String, Value::Str(_)) => (),
+                        (o, n) => panic!("Incompatible types for assignment {:?}, {:?}", o, n),
+                    }
+
+                    self.call_context_stack
+                    .last_mut()
+                    .unwrap()
+                    .add_variable_to_current_scope(name.clone(), val);
+                }
+            },
+            Stmt::ForLoop(for_loop) => {
+                self.push_new_scope();
+                self.visit_expr(&for_loop.iterable.from);
+                if let Some(v) = self.last_expr_value.clone() {
+                    self.add_variable_to_scope(&for_loop.iterator, &v);
+                } else {
+                    panic!()
+                }
+
+                self.visit_expr(&for_loop.iterable.to);
+
+                if let Some(to) = self.last_expr_value.clone() {
+                    loop {
+                        for stmt in &for_loop.stmt_seq {
+                            self.visit_stmt(stmt);
+                        }
+                        let new_from;
+                        let from = self.retrieve_variable_value(&for_loop.iterator);
+                        println!("from, to {:?}, {:?}", from, to);
+                        match (&from, &to) {
+                            (Value::U8(f), Value::U8(t)) => {
+                                if f + 1 >= *t {
+                                    break;
+                                }
+                                new_from = Value::U8(f + 1)
+                            }
+                            (Value::U32(f), Value::U32(t)) => {
+                                if f + 1 >= *t {
+                                    break;
+                                }
+                                new_from = Value::U32(f + 1)
+                            }
+                            (Value::U64(f), Value::U64(t)) => {
+                                if f + 1 >= *t {
+                                    break;
+                                }
+                                new_from = Value::U64(f + 1)
+                            }
+                            (Value::I32(f), Value::I32(t)) => {
+                                if f + 1 >= *t {
+                                    break;
+                                }
+                                new_from = Value::I32(f + 1)
+                            }
+                            (Value::I64(f), Value::I64(t)) => {
+                                if f + 1 >= *t {
+                                    break;
+                                }
+                                new_from = Value::I64(f + 1)
+                            }
+                            _ => panic!("Can't use type {:?} from as iterator", from)
+
+                        }
+                        self.update_variable_value(&for_loop.iterator, &new_from);
+                    
+                    }
+                }
+                
+            },
+            Stmt::Return(expr) => {
+                self.visit_expr(expr);
+                if let Some(typ) = &self.type_to_be_returned {
+                    if let Some(val) = &self.last_expr_value {
+                        match (typ, &val) {
+                            (Type::Int32, Value::I32(_)) => (),
+                            (Type::Uint32, Value::U32(_)) => (),
+                            (Type::Int64, Value::I64(_)) => (),
+                            (Type::Uint64, Value::U64(_)) => (),
+                            (Type::Float32, Value::F32(_)) => (),
+                            (Type::Float64, Value::F64(_)) => (),
+                            (Type::Bool, Value::Bool(_)) => (),
+                            (Type::String, Value::Str(_)) => (),
+                            (o, n) => panic!("Incompatible type {:?} being returned, expected {:?}", o, n),
+                        }
+                        self.returned_value = Some(val.clone());
+                    } else {
+                        panic!();
+                    }
+                } else {
+                    panic!();
+                }
+            },
         }
     }
 
@@ -396,7 +614,18 @@ impl AstVisitor for Interpreter {
             Expr::StrLit(s) => self.visit_str_lit(s),
             Expr::FloatLit(f) => self.visit_float_lit(*f),
             Expr::BoolLit(b) => self.visit_bool_lit(*b),
-            Expr::Identifier(id) => self.visit_name(id),
+            Expr::Identifier(id) => {
+                let var_val = self.call_context_stack
+                    .last()
+                    .unwrap()
+                    .try_find_variable_in_scope_hierarchy(id);
+
+                if let Some(val) = var_val {
+                    self.last_expr_value = Some(val.clone());
+                } else {
+                    panic!("Can't find variable {:?}", id);
+                }
+            },
             Expr::Binary(op, lhs, rhs) => {
                 self.visit_expr(lhs);
                 let lhs_val = self.last_expr_value.clone();
@@ -404,6 +633,7 @@ impl AstVisitor for Interpreter {
                 let rhs_val = self.last_expr_value.clone();
                 self.visit_bin_op(*op);
                 let op_val = self.next_bin_op;
+
                 match (op_val, &lhs_val, &rhs_val) {
                     (Some(op), Some(l), Some(r)) => {
                         self.last_expr_value = Some(self.perform_binary_op(op, l, r));
@@ -411,6 +641,7 @@ impl AstVisitor for Interpreter {
                     _ => panic!("Missing component for binary operation op: {:?}, lhs: {:?}, rhs: {:?}",
                                  op_val, lhs_val, rhs_val)
                 }
+                self.was_las_expr_a_literal = Some(false);
             }
             Expr::Unary(op, expr) => {
                 self.visit_expr(expr);
@@ -429,26 +660,64 @@ impl AstVisitor for Interpreter {
                 self.visit_call_expr(expr);
             },
         }
+        println!("{:?}, {:?}", e, self.last_expr_value);
     }
 
     fn visit_if_block(&mut self, i: &IfBlock) {
-        walk_if_block(self, i)
+        self.visit_expr(&i.expr);
+        if let Some(val) = self.last_expr_value.clone() {
+            if let Value::Bool(cond) = val {
+                if cond {
+                    for stmt in &i.stmt_seq {
+                        self.visit_stmt(stmt);
+                    }
+                } else if let Some(else_tail) = &i.else_tail {
+                    self.visit_else_tail(else_tail);
+                }
+            } 
+        }
     }
 
     fn visit_call_expr(&mut self, c: &CallExpr) {
-        // let fn_name = c.name;
+        for arg in &c.args {
+            self.visit_expr(&arg.expr);
+            if let Some(val) = &self.last_expr_value {
+                self.args.push((arg.kword.clone(), val.clone()))
+            }
+        }
+
+        let fun_def = self.call_context_stack
+            .last()
+            .unwrap()
+            .try_find_fun_def_in_scope_hierarchy(&c.name);
+
+        self.push_new_context_and_instantiate_params(&c.name);
+
+        if let Some(f) = fun_def {
+            self.type_to_be_returned = Some(f.ret_type.clone());
+            for stmt in &f.stmt_seq {
+                self.visit_stmt(stmt);
+                if self.should_return {
+                    self.last_expr_value = self.returned_value.clone();
+                    break;
+                }
+            }
+        }
+        self.call_context_stack.pop();
     }
 
     fn visit_else_tail(&mut self, e: &ElseTail) {
-        walk_else_tail(self, e)
+        if let Some(else_if) = &e.else_if_block {
+            self.visit_if_block(else_if);
+        } else if let Some(els) = &e.else_block {
+            self.visit_else_block(els);
+        }
     }
 
     fn visit_else_block(&mut self, e: &ElseBlock) {
-        walk_else_block(self, e)
-    }
-
-    fn visit_fun_def(&mut self, f: &FunDef) {
-        walk_fun_def(self, f)
+        for stmt in &e.stmt_seq {
+            self.visit_stmt(stmt);
+        }
     }
 
     fn visit_for_loop(&mut self, f: &ForLoopBlock) {
@@ -463,8 +732,8 @@ impl AstVisitor for Interpreter {
         walk_arg(self, arg)
     }
 
-    fn visit_int_lit(&mut self, i: u64) {
-        self.last_expr_value = Some(Value::U64(i));
+    fn visit_int_lit(&mut self, i: i32) {
+        self.last_expr_value = Some(Value::I32(i));
     }
 
     fn visit_str_lit(&mut self, s: &String) {
@@ -479,8 +748,9 @@ impl AstVisitor for Interpreter {
         self.last_expr_value = Some(Value::Bool(b));
     }
 
-    fn visit_name(&mut self, n: &Name) {}
-
+    fn visit_name(&mut self, n: &Name) {
+    }
+ 
     fn visit_bin_op(&mut self, o: BinOp) {
         self.next_bin_op = Some(o);
     }

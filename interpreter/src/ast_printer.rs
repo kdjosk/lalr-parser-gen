@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::visitor::*;
 use crate::ast::*;
 use ptree::{print_tree, TreeBuilder};
@@ -59,7 +61,7 @@ impl AstVisitor for AstPrinter {
         self.tree.end_child();
     }
 
-    fn visit_fun_def(&mut self, f: &FunDef) {
+    fn visit_fun_def(&mut self, f: Rc<FunDef>) {
         self.tree.begin_child("fun_def".to_string());
         walk_fun_def(self, f);
         self.tree.end_child();
@@ -83,8 +85,13 @@ impl AstVisitor for AstPrinter {
         self.tree.end_child();
     }
 
+    fn visit_range_expr(&mut self, r: &RangeExpr) {
+        self.tree.begin_child("range_expr".to_string());
+        walk_range_expr(self, r);
+        self.tree.end_child();
+    }
 
-    fn visit_int_lit(&mut self, i: u64) {
+    fn visit_int_lit(&mut self, i: i32) {
         self.tree.begin_child(format!("{}", i));
         self.tree.end_child();
     }

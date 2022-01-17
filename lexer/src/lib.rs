@@ -170,7 +170,7 @@ impl<T: Source> Lexer<T> {
         }
     }
 
-    fn build_floating_literal(&mut self, integer_prefix: u64) -> f64 {
+    fn build_floating_literal(&mut self, integer_prefix: i32) -> f64 {
         let fractional_part = self.build_fractional_part();
         match self.peek() {
             'e' | 'E' => {
@@ -229,13 +229,13 @@ impl<T: Source> Lexer<T> {
         num as f64 / div as f64
     }
 
-    fn build_integer_literal(&mut self) -> u64 {
+    fn build_integer_literal(&mut self) -> i32 {
         let mut c = self.get_char();
-        let mut num: u64 = c.to_digit(10).unwrap() as u64;
+        let mut num: i32 = c.to_digit(10).unwrap() as i32;
         c = self.get_char();
         while self.is_digit(c) {
             num *= 10;
-            num += c.to_digit(10).unwrap() as u64;
+            num += c.to_digit(10).unwrap() as i32;
             c = self.get_char();
         }
         self.cache(c);
